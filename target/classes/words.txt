@@ -1,0 +1,11 @@
+ACTION:ADD=添加|新增|创建|增加|补上|加|添|创造|新添|Add|create|put
+ACTION:DELETE=移除|删除|删掉|剪除|拿掉|不要|去掉|舍弃|丢掉|delete|remove
+ACIION:SELECT=选择|select|choice
+ACTION:SELECT:POSITION=左上角|右下角|左上角|左下角|上面|下面|左边|右边|上|下|左|右|顶部|底部|左侧|右侧|中间|中间靠左|中间靠右
+COMPONENT:CARD=卡片|块|Card|block
+COMPONENT:WEBHEADER=导航|顶部|Header
+COMPONENT:MENU=菜单|导航
+COMPONENT:BUTTON=按钮|按键|Button
+COMPONENT:FORM=表单|新建对话框|创建输入|输入列表
+COMPONENT:INPUT=输入|输入框
+COMPONENT:TABLE=表|表格|分页表格｜流式分页表格

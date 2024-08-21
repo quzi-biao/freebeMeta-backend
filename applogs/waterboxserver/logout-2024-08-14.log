@@ -1,0 +1,922 @@
+2024-08-14 00:16:58.812 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47765 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:16:58.816 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:16:59.017 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 00:16:59.019 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 00:17:00.488 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:17:00.771 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 275 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:17:02.292 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:17:02.310 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:17:02.310 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:17:02.311 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:17:02.433 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:17:02.434 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3415 ms -- 
+2024-08-14 00:17:02.968 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 00:17:03.332 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 00:17:05.220 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:17:10.715 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@41422de4 -- 
+2024-08-14 00:17:10.956 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:17:11.805 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:17:12.113 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:17:12.320 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: c37c07fc-999d-4f8c-bde0-474fb4ee787f
+ -- 
+2024-08-14 00:17:12.490 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4b5af52e, org.springframework.security.web.context.SecurityContextPersistenceFilter@5807fde4, org.springframework.security.web.header.HeaderWriterFilter@63ef8ff2, org.springframework.web.filter.CorsFilter@c1c8b7d, org.springframework.security.web.authentication.logout.LogoutFilter@2713f4c1, com.freebe.code.web.filter.JWTAuthenticationFilter@7b828880, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6dfea877, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2aebe673, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4124c9b8, org.springframework.security.web.session.SessionManagementFilter@5217122, org.springframework.security.web.access.ExceptionTranslationFilter@23f40ea8, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@38f49658] -- 
+2024-08-14 00:17:12.683 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:17:12.715 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:17:14.410 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 16.126 seconds (JVM running for 16.943) -- 
+2024-08-14 00:17:20.244 [http-nio-8990-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 00:17:20.245 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 00:17:20.250 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 5 ms -- 
+2024-08-14 00:19:42.568 [Thread-11] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:19:42.591 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 00:19:42.615 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 00:19:43.117 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47765 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:19:43.119 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:19:43.755 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:19:43.871 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 114 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:19:44.257 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:19:44.263 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:19:44.264 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:19:44.265 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:19:44.288 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:19:44.288 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 1143 ms -- 
+2024-08-14 00:19:44.533 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 00:19:44.644 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 00:19:45.286 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:19:48.324 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@545ac535 -- 
+2024-08-14 00:19:48.417 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:19:48.715 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:19:48.748 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:19:48.771 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: ed32307b-b9bf-408f-904c-bb508b02fe2b
+ -- 
+2024-08-14 00:19:48.781 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@69e164d2, org.springframework.security.web.context.SecurityContextPersistenceFilter@7f41b19c, org.springframework.security.web.header.HeaderWriterFilter@437fb97a, org.springframework.web.filter.CorsFilter@4a2f5089, org.springframework.security.web.authentication.logout.LogoutFilter@23b0ae09, com.freebe.code.web.filter.JWTAuthenticationFilter@8772f74, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d41b215, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@53cb72ae, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@74497ac1, org.springframework.security.web.session.SessionManagementFilter@1bf326b4, org.springframework.security.web.access.ExceptionTranslationFilter@39a566ff, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@f84c54] -- 
+2024-08-14 00:19:48.812 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:19:48.815 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:19:49.706 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 6.77 seconds (JVM running for 172.238) -- 
+2024-08-14 00:19:49.738 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 00:20:01.542 [Thread-14] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:20:01.549 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown initiated... -- 
+2024-08-14 00:20:01.641 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown completed. -- 
+2024-08-14 00:20:02.306 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47765 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:20:02.309 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:20:02.781 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:20:02.855 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 71 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:20:03.095 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:20:03.100 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:20:03.101 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:20:03.101 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:20:03.113 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:20:03.113 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 781 ms -- 
+2024-08-14 00:20:03.207 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Starting... -- 
+2024-08-14 00:20:03.287 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Start completed. -- 
+2024-08-14 00:20:03.849 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:20:06.226 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@5ef4dae1 -- 
+2024-08-14 00:20:06.271 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:20:06.436 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:20:06.459 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:20:06.476 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: d9d53037-87aa-47b7-87a3-d8eac53c6f2e
+ -- 
+2024-08-14 00:20:06.484 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4c17b566, org.springframework.security.web.context.SecurityContextPersistenceFilter@3def1cf6, org.springframework.security.web.header.HeaderWriterFilter@2e8ae1b0, org.springframework.web.filter.CorsFilter@3879aeeb, org.springframework.security.web.authentication.logout.LogoutFilter@25bfc8b1, com.freebe.code.web.filter.JWTAuthenticationFilter@5ac4704f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@563a8761, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2fc47b77, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1210d890, org.springframework.security.web.session.SessionManagementFilter@43819f1d, org.springframework.security.web.access.ExceptionTranslationFilter@1c2ef218, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@152eee2d] -- 
+2024-08-14 00:20:06.500 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:20:06.503 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:20:07.244 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 5.12 seconds (JVM running for 189.776) -- 
+2024-08-14 00:20:07.257 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 00:20:08.131 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:20:08.137 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown initiated... -- 
+2024-08-14 00:20:08.153 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown completed. -- 
+2024-08-14 00:21:52.396 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47856 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:21:52.400 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:21:52.591 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 00:21:52.593 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 00:21:54.070 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:21:54.347 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 257 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:21:55.855 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:21:55.869 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:21:55.869 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:21:55.869 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:21:55.995 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:21:55.996 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3401 ms -- 
+2024-08-14 00:21:56.581 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 00:21:56.932 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 00:21:58.851 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:22:04.331 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@5c524922 -- 
+2024-08-14 00:22:04.469 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:22:05.329 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:22:05.688 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:22:05.930 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: cf8ccd9c-b001-42ec-b00b-cbb54ddc00a9
+ -- 
+2024-08-14 00:22:06.010 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@488743e1, org.springframework.security.web.context.SecurityContextPersistenceFilter@b8f4e00, org.springframework.security.web.header.HeaderWriterFilter@1126e52a, org.springframework.web.filter.CorsFilter@14afd0d8, org.springframework.security.web.authentication.logout.LogoutFilter@5849442b, com.freebe.code.web.filter.JWTAuthenticationFilter@3f6df79f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4923ca9c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@64df1bbf, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@370b2d3, org.springframework.security.web.session.SessionManagementFilter@20880f70, org.springframework.security.web.access.ExceptionTranslationFilter@4599228, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@9cc79c0] -- 
+2024-08-14 00:22:06.133 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:22:06.163 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:22:07.765 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 16.025 seconds (JVM running for 16.74) -- 
+2024-08-14 00:22:09.723 [http-nio-8990-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 00:22:09.724 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 00:22:09.730 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 6 ms -- 
+2024-08-14 00:22:48.908 [Thread-11] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:22:48.923 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 00:22:48.944 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 00:22:49.433 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47856 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:22:49.435 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:22:50.028 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:22:50.110 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 80 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:22:50.415 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:22:50.418 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:22:50.418 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:22:50.419 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:22:50.435 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:22:50.435 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 971 ms -- 
+2024-08-14 00:22:50.570 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 00:22:50.646 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 00:22:51.323 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:22:54.164 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@5b26283 -- 
+2024-08-14 00:22:54.225 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:22:54.435 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:22:54.473 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:22:54.499 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 243c077f-521b-46a8-83ba-e9fd84b49948
+ -- 
+2024-08-14 00:22:54.506 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2f74bd, org.springframework.security.web.context.SecurityContextPersistenceFilter@63902a8a, org.springframework.security.web.header.HeaderWriterFilter@13cfdc60, org.springframework.web.filter.CorsFilter@630c39a5, org.springframework.security.web.authentication.logout.LogoutFilter@6f12338b, com.freebe.code.web.filter.JWTAuthenticationFilter@1419e157, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3dd65b00, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5017bc06, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@21e0835a, org.springframework.security.web.session.SessionManagementFilter@81aac9d, org.springframework.security.web.access.ExceptionTranslationFilter@5ef00d1d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4f171ea5] -- 
+2024-08-14 00:22:54.532 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:22:54.534 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:22:55.466 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 6.227 seconds (JVM running for 64.441) -- 
+2024-08-14 00:22:55.500 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 00:22:58.439 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 00:22:58.442 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 00:22:58.445 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 2 ms -- 
+2024-08-14 00:23:36.312 [Thread-14] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:23:36.316 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown initiated... -- 
+2024-08-14 00:23:36.330 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown completed. -- 
+2024-08-14 00:23:36.815 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47856 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:23:36.817 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:23:37.235 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:23:37.301 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 64 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:23:37.563 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:23:37.567 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:23:37.568 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:23:37.568 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:23:37.579 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:23:37.580 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 735 ms -- 
+2024-08-14 00:23:37.656 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Starting... -- 
+2024-08-14 00:23:37.731 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Start completed. -- 
+2024-08-14 00:23:38.265 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:23:40.868 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@32825603 -- 
+2024-08-14 00:23:40.914 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:23:41.037 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:23:41.060 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:23:41.075 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 1f93df5d-4c99-4482-8160-91f6c724b74a
+ -- 
+2024-08-14 00:23:41.083 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@339c937d, org.springframework.security.web.context.SecurityContextPersistenceFilter@bcc1c1b, org.springframework.security.web.header.HeaderWriterFilter@5a42a216, org.springframework.web.filter.CorsFilter@6647c9ae, org.springframework.security.web.authentication.logout.LogoutFilter@1c1039ab, com.freebe.code.web.filter.JWTAuthenticationFilter@1638feb5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@63443bba, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2cd967d6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2e6a1941, org.springframework.security.web.session.SessionManagementFilter@5ed0a0bb, org.springframework.security.web.access.ExceptionTranslationFilter@6dd0a60e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@30680ce7] -- 
+2024-08-14 00:23:41.099 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:23:41.101 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:23:41.685 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 5.056 seconds (JVM running for 110.66) -- 
+2024-08-14 00:23:41.692 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 00:23:48.164 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 00:23:48.166 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 00:23:48.167 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 1 ms -- 
+2024-08-14 00:26:59.779 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:26:59.785 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown initiated... -- 
+2024-08-14 00:26:59.801 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown completed. -- 
+2024-08-14 00:27:03.729 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47909 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 00:27:03.732 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 00:27:03.933 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 00:27:03.934 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 00:27:05.447 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 00:27:05.742 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 283 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 00:27:07.269 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 00:27:07.289 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:27:07.290 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 00:27:07.290 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 00:27:07.390 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 00:27:07.391 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3456 ms -- 
+2024-08-14 00:27:07.882 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 00:27:08.232 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 00:27:10.133 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 00:27:15.734 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@7ceb2353 -- 
+2024-08-14 00:27:15.872 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 00:27:16.737 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 00:27:17.059 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 00:27:17.205 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 31f50fbd-37da-474c-857a-7616ea10c4bd
+ -- 
+2024-08-14 00:27:17.279 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5d4ba737, org.springframework.security.web.context.SecurityContextPersistenceFilter@f77b59a, org.springframework.security.web.header.HeaderWriterFilter@73376815, org.springframework.web.filter.CorsFilter@35648880, org.springframework.security.web.authentication.logout.LogoutFilter@2a71205, com.freebe.code.web.filter.JWTAuthenticationFilter@5acdc024, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@37402b35, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1613616f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3d43abcc, org.springframework.security.web.session.SessionManagementFilter@6dfea877, org.springframework.security.web.access.ExceptionTranslationFilter@2536055, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@172e6576] -- 
+2024-08-14 00:27:17.474 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 00:27:17.561 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 00:27:19.178 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 15.948 seconds (JVM running for 16.657) -- 
+2024-08-14 00:27:20.080 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 00:27:20.081 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 00:27:20.084 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 3 ms -- 
+2024-08-14 01:25:06.625 [http-nio-8990-exec-2] WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver -- Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.freebe.code.common.ResultBean<org.springframework.data.domain.Page<com.freebe.code.business.meta.vo.MemberVO>> com.freebe.code.business.meta.controller.MemberController.list(com.freebe.code.business.meta.controller.param.MemberQueryParam) throws com.freebe.code.common.CustomException] -- 
+2024-08-14 02:12:20.795 [Thread-11] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 02:12:20.809 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 02:12:20.848 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 02:12:21.429 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47909 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 02:12:21.431 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 02:12:22.052 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 02:12:22.135 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 80 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 02:12:22.503 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 02:12:22.509 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 02:12:22.510 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 02:12:22.510 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 02:12:22.536 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 02:12:22.536 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 1077 ms -- 
+2024-08-14 02:12:22.738 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 02:12:22.843 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 02:12:23.428 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 02:12:26.517 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@2abf4451 -- 
+2024-08-14 02:12:26.588 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 02:12:26.839 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 02:12:26.876 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 02:12:26.907 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 5ac0d581-7173-4d55-8001-0892996763bc
+ -- 
+2024-08-14 02:12:26.926 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@61c3876, org.springframework.security.web.context.SecurityContextPersistenceFilter@1039e509, org.springframework.security.web.header.HeaderWriterFilter@1af54ea3, org.springframework.web.filter.CorsFilter@50db52de, org.springframework.security.web.authentication.logout.LogoutFilter@19ae6f9d, com.freebe.code.web.filter.JWTAuthenticationFilter@47427abe, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@449a81f2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@742a4f94, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@77ce038e, org.springframework.security.web.session.SessionManagementFilter@7468c206, org.springframework.security.web.access.ExceptionTranslationFilter@37bc697d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@572814d7] -- 
+2024-08-14 02:12:26.963 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 02:12:26.968 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 02:12:28.020 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 6.809 seconds (JVM running for 6325.469) -- 
+2024-08-14 02:12:28.063 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 02:12:29.670 [http-nio-8990-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 02:12:29.674 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 02:12:29.678 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 4 ms -- 
+2024-08-14 02:14:05.162 [http-nio-8990-exec-4] INFO  com.freebe.code.business.base.service.impl.TecentSmsService -- 发送短信: 号码: 18650793245, 模板: 2137122, 参数: 957498 -- 
+2024-08-14 02:20:36.018 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=5m13s38ms). -- 
+2024-08-14 04:00:11.674 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=1h39m35s660ms). -- 
+2024-08-14 04:06:24.714 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=5m13s36ms). -- 
+2024-08-14 05:35:54.672 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=1h29m29s957ms). -- 
+2024-08-14 05:53:12.007 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=17m17s336ms). -- 
+2024-08-14 06:44:13.080 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=50m31s59ms). -- 
+2024-08-14 08:21:17.431 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=1h37m4s351ms). -- 
+2024-08-14 08:39:42.326 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=18m24s896ms). -- 
+2024-08-14 08:50:58.843 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=10m46s510ms). -- 
+2024-08-14 08:56:48.351 [Thread-14] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 08:56:48.357 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown initiated... -- 
+2024-08-14 08:56:48.399 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown completed. -- 
+2024-08-14 08:56:49.403 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 47909 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 08:56:49.405 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 08:56:49.843 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 08:56:49.910 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 64 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 08:56:50.195 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 08:56:50.200 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 08:56:50.200 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 08:56:50.200 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 08:56:50.216 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 08:56:50.216 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 787 ms -- 
+2024-08-14 08:56:50.429 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Starting... -- 
+2024-08-14 08:56:50.550 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Start completed. -- 
+2024-08-14 08:56:51.068 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 08:56:53.391 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@4a361671 -- 
+2024-08-14 08:56:53.445 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 08:56:53.578 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 08:56:53.604 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 08:56:53.621 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 634902cd-674a-4b0a-b287-c29b0829e01b
+ -- 
+2024-08-14 08:56:53.633 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@603495e2, org.springframework.security.web.context.SecurityContextPersistenceFilter@1d67adc3, org.springframework.security.web.header.HeaderWriterFilter@76687d37, org.springframework.web.filter.CorsFilter@30f6808c, org.springframework.security.web.authentication.logout.LogoutFilter@314ea00b, com.freebe.code.web.filter.JWTAuthenticationFilter@1d1e68a8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@63fc649b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@56c82c16, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@24b74d4f, org.springframework.security.web.session.SessionManagementFilter@326ea0de, org.springframework.security.web.access.ExceptionTranslationFilter@15fe74b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@445d3301] -- 
+2024-08-14 08:56:53.656 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 08:56:54.395 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 5.345 seconds (JVM running for 7246.292) -- 
+2024-08-14 08:56:54.412 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 08:56:54.434 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 08:56:54.440 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown initiated... -- 
+2024-08-14 08:56:54.483 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown completed. -- 
+2024-08-14 09:11:28.776 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 49863 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 09:11:28.781 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 09:11:29.072 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 09:11:29.073 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 09:11:30.671 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 09:11:30.948 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 269 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 09:11:32.445 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 09:11:32.458 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:11:32.458 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 09:11:32.458 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 09:11:32.579 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 09:11:32.580 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3506 ms -- 
+2024-08-14 09:11:33.238 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 09:11:33.602 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 09:11:35.459 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:11:38.168 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@41a5452c -- 
+2024-08-14 09:11:38.352 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 09:11:39.396 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 09:11:39.663 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 09:11:39.945 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 6946f05f-f5d4-4c86-93fc-b746245a1520
+ -- 
+2024-08-14 09:11:40.060 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1221545e, org.springframework.security.web.context.SecurityContextPersistenceFilter@42669fdc, org.springframework.security.web.header.HeaderWriterFilter@3518958f, org.springframework.web.filter.CorsFilter@4cbbbc70, org.springframework.security.web.authentication.logout.LogoutFilter@303f0db, com.freebe.code.web.filter.JWTAuthenticationFilter@20134366, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2866de19, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@73812e66, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@deed699, org.springframework.security.web.session.SessionManagementFilter@3f0eba23, org.springframework.security.web.access.ExceptionTranslationFilter@72a12081, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@753fefbc] -- 
+2024-08-14 09:11:40.215 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:11:40.241 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 09:11:41.886 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 13.887 seconds (JVM running for 14.665) -- 
+2024-08-14 09:11:56.021 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:11:56.032 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 09:11:56.049 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 09:19:16.643 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 49896 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 09:19:16.648 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 09:19:16.829 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 09:19:16.831 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 09:19:18.410 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 09:19:18.639 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 218 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 09:19:20.162 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 09:19:20.183 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:19:20.184 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 09:19:20.184 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 09:19:20.278 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 09:19:20.278 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3445 ms -- 
+2024-08-14 09:19:20.798 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 09:19:21.196 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 09:19:23.057 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:19:25.056 [restartedMain] WARN  org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext -- Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'memberController': Unsatisfied dependency expressed through field 'memberService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session -- 
+2024-08-14 09:19:25.060 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:19:25.064 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 09:19:25.084 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 09:19:25.092 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Stopping service [Tomcat] -- 
+2024-08-14 09:19:25.130 [restartedMain] INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener -- 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. -- 
+2024-08-14 09:19:25.157 [restartedMain] ERROR org.springframework.boot.SpringApplication -- Application run failed -- 
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'memberController': Unsatisfied dependency expressed through field 'memberService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:659)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:639)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:944)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:918)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:145)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:434)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:338)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332)
+	at com.freebe.code.GeneralApplication.main(GeneralApplication.java:16)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:160)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:440)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1796)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1300)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:656)
+	... 25 common frames omitted
+Caused by: org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:170)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:310)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:45)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:95)
+	at com.freebe.code.business.base.entity.User$HibernateProxy$H1Hj9pzI.setName(Unknown Source)
+	at com.freebe.code.business.meta.service.impl.MemberServiceImpl.loadData(MemberServiceImpl.java:85)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleElement.invoke(InitDestroyAnnotationBeanPostProcessor.java:389)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:333)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:157)
+	... 37 common frames omitted
+2024-08-14 09:21:11.330 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 49908 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 09:21:11.334 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 09:21:11.535 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 09:21:11.537 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 09:21:13.036 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 09:21:13.293 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 246 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 09:21:14.792 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 09:21:14.807 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:21:14.807 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 09:21:14.809 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 09:21:14.923 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 09:21:14.923 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3386 ms -- 
+2024-08-14 09:21:15.359 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 09:21:15.733 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 09:21:17.694 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:21:20.764 [restartedMain] WARN  org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext -- Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'memberController': Unsatisfied dependency expressed through field 'memberService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session -- 
+2024-08-14 09:21:20.773 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:21:20.780 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 09:21:20.819 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 09:21:20.842 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Stopping service [Tomcat] -- 
+2024-08-14 09:21:20.892 [restartedMain] INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener -- 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. -- 
+2024-08-14 09:21:20.922 [restartedMain] ERROR org.springframework.boot.SpringApplication -- Application run failed -- 
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'memberController': Unsatisfied dependency expressed through field 'memberService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:659)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:639)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:944)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:918)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:145)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:434)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:338)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332)
+	at com.freebe.code.GeneralApplication.main(GeneralApplication.java:16)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:160)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:440)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1796)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1300)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:656)
+	... 25 common frames omitted
+Caused by: org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.base.entity.User#2] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:170)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:310)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:45)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:95)
+	at com.freebe.code.business.base.entity.User$HibernateProxy$Z9ySW92C.setName(Unknown Source)
+	at com.freebe.code.business.meta.service.impl.MemberServiceImpl.loadData(MemberServiceImpl.java:85)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleElement.invoke(InitDestroyAnnotationBeanPostProcessor.java:389)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:333)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:157)
+	... 37 common frames omitted
+2024-08-14 09:35:32.827 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 50375 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 09:35:32.832 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 09:35:33.041 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 09:35:33.043 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 09:35:34.601 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 09:35:34.841 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 230 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 09:35:36.384 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 09:35:36.402 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:35:36.402 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 09:35:36.402 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 09:35:36.520 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 09:35:36.521 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3477 ms -- 
+2024-08-14 09:35:37.237 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 09:35:37.621 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 09:35:39.405 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:35:45.136 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@228f3bca -- 
+2024-08-14 09:35:45.292 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 09:35:46.187 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 09:35:46.405 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 09:35:46.558 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 915b1a62-0177-48ee-9a0d-1d74fda5de32
+ -- 
+2024-08-14 09:35:46.680 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3f8a7011, org.springframework.security.web.context.SecurityContextPersistenceFilter@113ae101, org.springframework.security.web.header.HeaderWriterFilter@36918179, org.springframework.web.filter.CorsFilter@415861a8, org.springframework.security.web.authentication.logout.LogoutFilter@29c6aa71, com.freebe.code.web.filter.JWTAuthenticationFilter@1ee1a259, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5d8e003f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@764ddd1f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1ba18178, org.springframework.security.web.session.SessionManagementFilter@6f0ecfc2, org.springframework.security.web.access.ExceptionTranslationFilter@69869fa2, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@73e61bc1] -- 
+2024-08-14 09:35:46.894 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:35:46.933 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 09:35:48.593 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 16.302 seconds (JVM running for 17.128) -- 
+2024-08-14 09:53:41.924 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 09:53:41.925 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 09:53:41.931 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 6 ms -- 
+2024-08-14 09:54:06.068 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:54:06.082 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 09:54:06.105 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 09:55:53.277 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 50460 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 09:55:53.281 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 09:55:53.473 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 09:55:53.475 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 09:55:55.006 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 09:55:55.249 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 233 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 09:55:56.766 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 09:55:56.781 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:55:56.782 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 09:55:56.782 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 09:55:56.900 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 09:55:56.900 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3425 ms -- 
+2024-08-14 09:55:57.380 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 09:55:57.737 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 09:55:59.587 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:56:05.548 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@5a6918d3 -- 
+2024-08-14 09:56:05.705 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 09:56:06.708 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 09:56:06.910 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 09:56:07.075 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: ae827c0e-bf86-4f96-8f95-d881d16573d4
+ -- 
+2024-08-14 09:56:07.199 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@22397ad5, org.springframework.security.web.context.SecurityContextPersistenceFilter@2dfeecc3, org.springframework.security.web.header.HeaderWriterFilter@207a755d, org.springframework.web.filter.CorsFilter@56e6b6a2, org.springframework.security.web.authentication.logout.LogoutFilter@f243036, com.freebe.code.web.filter.JWTAuthenticationFilter@584cf47a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50cc91f8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@506c1cd7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3a237877, org.springframework.security.web.session.SessionManagementFilter@6115127b, org.springframework.security.web.access.ExceptionTranslationFilter@4d8474f5, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1ce976b6] -- 
+2024-08-14 09:56:07.374 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:56:07.405 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 09:56:08.990 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 16.457 seconds (JVM running for 17.201) -- 
+2024-08-14 09:56:11.148 [http-nio-8990-exec-3] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 09:56:11.149 [http-nio-8990-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 09:56:11.152 [http-nio-8990-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 3 ms -- 
+2024-08-14 09:56:45.179 [Thread-11] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:56:45.194 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 09:56:45.213 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 09:56:45.692 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 50460 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 09:56:45.694 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 09:56:46.296 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 09:56:46.384 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 87 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 09:56:46.726 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 09:56:46.730 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:56:46.730 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 09:56:46.730 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 09:56:46.746 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 09:56:46.746 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 1026 ms -- 
+2024-08-14 09:56:46.911 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 09:56:47.003 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 09:56:47.661 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:56:50.497 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@29514b3a -- 
+2024-08-14 09:56:50.553 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 09:56:50.771 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 09:56:50.810 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 09:56:50.831 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 1908e136-a400-4a39-9d53-6c0a3c75f809
+ -- 
+2024-08-14 09:56:50.838 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a59e5d8, org.springframework.security.web.context.SecurityContextPersistenceFilter@5117a5b4, org.springframework.security.web.header.HeaderWriterFilter@608002f2, org.springframework.web.filter.CorsFilter@31898b8c, org.springframework.security.web.authentication.logout.LogoutFilter@71aa6e48, com.freebe.code.web.filter.JWTAuthenticationFilter@2a7cb590, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@36deddac, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@56a9ce17, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@51616a4d, org.springframework.security.web.session.SessionManagementFilter@3c5ee80c, org.springframework.security.web.access.ExceptionTranslationFilter@2c497cf6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@739d1e6b] -- 
+2024-08-14 09:56:50.868 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 09:56:50.869 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 09:56:51.905 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 6.403 seconds (JVM running for 60.118) -- 
+2024-08-14 09:56:51.945 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 09:57:03.395 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 09:57:03.402 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown initiated... -- 
+2024-08-14 09:57:03.425 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown completed. -- 
+2024-08-14 10:04:20.155 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 50544 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 10:04:20.160 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 10:04:20.346 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 10:04:20.347 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 10:04:21.762 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 10:04:22.041 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 271 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 10:04:23.480 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 10:04:23.493 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:04:23.493 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 10:04:23.493 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 10:04:23.608 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 10:04:23.608 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3261 ms -- 
+2024-08-14 10:04:24.180 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 10:04:24.535 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 10:04:26.377 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:04:32.391 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@6bd05e8b -- 
+2024-08-14 10:04:32.528 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 10:04:33.307 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 10:04:33.603 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 10:04:33.789 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 1f224523-0e8c-423c-b607-db9b2d1953f1
+ -- 
+2024-08-14 10:04:33.917 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7c971844, org.springframework.security.web.context.SecurityContextPersistenceFilter@1d666f18, org.springframework.security.web.header.HeaderWriterFilter@2db68bd3, org.springframework.web.filter.CorsFilter@dcd751e, org.springframework.security.web.authentication.logout.LogoutFilter@1d48de08, com.freebe.code.web.filter.JWTAuthenticationFilter@4dd20476, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d3599a1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6dffc507, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26722721, org.springframework.security.web.session.SessionManagementFilter@177ef3fd, org.springframework.security.web.access.ExceptionTranslationFilter@da6fb47, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@349c36b4] -- 
+2024-08-14 10:04:34.149 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:04:34.182 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 10:04:36.018 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 16.546 seconds (JVM running for 17.276) -- 
+2024-08-14 10:04:37.330 [http-nio-8990-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 10:04:37.331 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 10:04:37.335 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 4 ms -- 
+2024-08-14 10:05:01.505 [Thread-11] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:05:01.518 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 10:05:01.540 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 10:05:02.013 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeMacBook-Air.local with PID 50544 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 10:05:02.016 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 10:05:02.633 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 10:05:02.723 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 88 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 10:05:03.054 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 10:05:03.058 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:05:03.058 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 10:05:03.058 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 10:05:03.074 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 10:05:03.074 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 1034 ms -- 
+2024-08-14 10:05:03.212 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 10:05:03.290 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 10:05:03.985 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:05:07.082 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@2bd4ed55 -- 
+2024-08-14 10:05:07.178 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 10:05:07.456 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 10:05:07.495 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 10:05:07.517 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 543e6caa-ff32-4cf3-b9a9-60d4ad63a0ba
+ -- 
+2024-08-14 10:05:07.525 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1584e369, org.springframework.security.web.context.SecurityContextPersistenceFilter@99ebbae, org.springframework.security.web.header.HeaderWriterFilter@12350af9, org.springframework.web.filter.CorsFilter@12a199b4, org.springframework.security.web.authentication.logout.LogoutFilter@7843ee24, com.freebe.code.web.filter.JWTAuthenticationFilter@44506ea0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2ffb8514, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@15a320d0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2674474, org.springframework.security.web.session.SessionManagementFilter@4d9b9ab0, org.springframework.security.web.access.ExceptionTranslationFilter@20e0c465, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@68b7c212] -- 
+2024-08-14 10:05:07.552 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:05:07.554 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 10:05:08.414 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 6.61 seconds (JVM running for 49.674) -- 
+2024-08-14 10:05:08.444 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 10:05:11.482 [http-nio-8990-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 10:05:11.483 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 10:05:11.486 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 2 ms -- 
+2024-08-14 10:12:37.891 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=7m4s484ms). -- 
+2024-08-14 10:56:11.620 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=43m33s730ms). -- 
+2024-08-14 10:57:06.573 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=54s953ms). -- 
+2024-08-14 10:58:19.516 [Thread-14] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:58:19.522 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown initiated... -- 
+2024-08-14 10:58:19.536 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown completed. -- 
+2024-08-14 10:58:20.023 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 50544 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 10:58:20.027 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 10:58:20.440 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 10:58:20.507 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 63 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 10:58:20.749 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 10:58:20.753 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:58:20.753 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 10:58:20.753 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 10:58:20.765 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 10:58:20.765 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 716 ms -- 
+2024-08-14 10:58:20.846 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Starting... -- 
+2024-08-14 10:58:20.925 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Start completed. -- 
+2024-08-14 10:58:21.359 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:58:23.844 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@5da0e21c -- 
+2024-08-14 10:58:23.890 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 10:58:24.026 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 10:58:24.049 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 10:58:24.064 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 289f2d8f-6132-4fcd-8285-53a0508ab4e8
+ -- 
+2024-08-14 10:58:24.073 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@59b9860e, org.springframework.security.web.context.SecurityContextPersistenceFilter@391b274e, org.springframework.security.web.header.HeaderWriterFilter@368abf90, org.springframework.web.filter.CorsFilter@511ac775, org.springframework.security.web.authentication.logout.LogoutFilter@2749aaed, com.freebe.code.web.filter.JWTAuthenticationFilter@25557885, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@f4b8466, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6c5ecc20, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5d3c48f7, org.springframework.security.web.session.SessionManagementFilter@55bfc846, org.springframework.security.web.access.ExceptionTranslationFilter@12349a59, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1f0d76cd] -- 
+2024-08-14 10:58:24.091 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:58:24.094 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 10:58:24.826 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 4.975 seconds (JVM running for 242.939) -- 
+2024-08-14 10:58:24.849 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 10:58:26.823 [Thread-24] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:58:26.831 [Thread-24] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown initiated... -- 
+2024-08-14 10:58:26.853 [Thread-24] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-3 - Shutdown completed. -- 
+2024-08-14 10:58:27.446 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 50544 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 10:58:27.449 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 10:58:27.823 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 10:58:27.884 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 59 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 10:58:28.093 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 10:58:28.097 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:58:28.099 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 10:58:28.099 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 10:58:28.113 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 10:58:28.114 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 641 ms -- 
+2024-08-14 10:58:28.192 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-4 - Starting... -- 
+2024-08-14 10:58:28.275 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-4 - Start completed. -- 
+2024-08-14 10:58:28.691 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 10:58:30.869 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@5b4c15e1 -- 
+2024-08-14 10:58:30.971 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 10:58:31.189 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 10:58:31.209 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 10:58:31.226 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 037d9128-474f-42a7-9934-11e10042c50c
+ -- 
+2024-08-14 10:58:31.235 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7176f87e, org.springframework.security.web.context.SecurityContextPersistenceFilter@15bbfbb6, org.springframework.security.web.header.HeaderWriterFilter@45505aa6, org.springframework.web.filter.CorsFilter@638e9402, org.springframework.security.web.authentication.logout.LogoutFilter@1ae233e8, com.freebe.code.web.filter.JWTAuthenticationFilter@638c7b8d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@d5bd151, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4a192f36, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3f1c8bca, org.springframework.security.web.session.SessionManagementFilter@1431df86, org.springframework.security.web.access.ExceptionTranslationFilter@5af85000, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@70ce098f] -- 
+2024-08-14 10:58:31.251 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 10:58:31.255 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 10:58:31.780 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 4.536 seconds (JVM running for 249.893) -- 
+2024-08-14 10:58:31.798 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 11:01:39.235 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 11:01:39.240 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 11:01:39.246 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 6 ms -- 
+2024-08-14 16:05:09.755 [Thread-33] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:05:09.760 [Thread-33] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-4 - Shutdown initiated... -- 
+2024-08-14 16:05:09.780 [Thread-33] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-4 - Shutdown completed. -- 
+2024-08-14 16:05:10.385 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 50544 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 16:05:10.387 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 16:05:10.788 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 16:05:10.840 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 51 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 16:05:11.073 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 16:05:11.076 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:05:11.076 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 16:05:11.076 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 16:05:11.090 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 16:05:11.090 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 685 ms -- 
+2024-08-14 16:05:11.191 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-5 - Starting... -- 
+2024-08-14 16:05:11.316 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-5 - Start completed. -- 
+2024-08-14 16:05:11.791 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:05:14.145 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@77227298 -- 
+2024-08-14 16:05:14.221 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 16:05:14.489 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 16:05:14.527 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 16:05:14.553 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 3ccf83fc-3648-409f-9a93-fd4d69445051
+ -- 
+2024-08-14 16:05:14.567 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@36d51ea5, org.springframework.security.web.context.SecurityContextPersistenceFilter@383fbba0, org.springframework.security.web.header.HeaderWriterFilter@263925b8, org.springframework.web.filter.CorsFilter@93b960, org.springframework.security.web.authentication.logout.LogoutFilter@2736ab77, com.freebe.code.web.filter.JWTAuthenticationFilter@19145df2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@127943b9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7d82b0ab, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6ec0af4b, org.springframework.security.web.session.SessionManagementFilter@7631df8, org.springframework.security.web.access.ExceptionTranslationFilter@db4eb1d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@704d2a7a] -- 
+2024-08-14 16:05:14.595 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:05:14.602 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 16:05:15.071 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 4.885 seconds (JVM running for 18653.201) -- 
+2024-08-14 16:05:15.089 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 16:05:27.670 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 16:05:27.673 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 16:05:27.677 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 2 ms -- 
+2024-08-14 16:24:19.523 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:24:19.531 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-5 - Shutdown initiated... -- 
+2024-08-14 16:24:19.571 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-5 - Shutdown completed. -- 
+2024-08-14 16:47:38.990 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 52101 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 16:47:38.995 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 16:47:39.190 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 16:47:39.191 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 16:47:40.725 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 16:47:40.963 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 228 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 16:47:42.514 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 16:47:42.533 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:47:42.533 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 16:47:42.534 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 16:47:42.646 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 16:47:42.647 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3456 ms -- 
+2024-08-14 16:47:43.203 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 16:47:43.611 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 16:47:45.448 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:47:51.108 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@2c71ee3e -- 
+2024-08-14 16:47:51.233 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 16:47:52.127 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 16:47:52.441 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 16:47:52.686 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: fd36682b-7e35-4b97-85c1-3468afdd76ad
+ -- 
+2024-08-14 16:47:52.799 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@35e28c57, org.springframework.security.web.context.SecurityContextPersistenceFilter@7e2d8998, org.springframework.security.web.header.HeaderWriterFilter@27aab2ec, org.springframework.web.filter.CorsFilter@3dd85480, org.springframework.security.web.authentication.logout.LogoutFilter@6061bebf, com.freebe.code.web.filter.JWTAuthenticationFilter@376a5b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@150a0862, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c48130d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1e6917e8, org.springframework.security.web.session.SessionManagementFilter@34d46fe5, org.springframework.security.web.access.ExceptionTranslationFilter@e3a685e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@24e8031b] -- 
+2024-08-14 16:47:53.009 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:47:53.040 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 16:47:54.661 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 16.222 seconds (JVM running for 17.09) -- 
+2024-08-14 16:47:56.286 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 16:47:56.287 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 16:47:56.290 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 3 ms -- 
+2024-08-14 16:49:25.258 [Thread-10] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:49:25.278 [Thread-10] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 16:49:25.310 [Thread-10] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 16:49:25.727 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 52101 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 16:49:25.729 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 16:49:26.315 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 16:49:26.406 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 89 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 16:49:26.693 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 16:49:26.699 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:49:26.700 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 16:49:26.700 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 16:49:26.715 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 16:49:26.716 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 956 ms -- 
+2024-08-14 16:49:26.849 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 16:49:26.943 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 16:49:27.532 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:49:28.352 [restartedMain] WARN  org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext -- Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'memberController': Unsatisfied dependency expressed through field 'memberService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.meta.entity.Member#2] - no Session -- 
+2024-08-14 16:49:28.354 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:49:28.356 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown initiated... -- 
+2024-08-14 16:49:28.377 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Shutdown completed. -- 
+2024-08-14 16:49:28.379 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Stopping service [Tomcat] -- 
+2024-08-14 16:49:28.415 [restartedMain] INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener -- 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. -- 
+2024-08-14 16:49:28.434 [restartedMain] ERROR org.springframework.boot.SpringApplication -- Application run failed -- 
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'memberController': Unsatisfied dependency expressed through field 'memberService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.meta.entity.Member#2] - no Session
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:659)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:639)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:944)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:918)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:145)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:434)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:338)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332)
+	at com.freebe.code.GeneralApplication.main(GeneralApplication.java:16)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'memberServiceImpl': Invocation of init method failed; nested exception is org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.meta.entity.Member#2] - no Session
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:160)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:440)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1796)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1300)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:656)
+	... 25 common frames omitted
+Caused by: org.hibernate.LazyInitializationException: could not initialize proxy [com.freebe.code.business.meta.entity.Member#2] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:170)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:310)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:45)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:95)
+	at com.freebe.code.business.meta.entity.Member$HibernateProxy$FYQnDJhC.setName(Unknown Source)
+	at com.freebe.code.business.meta.service.impl.MemberServiceImpl.toVO(MemberServiceImpl.java:247)
+	at com.freebe.code.business.meta.service.impl.MemberServiceImpl.loadData(MemberServiceImpl.java:79)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleElement.invoke(InitDestroyAnnotationBeanPostProcessor.java:389)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:333)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:157)
+	... 37 common frames omitted
+2024-08-14 16:50:26.353 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 52121 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 16:50:26.357 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 16:50:26.557 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable -- 
+2024-08-14 16:50:26.558 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor -- For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' -- 
+2024-08-14 16:50:28.122 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 16:50:28.362 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 232 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 16:50:29.861 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 16:50:29.875 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:50:29.876 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 16:50:29.876 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 16:50:29.994 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 16:50:29.995 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 3435 ms -- 
+2024-08-14 16:50:30.551 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting... -- 
+2024-08-14 16:50:30.904 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed. -- 
+2024-08-14 16:50:32.780 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:50:35.155 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@3ae56ac3 -- 
+2024-08-14 16:50:35.308 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 16:50:36.147 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 16:50:36.422 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 16:50:36.610 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: eefaf63d-9816-4e05-9c82-cba0186a1081
+ -- 
+2024-08-14 16:50:36.751 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5f1d2072, org.springframework.security.web.context.SecurityContextPersistenceFilter@197a7fec, org.springframework.security.web.header.HeaderWriterFilter@44070382, org.springframework.web.filter.CorsFilter@19849377, org.springframework.security.web.authentication.logout.LogoutFilter@36015750, com.freebe.code.web.filter.JWTAuthenticationFilter@1456f792, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3156ad63, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@b4cc076, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@291b5d4c, org.springframework.security.web.session.SessionManagementFilter@34d63e8f, org.springframework.security.web.access.ExceptionTranslationFilter@57df4461, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1f35ba0e] -- 
+2024-08-14 16:50:36.892 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:50:36.912 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 16:50:38.557 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 12.722 seconds (JVM running for 13.43) -- 
+2024-08-14 16:50:42.870 [http-nio-8990-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 16:50:42.871 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 16:50:42.877 [http-nio-8990-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 6 ms -- 
+2024-08-14 16:55:45.222 [Thread-5] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:55:45.242 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated... -- 
+2024-08-14 16:55:45.270 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed. -- 
+2024-08-14 16:55:45.684 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Starting GeneralApplication using Java 1.8.0_372-internal on zhengbiaodeAir.lan with PID 52121 (/Users/zhengbiaoxie/Workspace/code-wander-backend/target/classes started by zhengbiaoxie in /Users/zhengbiaoxie/Workspace/code-wander-backend) -- 
+2024-08-14 16:55:45.685 [restartedMain] INFO  com.freebe.code.GeneralApplication -- No active profile set, falling back to default profiles: default -- 
+2024-08-14 16:55:46.242 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode. -- 
+2024-08-14 16:55:46.327 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 84 ms. Found 17 JPA repository interfaces. -- 
+2024-08-14 16:55:46.641 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat initialized with port(s): 8990 (http) -- 
+2024-08-14 16:55:46.647 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Initializing ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:55:46.648 [restartedMain] INFO  org.apache.catalina.core.StandardService -- Starting service [Tomcat] -- 
+2024-08-14 16:55:46.648 [restartedMain] INFO  org.apache.catalina.core.StandardEngine -- Starting Servlet engine: [Apache Tomcat/9.0.54] -- 
+2024-08-14 16:55:46.672 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring embedded WebApplicationContext -- 
+2024-08-14 16:55:46.672 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext -- Root WebApplicationContext: initialization completed in 970 ms -- 
+2024-08-14 16:55:46.903 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Starting... -- 
+2024-08-14 16:55:46.971 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -- HikariPool-2 - Start completed. -- 
+2024-08-14 16:55:47.566 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default' -- 
+2024-08-14 16:55:48.501 [restartedMain] INFO  com.freebe.code.common.CommonExecutor -- 启动线程： com.freebe.code.business.meta.service.impl.TransactionTimer$1@373ae107 -- 
+2024-08-14 16:55:48.571 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration -- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning -- 
+2024-08-14 16:55:48.782 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer -- LiveReload server is running on port 35729 -- 
+2024-08-14 16:55:48.827 [restartedMain] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration -- Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration) -- 
+2024-08-14 16:55:48.850 [restartedMain] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration -- 
+
+Using generated security password: 61e01b17-7933-4f5b-aa9a-595d65b8bdb6
+ -- 
+2024-08-14 16:55:48.860 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain -- Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b2198b3, org.springframework.security.web.context.SecurityContextPersistenceFilter@1118a82e, org.springframework.security.web.header.HeaderWriterFilter@35e3ae70, org.springframework.web.filter.CorsFilter@63073eb4, org.springframework.security.web.authentication.logout.LogoutFilter@2629cec8, com.freebe.code.web.filter.JWTAuthenticationFilter@5591a1a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7e9da980, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5625180d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@646c7572, org.springframework.security.web.session.SessionManagementFilter@3ed35ec5, org.springframework.security.web.access.ExceptionTranslationFilter@41a5d9f4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@313af04e] -- 
+2024-08-14 16:55:48.891 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol -- Starting ProtocolHandler ["http-nio-8990"] -- 
+2024-08-14 16:55:48.895 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer -- Tomcat started on port(s): 8990 (http) with context path '' -- 
+2024-08-14 16:55:49.681 [restartedMain] INFO  com.freebe.code.GeneralApplication -- Started GeneralApplication in 4.15 seconds (JVM running for 324.552) -- 
+2024-08-14 16:55:49.701 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener -- Condition evaluation unchanged -- 
+2024-08-14 16:57:11.976 [http-nio-8990-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -- Initializing Spring DispatcherServlet 'dispatcherServlet' -- 
+2024-08-14 16:57:11.985 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Initializing Servlet 'dispatcherServlet' -- 
+2024-08-14 16:57:11.992 [http-nio-8990-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet -- Completed initialization in 6 ms -- 
+2024-08-14 18:51:40.996 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=2m52s821ms). -- 
+2024-08-14 19:25:22.494 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=33m41s500ms). -- 
+2024-08-14 19:51:14.939 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=25m52s445ms). -- 
+2024-08-14 20:55:42.929 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=1h4m27s991ms). -- 
+2024-08-14 21:29:57.502 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=33m14s511ms). -- 
+2024-08-14 23:07:17.408 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=1h37m19s906ms). -- 
+2024-08-14 23:34:29.967 [HikariPool-2 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool -- HikariPool-2 - Thread starvation or clock leap detected (housekeeper delta=27m12s557ms). -- 
