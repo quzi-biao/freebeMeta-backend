@@ -81,6 +81,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	
 	@Override
 	public UserVO getUser(Long userId) {
+		if(userId == null || userId < 0) {
+			return null;
+		}
 		try {
 			UserVO vo = this.objectCaches.get(userId, UserVO.class);
 			if(null != vo) {
