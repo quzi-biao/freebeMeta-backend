@@ -40,7 +40,7 @@ public class SwaggerConfig   {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("二供运维系统接口")
+            .title("FreeBe Meta 系统接口")
             .version("1.0")
             .build();
     }
