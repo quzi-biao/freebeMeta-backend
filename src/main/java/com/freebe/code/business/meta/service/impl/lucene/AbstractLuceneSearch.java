@@ -172,7 +172,8 @@ public abstract class AbstractLuceneSearch<T extends BaseVO> {
             //遍历查询结果 把标题和内容替换为带高亮的最佳摘要
             for (ScoreDoc sd : tds.scoreDocs) {
                 Document doc = indexSearcher.doc(sd.doc);
-                T t = (T) this.getClazz().newInstance();
+                @SuppressWarnings("deprecation")
+				T t = (T) this.getClazz().newInstance();
                 
                 Integer id = Integer.parseInt(doc.get("id"));
                 t.setId(id.longValue());
