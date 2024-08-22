@@ -339,7 +339,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	}
 	
 	private List<MemberVO> randomList(long size) throws CustomException {
-		Long maxId = this.repository.getMaxId();
+		Long maxId = Optional.ofNullable(this.repository.getMaxId()).orElse(0L);
 		List<MemberVO> retList = new ArrayList<>();
 		long count = this.countMembers();
 		if(size > count) {
