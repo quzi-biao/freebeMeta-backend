@@ -62,10 +62,20 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 	public void init() throws CustomException {
 		if(this.repository.count() == 0) {
 			// 创建默认角色
-			RoleParam role = new RoleParam();
-			role.setName("财务官");
-			role.setRoleCode(TransactionService.ROLE_CF_CODE);
-			this.createOrUpdate(role);
+			RoleParam param = new RoleParam();
+			param.setName("财务官");
+			param.setRoleCode(TransactionService.ROLE_CF_CODE);
+			Role e = this.getUpdateEntity(param);
+
+			e.setContractAddress(param.getContractAddress());
+			e.setIcon(param.getIcon());
+			e.setDescription(param.getDescription());
+			e.setReward(param.getReward());
+			e.setRoleCode(param.getRoleCode());
+			e.setPicture(param.getPicture());
+			e.setNumber(param.getNumber());
+
+			e = repository.save(e);
 		}
 	}
 
