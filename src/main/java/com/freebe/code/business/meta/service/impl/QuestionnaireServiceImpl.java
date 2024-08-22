@@ -11,6 +11,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.QuestionnaireParam;
 import com.freebe.code.business.meta.controller.param.QuestionnaireQueryParam;
 import com.freebe.code.business.meta.entity.Questionnaire;
+import com.freebe.code.business.meta.entity.QuestionnaireAnswer;
+import com.freebe.code.business.meta.repository.QuestionnaireAnswerRepository;
 import com.freebe.code.business.meta.repository.QuestionnaireRepository;
 import com.freebe.code.business.meta.service.QuestionService;
 import com.freebe.code.business.meta.service.QuestionnaireService;
@@ -41,6 +44,9 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
 public class QuestionnaireServiceImpl extends BaseServiceImpl<Questionnaire> implements QuestionnaireService {
 	@Autowired
 	private QuestionnaireRepository repository;
+	
+	@Autowired
+	private QuestionnaireAnswerRepository questionnaireAnswerRepository;
 
 	@Autowired
 	private ObjectCaches objectCaches;
@@ -50,7 +56,7 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<Questionnaire> imp
 	
 	@Autowired
 	private UserService userService;
-
+	
 	@Override
 	public QuestionnaireVO findById(Long id) throws CustomException {
 		QuestionnaireVO ret = this.objectCaches.get(id, QuestionnaireVO.class);
@@ -111,6 +117,26 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<Questionnaire> imp
 			retList.add(toVO(e));
 		}
 		return new PageImpl<QuestionnaireVO>(retList, page.getPageable(), page.getTotalElements());
+	}
+	
+
+	@Override
+	public List<QuestionnaireVO> answered() throws CustomException {
+		QuestionnaireAnswer example = new QuestionnaireAnswer();
+		example.setUserId(getCurrentUser().getId());
+		example.setIsDelete(false);
+		
+		List<QuestionnaireAnswer> answerList = questionnaireAnswerRepository.findAll(Example.of(example));
+		if(null == answerList || answerList.size() == 0) {
+			return null;
+		}
+		
+		List<QuestionnaireVO> ret = new ArrayList<>();
+		for(QuestionnaireAnswer a : answerList) {
+			ret.add(this.findById(a.getQuestionnaireId()));
+		}
+		
+		return ret;
 	}
 
 	private Specification<Questionnaire> buildSpec(QuestionnaireQueryParam param) throws CustomException {

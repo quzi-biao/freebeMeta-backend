@@ -64,4 +64,10 @@ public class MemberController {
 	public ResultBean<MemberVO> addRole(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) throws CustomException {
 		return ResultBean.ok(memberService.addRole(id, roleId));
 	}
+	
+	@ApiOperation(value = "移除角色")
+	@GetMapping("removeRole/{id}/{roleId}")
+	public ResultBean<MemberVO> removeRole(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) throws CustomException {
+		return ResultBean.ok(memberService.removeRole(id, roleId));
+	}
 }

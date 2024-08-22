@@ -18,13 +18,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
+import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.meta.controller.param.RoleParam;
 import com.freebe.code.business.meta.controller.param.RoleQueryParam;
 import com.freebe.code.business.meta.entity.Role;
 import com.freebe.code.business.meta.repository.RoleRepository;
+import com.freebe.code.business.meta.service.MemberRoleRelationService;
+import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.RoleService;
 import com.freebe.code.business.meta.service.TransactionService;
+import com.freebe.code.business.meta.vo.MemberRoleRelationVO;
 import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
@@ -43,6 +48,15 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
 	@Autowired
 	private ObjectCaches objectCaches;
+	
+	@Autowired
+	private MemberRoleRelationService relationService;
+	
+	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@PostConstruct
 	public void init() throws CustomException {
@@ -83,6 +97,10 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
 	@Override
 	public RoleVO createOrUpdate(RoleParam param) throws CustomException {
+		if(this.getCurrentUser().getId() != 1) {
+			throw new CustomException("您无权执行此操作");
+		}
+		
 		Role e = this.getUpdateEntity(param);
 
 		e.setContractAddress(param.getContractAddress());
@@ -91,6 +109,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 		e.setReward(param.getReward());
 		e.setRoleCode(param.getRoleCode());
 		e.setPicture(param.getPicture());
+		e.setNumber(param.getNumber());
 
 		e = repository.save(e);
 
@@ -124,8 +143,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 			public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				QueryBuilder<Role> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
-
-				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
 				return query.where(builder.getPredicate()).getRestriction();
 			}
 		};
@@ -144,6 +161,16 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 		vo.setReward(e.getReward());
 		vo.setRoleCode(e.getRoleCode());
 		vo.setPicture(e.getPicture());
+		vo.setNumber(e.getNumber());
+		
+		List<MemberRoleRelationVO> relations = this.relationService.getList(e.getId());
+		if(null != relations && relations.size() > 0) {
+			List<UserVO> members = new ArrayList<>();
+			for(MemberRoleRelationVO mr : relations) {
+				members.add(this.userService.getUser(this.memberService.getUserIdByMemberId(mr.getMemberId())));
+			}
+			vo.setRoleKeeper(members);
+		}
 
 		return vo;
 	}

@@ -40,6 +40,7 @@ import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.RoleService;
 import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.service.impl.lucene.MemberLuceneSearch;
+import com.freebe.code.business.meta.vo.MemberRoleRelationVO;
 import com.freebe.code.business.meta.vo.MemberVO;
 import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.business.meta.vo.Skill;
@@ -139,6 +140,29 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		return toVO(ret);
 	}
 	
+	
+	@Override
+	public Long getUserIdByMemberId(Long id) throws CustomException {
+		if(null == id) {
+			throw new CustomException("参数错误");
+		}
+		
+		Member ret = this.objectCaches.get(id, Member.class);
+		if(null == ret){
+			Optional<Member> op = this.repository.findById(id);
+			if(!op.isPresent()){
+				return null;
+			}
+			ret = op.get();
+		}
+		
+		if(null == ret) {
+			throw new CustomException("用户不存在");
+		}
+		
+		return ret.getUserId();
+	}
+	
 	@Override
 	public Long getMemberIdByUserId(Long userId) throws CustomException {
 		if(null == userId) {
@@ -196,7 +220,50 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	
 	@Transactional
 	@Override
+	public MemberVO removeRole(Long memberId, Long roleId) throws CustomException {
+		if(this.getCurrentUser().getId() != 1) {
+			throw new CustomException("您无权执行此操作");
+		}
+		
+		Member member = this.getById(memberId);
+		MemberRoleRelationVO relation = this.memberRoleRelationService.getRelation(roleId, memberId);
+		if(null == relation) {
+			return toVO(member);
+		}
+		
+		String roleStr = member.getRoles();
+		Set<Long> roleIds = new HashSet<>();
+		if(!StringUtils.isEmpty(roleStr)) {
+			roleIds = new HashSet<>(toList(roleStr, Long.class));
+		}
+		
+		this.memberRoleRelationService.softDelete(relation.getId());
+		
+		roleIds.remove(roleId);
+		member.setRoles(JSONObject.toJSONString(roleIds));
+		this.repository.save(member);
+		
+		objectCaches.put(member.getId(), member);
+		objectCaches.put("user:" + member.getUserId(), member);
+		
+		MemberVO ret = toVO(member);
+		searcher.addOrUpdateIndex(ret);
+		
+		return ret;
+	}
+	
+	@Transactional
+	@Override
 	public MemberVO addRole(Long memberId, Long roleId) throws CustomException {
+		if(this.getCurrentUser().getId() != 1) {
+			throw new CustomException("您无权执行此操作");
+		}
+		
+		MemberRoleRelationVO relation = this.memberRoleRelationService.getRelation(roleId, memberId);
+		if(null != relation) {
+			throw new CustomException("已经是该岗位的成员");
+		}
+		
 		Member member = this.getById(memberId);
 		if(null == member) {
 			throw new CustomException("成员不存在");
@@ -205,6 +272,13 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		RoleVO role = this.roleService.findById(roleId);
 		if(null == role) {
 			throw new CustomException("角色不存在");
+		}
+		
+		if(null != role.getRoleKeeper()) {
+			System.out.println(role.getRoleKeeper());
+			if(role.getNumber().intValue() <= role.getRoleKeeper().size()) {
+				throw new CustomException("角色限制为" + role.getNumber() + '人');
+			}
 		}
 		
 		String roleStr = member.getRoles();

@@ -1,6 +1,9 @@
 package com.freebe.code.business.meta.vo;
 
+import java.util.List;
+
 import com.freebe.code.business.base.vo.BaseVO;
+import com.freebe.code.business.base.vo.UserVO;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -36,4 +39,10 @@ public class RoleVO extends BaseVO {
 	
 	@ApiModelProperty("角色编码")
 	private String roleCode;
+	
+	@ApiModelProperty("数量")
+	private Integer number;
+	
+	@ApiModelProperty("角色持有者")
+	private List<UserVO> roleKeeper;
 }

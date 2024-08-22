@@ -36,4 +36,7 @@ public class RoleParam extends BaseEntityParam {
 	
 	@ApiModelProperty("角色编码")
 	private String roleCode;
+	
+	@ApiModelProperty("数量")
+	private Integer number;
 }

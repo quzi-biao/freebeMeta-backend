@@ -46,6 +46,11 @@ public class Role extends BaseEntity {
 	private String reward;
 	
 	/**
+	 * 人数
+	 */
+	private Integer number;
+	
+	/**
 	 * 角色图片
 	 */
 	private String picture;

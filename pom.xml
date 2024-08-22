@@ -7,7 +7,7 @@
 		<relativePath />
 	</parent>
 	<groupId>com.freebe</groupId>
-	<artifactId>code.wander</artifactId>
+	<artifactId>meta</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
   
 	<properties>

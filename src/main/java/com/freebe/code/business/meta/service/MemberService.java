@@ -33,6 +33,14 @@ public interface MemberService extends BaseService<Member> {
 	Long getMemberIdByUserId(Long userId) throws CustomException;
 	
 	/**
+	 * 根据用户ID获取成员ID
+	 * @param userId
+	 * @return
+	 * @throws CustomException
+	 */
+	Long getUserIdByMemberId(Long userId) throws CustomException;
+	
+	/**
 	 * 为成员添加某个角色
 	 * @param roleId
 	 * @return
@@ -46,5 +54,14 @@ public interface MemberService extends BaseService<Member> {
 	 * @throws CustomException
 	 */
 	Long countMembers() throws CustomException;
+
+	/**
+	 * 移除角色
+	 * @param memberId
+	 * @param roleId
+	 * @return
+	 * @throws CustomException
+	 */
+	MemberVO removeRole(Long memberId, Long roleId) throws CustomException;
 
 }

@@ -4,28 +4,17 @@ package com.freebe.code.business.meta.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.MemberRoleRelationParam;
-import com.freebe.code.business.meta.controller.param.MemberRoleRelationQueryParam;
 import com.freebe.code.business.meta.entity.MemberRoleRelation;
 import com.freebe.code.business.meta.repository.MemberRoleRelationRepository;
 import com.freebe.code.business.meta.service.MemberRoleRelationService;
 import com.freebe.code.business.meta.vo.MemberRoleRelationVO;
 import com.freebe.code.common.CustomException;
-import com.freebe.code.util.PageUtils;
-import com.freebe.code.util.QueryUtils.QueryBuilder;
 
 /**
  *
@@ -36,12 +25,6 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
 public class MemberRoleRelationServiceImpl extends BaseServiceImpl<MemberRoleRelation> implements MemberRoleRelationService {
 	@Autowired
 	private MemberRoleRelationRepository repository;
-	
-	
-	
-	public void removeRelation(Long memberId, Long roleId) throws CustomException {
-		
-	}
 
 
 	@Override
@@ -59,35 +42,23 @@ public class MemberRoleRelationServiceImpl extends BaseServiceImpl<MemberRoleRel
 	}
 
 	@Override
-	public Page<MemberRoleRelationVO> queryPage(MemberRoleRelationQueryParam param) throws CustomException {
-		param.setOrder("id");
-		PageRequest request = PageUtils.toPageRequest(param);
+	public List<MemberRoleRelationVO> getList(Long roleId) throws CustomException {
+		MemberRoleRelation e = new MemberRoleRelation();
 
-		Specification<MemberRoleRelation> example = buildSpec(param);
-
-		Page<MemberRoleRelation> page = repository.findAll(example, request);
-		List<MemberRoleRelationVO> retList = new ArrayList<>();
-
-		for(MemberRoleRelation e:  page.getContent()) {
-			retList.add(toVO(e));
+		e.setRoleId(roleId);
+		e.setIsDelete(false);
+		
+		List<MemberRoleRelation> ret = this.repository.findAll(Example.of(e));
+		
+		List<MemberRoleRelationVO> vos = new ArrayList<>();
+		for(MemberRoleRelation mr : ret) {
+			vos.add(toVO(mr));
 		}
-		return new PageImpl<MemberRoleRelationVO>(retList, page.getPageable(), page.getTotalElements());
+		
+		return vos;
+
 	}
 
-	private Specification<MemberRoleRelation> buildSpec(MemberRoleRelationQueryParam param) throws CustomException {
-		return new Specification<MemberRoleRelation>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Predicate toPredicate(Root<MemberRoleRelation> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				QueryBuilder<MemberRoleRelation> builder = new QueryBuilder<>(root, criteriaBuilder);
-				builder.addEqual("isDelete", false);
-
-				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
-				return query.where(builder.getPredicate()).getRestriction();
-			}
-		};
-	}
 
 	private MemberRoleRelationVO toVO(MemberRoleRelation e) throws CustomException {
 		MemberRoleRelationVO vo = new MemberRoleRelationVO();
@@ -105,6 +76,33 @@ public class MemberRoleRelationServiceImpl extends BaseServiceImpl<MemberRoleRel
 	@Override
 	public void softDelete(Long id) throws CustomException {
 		super.softDelete(id);
+	}
+
+
+	@Override
+	public MemberRoleRelationVO getRelation(Long roleId, Long memberId) throws CustomException {
+		MemberRoleRelation e = new MemberRoleRelation();
+
+		e.setRoleId(roleId);
+		e.setMemberId(memberId);
+		e.setIsDelete(false);
+		
+		List<MemberRoleRelation> ret = this.repository.findAll(Example.of(e));
+		
+		if(null == ret || ret.size() == 0) {
+			return null;
+		}
+		return toVO(ret.get(0));
+	}
+	
+	@Override
+	public MemberRoleRelationVO removeRelation(Long roleId, Long memberId) throws CustomException {
+		MemberRoleRelationVO vo = this.getRelation(roleId, memberId);
+		if(null == vo) {
+			return null;
+		}
+		this.softDelete(vo.getId());
+		return null;
 	}
 
 }
