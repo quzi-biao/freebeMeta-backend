@@ -157,7 +157,7 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 	}
 
 	@Override
-	public TransactionVO innerCreateOrUpdate(TransactionParam param) throws CustomException {
+	public synchronized TransactionVO innerCreateOrUpdate(TransactionParam param) throws CustomException {
 		if(null == param.getDstWalletId() || null == param.getSrcWalletId()) {
 			throw new CustomException("钱包地址为空");
 		}
@@ -181,7 +181,11 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 			e.setSrcWalletId(param.getSrcWalletId());
 			e.setDstWalletId(param.getDstWalletId());
 			e.setTransactionType(param.getTransactionType());
-			e.setState(TransactionState.WAIT_AUDIT);
+			if(TransactionType.FREEBE_DISTRIBUTE == param.getTransactionType()) {
+				e.setState(TransactionState.WAIT_AUDIT);
+			}else {
+				e.setState(TransactionState.CONFIRMING);
+			}
 			e.setProjectId(param.getProjectId());
 			e.setCurrency(param.getCurrency());
 		}
@@ -190,6 +194,11 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		e.setMark(param.getMark());
 
 		e = repository.save(e);
+		
+		// 任务奖励直接发放
+		if(TransactionType.FREEBE_DISTRIBUTE != param.getTransactionType()) {
+			this.confirm(e.getId());
+		}
 
 		TransactionVO vo = toVO(e);
 		objectCaches.put(e.getId(), e);
@@ -219,7 +228,7 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 	
 	@Transactional
 	@Override
-	public TransactionVO confirm(Long transactionId) throws CustomException {
+	public synchronized TransactionVO confirm(Long transactionId) throws CustomException {
 		Transaction transaction = this.getById(transactionId);
 		if(null == transaction) {
 			throw new CustomException("交易不存在");
@@ -249,7 +258,10 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		
 		transaction = this.repository.save(transaction);
 		objectCaches.put(transaction.getId(), transaction);
-		projectMemberService.billEnd(transactionId, transaction.getState());
+		
+		if(transaction.getTransactionType() == TransactionType.FREEBE_DISTRIBUTE) {
+			projectMemberService.billEnd(transactionId, transaction.getState());
+		}
 		
 		return toVO(transaction);
 	}

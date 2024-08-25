@@ -19,6 +19,7 @@ import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.meta.controller.param.WalletParam;
 import com.freebe.code.business.meta.service.WalletService;
+import com.freebe.code.business.meta.type.Currency;
 import com.freebe.code.common.CharChecker;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.KVStorage;
@@ -333,7 +334,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		return MD5.create().digestHex(md5 + sha);
 	}
 	
-	private UserVO toVO(User user) {
+	private UserVO toVO(User user) throws CustomException {
 		if(null == user) {
 			return null;
 		}
@@ -343,6 +344,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		vo.setAddress(user.getAddress());
 		vo.setAvator(user.getAvator());
 		vo.setFreeBeId(user.getFreeBeId());
+		vo.setFreeBe(this.walletService.getAmount(user.getId(), Currency.FREE_BE));
 		
 		return vo;
 	}

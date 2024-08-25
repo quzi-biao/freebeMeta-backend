@@ -27,4 +27,7 @@ public class ProjectQueryParam extends KeyWordsQueryParam {
 
 	@ApiModelProperty("项目结算状态")
 	private Integer billState;
+	
+	@ApiModelProperty("项目类型")
+	private Integer projectType;
 }

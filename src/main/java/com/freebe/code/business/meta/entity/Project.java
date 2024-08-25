@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import com.freebe.code.business.base.entity.BaseEntity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,11 @@ public class Project extends BaseEntity {
 	 * 项目所有者（项目主理人）
 	 */
 	private Long ownerId;
+	
+	/**
+	 * 项目类型
+	 */
+	private Integer projectType;
 	
 	/**
 	 * 项目总预算

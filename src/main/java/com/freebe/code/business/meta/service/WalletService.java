@@ -44,4 +44,13 @@ public interface WalletService extends BaseService<Wallet> {
 	 * @throws CustomException
 	 */
 	FinanceInfo getFinanceInfo() throws CustomException;
+
+	/**
+	 * 获取 FreeBe 积分
+	 * @param id
+	 * @param freeBe
+	 * @return
+	 * @throws CustomException 
+	 */
+	Double getAmount(Long id, Integer freeBe) throws CustomException;
 }

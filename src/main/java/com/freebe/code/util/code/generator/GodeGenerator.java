@@ -23,7 +23,7 @@ import com.freebe.code.util.code.generator.generator.VOClassGenerator;
  *
  */
 public class GodeGenerator {
-	private static String srcPath = "/Users/zhengbiaoxie/Workspace/code-wander-backend/src/main/java";
+	private static String srcPath = "/Users/zhengbiaoxie/Workspace/freebe.meta/meta-be/src/main/java";
 	private static String basePath = "com.freebe.code.business.meta";
 	
 	private static String entityPath = basePath + ".entity";
@@ -35,6 +35,7 @@ public class GodeGenerator {
 	private static String controllerPath = basePath +".controller";
 	
 	public static void main(String[] args) throws Exception {
+		System.out.println(GeneratorUtils.getPath(srcPath, entityPath));
 		File[] entities = new File(GeneratorUtils.getPath(srcPath, entityPath)).listFiles();
 		for(File entity : entities) {
 			if(entity.isDirectory()) {
@@ -42,7 +43,10 @@ public class GodeGenerator {
 			}
 			String name = entity.getName();
 			String entityName = name.substring(0, name.indexOf('.'));
-			createFiles(entityName);
+			if(entityName.startsWith("Task")) {
+				System.out.println(entityName);
+				createFiles(entityName);
+			}
 		}
 		
 	}

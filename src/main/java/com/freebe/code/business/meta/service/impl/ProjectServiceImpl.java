@@ -37,6 +37,7 @@ import com.freebe.code.business.meta.service.impl.lucene.ProjectLuceneSearch;
 import com.freebe.code.business.meta.type.ProjectBillState;
 import com.freebe.code.business.meta.type.ProjectMemberState;
 import com.freebe.code.business.meta.type.ProjectState;
+import com.freebe.code.business.meta.type.ProjectType;
 import com.freebe.code.business.meta.type.WorkState;
 import com.freebe.code.business.meta.vo.MemberVO;
 import com.freebe.code.business.meta.vo.ProjectMemberVO;
@@ -117,18 +118,35 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		if(param.getId() == null) {
 			e.setState(ProjectState.INVITING);
 			e.setBillState(ProjectBillState.NONE);
+			if(param.getProjectType() == ProjectType.CO) {
+				e.setState(ProjectState.RUNNING);
+				e.setBillState(ProjectBillState.DONE);
+			}
 		}else {
 			create = false;
 			int state = e.getState();
-			if(!(state == ProjectState.CREATING || state == ProjectState.INVITING ||
-					state == ProjectState.WAIT_START || state == ProjectState.RUNNING)) {
-				throw new CustomException("项目已结束，不可修改");
+			if(param.getProjectType() != ProjectType.CO && e.getProjectType() == ProjectType.CO) {
+				throw new CustomException("共建项目的类型不可修改为其他类型的项目");
+			}
+			
+			// 改变项目类型
+			if(param.getProjectType() == ProjectType.CO && e.getProjectType() != ProjectType.CO ) {
+				e.setState(ProjectState.RUNNING);
+				e.setBillState(ProjectBillState.DONE);
+				// 清空成员信息
+				param.setMembers(new ArrayList<>());
+				this.projectMemberService.updateProjectMembers(e.getId(), param.getMembers());
+			}else {
+				if(!(state == ProjectState.CREATING || state == ProjectState.INVITING ||
+						state == ProjectState.WAIT_START || state == ProjectState.RUNNING)) {
+					throw new CustomException("项目已结束，不可修改");
+				}
 			}
 		}
 		
 		e.setPreAmount(currencyStr(preAmount));
 		e.setRealAmount(currencyStr(param.getRealAmount()));
-		
+		e.setProjectType(param.getProjectType());		
 		e.setCurrency(param.getCurrency());
 		e.setPictures(toStr(param.getPictures()));
 		e.setTags(toStr(param.getTags()));
@@ -136,7 +154,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 
 		e = repository.save(e);
 		
-		this.projectMemberService.updateProjectMembers(e.getId(), param.getMembers());
+		if(param.getProjectType() != ProjectType.CO) {
+			this.projectMemberService.updateProjectMembers(e.getId(), param.getMembers());
+		}
 
 		ProjectVO vo = toVO(e);
 		objectCaches.put(e.getId(), e);
@@ -366,6 +386,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 				
 				builder.addEqual("billState", param.getBillState());
 				builder.addEqual("state", param.getState());
+				builder.addEqual("projectType", param.getProjectType());
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}
@@ -395,6 +416,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		vo.setEndTime(e.getEndTime());
 		vo.setBillTime(e.getBillTime());
 		vo.setBillState(e.getBillState());
+		vo.setProjectType(e.getProjectType());
 		
 		vo.setMembers(this.projectMemberService.getProjectMembers(e.getId()));
 		return vo;
@@ -462,8 +484,10 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			}
 		}
 		
-		if(null == param.getMembers() || param.getMembers().size() == 0){
-			throw new CustomException("至少要有一名项目成员");
+		if(param.getProjectType() != ProjectType.CO) {
+			if(null == param.getMembers() || param.getMembers().size() == 0){
+				throw new CustomException("至少要有一名项目成员");
+			}
 		}
 		
 		if(param.getName().length() > MAX_NAME_LENGTH) {
@@ -480,25 +504,27 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			throw new CustomException("您还不是 FreeBe 成员，请填写成员问卷");
 		}
 		
-		boolean hasOwner = false;
-		for(ProjectMemberParam pm : param.getMembers()) {
-			if(null == pm.getPreAmount()) {
-				throw new CustomException("请为成员设置预算积分");
+		if(param.getProjectType() != ProjectType.CO) { 
+			boolean hasOwner = false;
+			for(ProjectMemberParam pm : param.getMembers()) {
+				if(null == pm.getPreAmount()) {
+					throw new CustomException("请为成员设置预算积分");
+				}
+				if(null == pm.getRole()) {
+					throw new CustomException("请为成员设置项目角色");
+				}
+				if(pm.getMemberId().longValue() == owner.getId().longValue()) {
+					hasOwner = true;
+				}
 			}
-			if(null == pm.getRole()) {
-				throw new CustomException("请为成员设置项目角色");
+			
+			if(!hasOwner) {
+				ProjectMemberParam pm = new ProjectMemberParam();
+				pm.setMemberId(owner.getId());
+				pm.setRole("项目主理人");
+				pm.setPreAmount(0D);
+				param.getMembers().add(pm);
 			}
-			if(pm.getMemberId().longValue() == owner.getId().longValue()) {
-				hasOwner = true;
-			}
-		}
-		
-		if(!hasOwner) {
-			ProjectMemberParam pm = new ProjectMemberParam();
-			pm.setMemberId(owner.getId());
-			pm.setRole("项目主理人");
-			pm.setPreAmount(0D);
-			param.getMembers().add(pm);
 		}
 	}
 

@@ -122,6 +122,36 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 		
 		return toVO(ret);
 	}
+	
+
+	@Override
+	public Double getAmount(Long userId, Integer freeBe) throws CustomException {
+		String id = "u: " + userId;
+		
+		Wallet ret = this.objectCaches.get(id, Wallet.class);
+		if(null != ret) {
+			return numbericCurrency(ret.getFreeBe());
+		}
+		
+		Wallet wallet = new Wallet();
+		wallet.setUserId(userId);
+		wallet.setIsDelete(false);
+		
+		List<Wallet> wallets = this.repository.findAll(Example.of(wallet));
+		
+		if(null == wallets || wallets.size() == 0) {
+			WalletParam param = new WalletParam();
+			param.setUserId(userId);
+			this.createOrUpdate(param);
+			wallets = this.repository.findAll(Example.of(wallet));
+			if(null == wallets || wallets.size() == 0) {
+				return null;
+			}
+		}
+		
+		ret = wallets.get(0);
+		return numbericCurrency(ret.getFreeBe());
+	}
 
 	@Override
 	public WalletVO createOrUpdate(WalletParam param) throws CustomException {
@@ -236,4 +266,6 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 
 		return vo;
 	}
+
+
 }

@@ -30,4 +30,7 @@ public class UserVO {
 	
 	@ApiModelProperty("freeBeId")
 	private String freeBeId;
+	
+	@ApiModelProperty("freeBe积分")
+	private Double freeBe;
 }

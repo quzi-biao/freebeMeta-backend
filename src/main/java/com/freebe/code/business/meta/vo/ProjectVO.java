@@ -63,6 +63,9 @@ public class ProjectVO extends BaseVO {
 
 	@ApiModelProperty("项目结算状态")
 	private Integer billState;
+	
+	@ApiModelProperty("项目类型")
+	private Integer projectType;
 
 	@ApiModelProperty("项目成员")
 	private List<ProjectMemberVO> members;

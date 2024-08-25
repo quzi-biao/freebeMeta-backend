@@ -43,6 +43,9 @@ public class ProjectParam extends BaseEntityParam {
 	@ApiModelProperty("项目介绍")
 	private String description;
 	
+	@ApiModelProperty("项目类型")
+	private Integer projectType;
+	
 	@ApiModelProperty("项目成员")
 	private List<ProjectMemberParam> members;
 }

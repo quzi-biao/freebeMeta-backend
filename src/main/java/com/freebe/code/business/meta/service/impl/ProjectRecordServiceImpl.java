@@ -24,6 +24,7 @@ import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.meta.controller.param.ProjectRecordParam;
 import com.freebe.code.business.meta.controller.param.ProjectRecordQueryParam;
+import com.freebe.code.business.meta.entity.Project;
 import com.freebe.code.business.meta.entity.ProjectMember;
 import com.freebe.code.business.meta.entity.ProjectRecord;
 import com.freebe.code.business.meta.repository.ProjectRecordRepository;
@@ -32,6 +33,7 @@ import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.ProjectRecordService;
 import com.freebe.code.business.meta.service.ProjectService;
 import com.freebe.code.business.meta.type.ProjectState;
+import com.freebe.code.business.meta.type.ProjectType;
 import com.freebe.code.business.meta.type.RecordType;
 import com.freebe.code.business.meta.vo.ProjectRecordVO;
 import com.freebe.code.common.CustomException;
@@ -80,17 +82,20 @@ public class ProjectRecordServiceImpl extends BaseServiceImpl<ProjectRecord> imp
 			throw new CustomException("请设置评论的项目");
 		}
 		
-		Integer projectState = this.projectService.getProjectState(param.getProjectId()).intValue();
-		if(projectState == ProjectState.NORMAL_END) {
+		Project project = this.projectService.getReference(param.getProjectId().longValue());
+		if(project.getState() == ProjectState.NORMAL_END) {
 			throw new CustomException("项目已结束, 不能再添加项目记录");
 		}
 		
-		Long memberId = this.memberService.getMemberIdByUserId(getCurrentUser().getId());
-		ProjectMember pm = this.projectMemberService.findOne(param.getProjectId(), memberId);
-		if(null == pm) {
-			throw new CustomException("只有项目组成员才可以添加项目记录");
+		if(project.getProjectType() != ProjectType.CO) {
+			Long memberId = this.memberService.getMemberIdByUserId(getCurrentUser().getId());
+			ProjectMember pm = this.projectMemberService.findOne(param.getProjectId(), memberId);
+			if(null == pm) {
+				throw new CustomException("只有项目组成员才可以添加项目记录");
+			}
+			param.setProjectRole(pm.getRole());
 		}
-		param.setProjectRole(pm.getRole());
+		
 		if(null == param.getRecordType()) {
 			param.setRecordType(RecordType.NORMAL);
 		}
