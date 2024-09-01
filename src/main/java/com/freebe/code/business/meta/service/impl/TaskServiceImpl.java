@@ -2,6 +2,7 @@ package com.freebe.code.business.meta.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -248,9 +251,15 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 
 	@Override
 	public Page<TaskVO> queryPage(TaskQueryParam param) throws CustomException {
-		param.setOrder("state");
-		param.setDesc(false);
-		PageRequest request = PageUtils.toPageRequest(param);
+		param.setOrder("id");
+		List<Order> orders = null;
+		if(param.getDesc() == null || param.getDesc()) {
+			orders = Arrays.asList(new Order[] {Order.asc("state"), Order.desc(param.getOrder())});
+		}else {
+			orders = Arrays.asList(new Order[] {Order.asc("state"), Order.asc(param.getOrder())});
+		}
+		
+		PageRequest request = PageRequest.of((int)param.getCurrPage(), (int)param.getLimit(), Sort.by(orders));
 
 		Specification<Task> example = buildSpec(param);
 

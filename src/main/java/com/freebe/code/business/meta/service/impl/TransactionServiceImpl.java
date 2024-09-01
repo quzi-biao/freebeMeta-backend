@@ -150,7 +150,7 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 	@Override
 	public TransactionVO createOrUpdate(TransactionParam param) throws CustomException {
 		// 接口只有财务官或项目所有者可以调用
-		checkFinanceOfficer();
+		// checkFinanceOfficer();
 		param.setTransactionType(TransactionType.FREEBE_DISTRIBUTE);
 		
 		return this.innerCreateOrUpdate(param);

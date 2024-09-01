@@ -39,10 +39,10 @@ public class TaskState {
 	/**
 	 * 认领超时
 	 */
-	public static final int WAIT_TIMEOUT_FAILED = 5;
+	public static final int WAIT_TIMEOUT_FAILED = 6;
 	
 	/**
 	 * 直接取消
 	 */
-	public static final int CANCEL = 6;
+	public static final int CANCEL = 7;
 }

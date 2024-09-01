@@ -39,4 +39,7 @@ public class TransactionParam extends BaseEntityParam {
 
 	@ApiModelProperty("关联的项目 ID")
 	private Long projectId;
+	
+	@ApiModelProperty("交易 hash")
+	private String transactionHash;
 }
