@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,17 +38,28 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
-        try {
-        	if(UrlPatternMatcher.match(request, whitePaths.getWhiteList()) || request.getRequestURI().equals("/")) {
-            	chain.doFilter(request, response);
-            	return;
-            }
+    	String header = request.getHeader(JwtUtils.AUTHORIZATION);
+        try {        	
+    		if (StringUtils.isBlank(header) || "undefined".equals(header) || "null".equals(header)) {
+    			if(UrlPatternMatcher.match(request, whitePaths.getWhiteList()) || request.getRequestURI().equals("/")) {
+                	chain.doFilter(request, response);
+                	return;
+                }
+    		}
         	
 			Long userId = getUserId(request);
             // 将组织信息和用户相关的信息写入到上下文中
             fillContextData(request, userId);
             chain.doFilter(request, response);
         }catch (Exception e){
+        	if(UrlPatternMatcher.match(request, whitePaths.getWhiteList()) || request.getRequestURI().equals("/")) {
+            	try {
+					chain.doFilter(request, response);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+            	return;
+            }
         	e.printStackTrace();
         	response.setCharacterEncoding("UTF-8");
             try {

@@ -33,5 +33,8 @@ public class MemberParam extends BaseEntityParam {
 	
 	@ApiModelProperty("头像")
 	private String avator;
+	
+	@ApiModelProperty("freebeId")
+	private String freeBeId;
 
 }

@@ -56,7 +56,7 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
 public class ProjectServiceImpl extends BaseServiceImpl<Project> implements ProjectService {
 	public static final int MAX_NAME_LENGTH = 64;
 	
-	public static final int MAX_DESCRIPTION_LENGTH = 500;
+	public static final int MAX_DESCRIPTION_LENGTH = 5000;
 	
 	@Autowired
 	private ProjectRepository repository;

@@ -44,10 +44,11 @@ public interface UserService extends BaseService<User> {
 	 * 更新信息
 	 * @param name
 	 * @param avator
+	 * @param freebeId 
 	 * @return
 	 * @throws CustomException
 	 */
-	UserVO updateUserInfo(String name, String avator) throws CustomException;
+	UserVO updateUserInfo(String name, String avator, String freebeId) throws CustomException;
 
 	/**
 	 * 根据个人的手机号/邮箱等获取验证码

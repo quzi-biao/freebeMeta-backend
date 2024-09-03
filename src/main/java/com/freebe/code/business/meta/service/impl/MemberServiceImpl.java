@@ -206,7 +206,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		e.setDescription(param.getDescription());
 		e.setSkills(toStr(param.getSkills()));
 		//e.setRoles(param.getRoles());
-		userService.updateUserInfo(param.getName(), param.getAvator());
+		userService.updateUserInfo(param.getName(), param.getAvator(), param.getFreeBeId());
 
 		e = repository.save(e);
 
@@ -317,7 +317,10 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			Page<WalletVO> wallets = this.walletService.queryPage(walletQuery);
 			List<MemberVO> retList = new ArrayList<>();
 			for(WalletVO e:  wallets.getContent()) {
-				retList.add(this.findByUserId(e.getUserId()));
+				MemberVO member = this.findByUserId(e.getUserId());
+				if(null != member) {
+					retList.add(member);
+				}
 			}
 			return new PageImpl<MemberVO>(retList, wallets.getPageable(), wallets.getTotalElements());
 		}
@@ -366,15 +369,17 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 		vo.setUserId(e.getUserId());
 		vo.setUser(userService.getUser(e.getUserId()));
-		
-		if(!vo.getUser().getName().equals(e.getName())) {
-			Member m = this.repository.getById(e.getId());
-			m.setName(vo.getUser().getName());
-			this.repository.save(m);
+		if(null != vo.getUser()) {
+			if(!vo.getUser().getName().equals(e.getName())) {
+				Member m = this.repository.getById(e.getId());
+				m.setName(vo.getUser().getName());
+				this.repository.save(m);
+			}
+			vo.setName(vo.getUser().getName());
+			vo.setAvator(vo.getUser().getAvator());	
+			vo.setFreeBeId(vo.getUser().getFreeBeId());
 		}
 		
-		vo.setName(vo.getUser().getName());
-		vo.setAvator(vo.getUser().getAvator());		
 		vo.setDescription(e.getDescription());
 		vo.setSkills(toList(e.getSkills(), Skill.class));
 		vo.setLastTime(e.getLastTime());
