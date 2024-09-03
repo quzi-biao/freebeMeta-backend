@@ -230,7 +230,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		
 		// 如果用户不存在，则创建
 		user = new User();
-		user.setName("F." + RandomNickName.create());
+		user.setName(loginParam.getFreeBeId().split("\\.")[0]);
+		if(user.getName() == null || user.getName().length() == 0) {
+			user.setName("F." + RandomNickName.create());
+		}
 		user.setIsDelete(false);
 		user.setCreateTime(System.currentTimeMillis());
 		user.setCode(CodeUtils.generateCode(User.class));
@@ -367,6 +370,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		}
 		if(!CharChecker.checkFreeBeId(loginParam.getFreeBeId())) {
 			throw new CustomException("FreeBe ID只能由数字和字母组成（区分大小写）");
+		}
+		
+		String freeBeName = loginParam.getFreeBeId().split("\\.")[0];
+		if(StringUtils.isEmpty(freeBeName)) {
+			throw new CustomException("请设置合法FreeBeId");
 		}
 		
 		if(StringUtils.isEmpty(loginParam.getPassword())) {
