@@ -12,6 +12,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import com.freebe.code.business.base.service.UserService;
+import com.freebe.code.business.meta.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,11 +32,6 @@ import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.entity.Task;
 import com.freebe.code.business.meta.entity.TaskTaker;
 import com.freebe.code.business.meta.repository.TaskRepository;
-import com.freebe.code.business.meta.service.ProjectService;
-import com.freebe.code.business.meta.service.TaskService;
-import com.freebe.code.business.meta.service.TaskTakerService;
-import com.freebe.code.business.meta.service.TransactionService;
-import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.type.Currency;
 import com.freebe.code.business.meta.type.TaskState;
 import com.freebe.code.business.meta.type.TaskTakerState;
@@ -59,9 +56,12 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 
 	@Autowired
 	private ObjectCaches objectCaches;
-	
+
 	@Autowired
 	private TaskTakerService taskTakerService;
+
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private WalletService walletService;
@@ -306,11 +306,16 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			vo.setProjectName("个人发布");
 		}
 		vo.setOwnerId(e.getOwnerId());
+
+		if(null != e.getOwnerId()) {
+			vo.setOwner(userService.getUser(e.getOwnerId()));
+		}
+		
 		vo.setTitle(e.getTitle());
 		vo.setDescription(e.getDescription());
 		vo.setState(e.getState());
 		vo.setLimitTime(e.getLimitTime());
-		
+
 		if(null != e.getTakeId()) {
 			vo.setTake(taskTakerService.findById(e.getTakeId()));
 		}

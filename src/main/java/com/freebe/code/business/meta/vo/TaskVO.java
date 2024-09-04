@@ -1,6 +1,7 @@
 package com.freebe.code.business.meta.vo;
 
 import com.freebe.code.business.base.vo.BaseVO;
+import com.freebe.code.business.base.vo.UserVO;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,8 +26,11 @@ public class TaskVO extends BaseVO {
 	@ApiModelProperty("项目名称")
 	private String projectName;
 
-	@ApiModelProperty("任务所有者")
+	@ApiModelProperty("任务所有者ID")
 	private Long ownerId;
+
+	@ApiModelProperty("任务所有者")
+	private UserVO owner;
 
 	@ApiModelProperty("任务标题")
 	private String title;
