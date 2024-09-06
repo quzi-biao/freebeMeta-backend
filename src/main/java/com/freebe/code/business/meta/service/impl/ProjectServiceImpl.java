@@ -498,27 +498,25 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			throw new CustomException("您还不是 FreeBe 成员，请填写成员问卷");
 		}
 		
-		if(param.getProjectType() != ProjectType.PUBLIC) { 
-			boolean hasOwner = false;
-			for(ProjectMemberParam pm : param.getMembers()) {
-				if(null == pm.getPreAmount()) {
-					throw new CustomException("请为成员设置预算积分");
-				}
-				if(null == pm.getRole()) {
-					throw new CustomException("请为成员设置项目角色");
-				}
-				if(pm.getMemberId().longValue() == owner.getId().longValue()) {
-					hasOwner = true;
-				}
+		boolean hasOwner = false;
+		for(ProjectMemberParam pm : param.getMembers()) {
+			if(null == pm.getPreAmount()) {
+				throw new CustomException("请为成员设置预算积分");
 			}
-			
-			if(!hasOwner) {
-				ProjectMemberParam pm = new ProjectMemberParam();
-				pm.setMemberId(owner.getId());
-				pm.setRole("项目主理人");
-				pm.setPreAmount(0D);
-				param.getMembers().add(pm);
+			if(null == pm.getRole()) {
+				throw new CustomException("请为成员设置项目角色");
 			}
+			if(pm.getMemberId().longValue() == owner.getId().longValue()) {
+				hasOwner = true;
+			}
+		}
+		
+		if(!hasOwner) {
+			ProjectMemberParam pm = new ProjectMemberParam();
+			pm.setMemberId(owner.getId());
+			pm.setRole("项目主理人");
+			pm.setPreAmount(0D);
+			param.getMembers().add(pm);
 		}
 	}
 
