@@ -87,7 +87,7 @@ public class ProjectRecordServiceImpl extends BaseServiceImpl<ProjectRecord> imp
 			throw new CustomException("项目已结束, 不能再添加项目记录");
 		}
 		
-		if(project.getProjectType() != ProjectType.CO) {
+		if(project.getProjectType() != ProjectType.BUSINESS) {
 			Long memberId = this.memberService.getMemberIdByUserId(getCurrentUser().getId());
 			ProjectMember pm = this.projectMemberService.findOne(param.getProjectId(), memberId);
 			if(null == pm) {

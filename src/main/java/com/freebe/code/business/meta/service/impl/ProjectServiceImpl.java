@@ -117,20 +117,16 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		boolean create = true;
 		if(param.getId() == null) {
 			e.setState(ProjectState.INVITING);
-			e.setBillState(ProjectBillState.NONE);
-			if(param.getProjectType() == ProjectType.CO) {
-				e.setState(ProjectState.RUNNING);
-				e.setBillState(ProjectBillState.DONE);
-			}
+			e.setBillState(ProjectBillState.DONE);
 		}else {
 			create = false;
 			int state = e.getState();
-			if(param.getProjectType() != ProjectType.CO && e.getProjectType() == ProjectType.CO) {
-				throw new CustomException("共建项目的类型不可修改为其他类型的项目");
+			if(param.getProjectType() != ProjectType.PUBLIC && e.getProjectType() == ProjectType.PUBLIC) {
+				throw new CustomException("公共项目的类型不可修改为其他类型的项目");
 			}
 			
 			// 改变项目类型
-			if(param.getProjectType() == ProjectType.CO && e.getProjectType() != ProjectType.CO ) {
+			if(param.getProjectType() == ProjectType.PUBLIC && e.getProjectType() != ProjectType.PUBLIC ) {
 				e.setState(ProjectState.RUNNING);
 				e.setBillState(ProjectBillState.DONE);
 				// 清空成员信息
@@ -154,9 +150,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 
 		e = repository.save(e);
 		
-		if(param.getProjectType() != ProjectType.CO) {
-			this.projectMemberService.updateProjectMembers(e.getId(), param.getMembers());
-		}
+		this.projectMemberService.updateProjectMembers(e.getId(), param.getMembers());
 
 		ProjectVO vo = toVO(e);
 		objectCaches.put(e.getId(), e);
@@ -484,11 +478,11 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			}
 		}
 		
-		if(param.getProjectType() != ProjectType.CO) {
-			if(null == param.getMembers() || param.getMembers().size() == 0){
-				throw new CustomException("至少要有一名项目成员");
-			}
-		}
+//		if(param.getProjectType() != ProjectType.PUBLIC) {
+//			if(null == param.getMembers() || param.getMembers().size() == 0){
+//				throw new CustomException("至少要有一名项目成员");
+//			}
+//		}
 		
 		if(param.getName().length() > MAX_NAME_LENGTH) {
 			throw new CustomException("项目名称不能超过" + MAX_NAME_LENGTH + "个字符");
@@ -504,7 +498,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			throw new CustomException("您还不是 FreeBe 成员，请填写成员问卷");
 		}
 		
-		if(param.getProjectType() != ProjectType.CO) { 
+		if(param.getProjectType() != ProjectType.PUBLIC) { 
 			boolean hasOwner = false;
 			for(ProjectMemberParam pm : param.getMembers()) {
 				if(null == pm.getPreAmount()) {

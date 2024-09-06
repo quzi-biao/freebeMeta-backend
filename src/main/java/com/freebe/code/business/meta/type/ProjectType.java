@@ -1,5 +1,19 @@
 package com.freebe.code.business.meta.type;
 
 public class ProjectType {
-	public static final int CO = 0;
+	
+	/**
+	 * 公共项目
+	 */
+	public static final int PUBLIC = 0;
+	
+	/**
+	 * 商业项目
+	 */
+	public static final int BUSINESS = 1;
+	
+	/**
+	 * 创业项目
+	 */
+	public static final int ENTREPRENEUR = 2;
 }
