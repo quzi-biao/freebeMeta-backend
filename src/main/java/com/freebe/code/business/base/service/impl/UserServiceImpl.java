@@ -151,11 +151,20 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		
 		return user;
 	}
-	
+
 	@Override
 	public void deleteAuthentication(String token) {
 		//后面需要更新kv的删除功能
 		this.kv.save(token, System.currentTimeMillis() - 40*60 * 1000);
+	}
+
+	@Override
+	public void validateAuthentication(String token) throws CustomException {
+		String ts = this.kv.get(token);
+		// TODO 时间戳过期判断
+		if(null == ts) {
+			throw new CustomException("token 不存在");
+		}
 	}
 
 	@Override

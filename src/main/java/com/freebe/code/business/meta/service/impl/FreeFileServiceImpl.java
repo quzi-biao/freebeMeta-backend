@@ -10,6 +10,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.freebe.code.business.meta.service.impl.lucene.ProjectLuceneSearch;
+import com.freebe.code.business.meta.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,6 +30,7 @@ import com.freebe.code.business.meta.vo.FreeFileVO;
 import com.freebe.code.business.meta.controller.param.FreeFileParam;
 import com.freebe.code.business.meta.controller.param.FreeFileQueryParam;
 import com.freebe.code.business.meta.repository.FreeFileRepository;
+import com.freebe.code.business.meta.service.impl.lucene.FreeFileLuceneSearch;
 
 /**
  *
@@ -41,6 +44,9 @@ public class FreeFileServiceImpl extends BaseServiceImpl<FreeFile> implements Fr
 
 	@Autowired
 	private ObjectCaches objectCaches;
+
+	@Autowired
+	private FreeFileLuceneSearch searcher;
 
 	@Override
 	public FreeFileVO findById(Long id) throws CustomException {
@@ -58,7 +64,7 @@ public class FreeFileServiceImpl extends BaseServiceImpl<FreeFile> implements Fr
 
 	@Override
 	public FreeFileVO createOrUpdate(FreeFileParam param) throws CustomException {
-		FreeFile e = this.getUpdateEntity(param);
+		FreeFile e = this.getUpdateEntity(param, false);
 
 		e.setTitle(param.getTitle());
 		e.setDescription(param.getDescription());
@@ -66,14 +72,16 @@ public class FreeFileServiceImpl extends BaseServiceImpl<FreeFile> implements Fr
 		e.setUrl(param.getUrl());
 		e.setFileType(param.getFileType());
 		e.setPublicType(param.getPublicType());
-		e.setOwnerId(param.getOwnerId());
 		e.setPrice(param.getPrice());
 		e.setPriceCategory(param.getPriceCategory());
+		e.setFileCategory(param.getFileCategory());
+		e.setOwnerId(getCurrentUser().getId());
 
 		e = repository.save(e);
 
 		FreeFileVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
+		searcher.addOrUpdateIndex(vo);
 
 		return vo;
 	}
@@ -82,6 +90,18 @@ public class FreeFileServiceImpl extends BaseServiceImpl<FreeFile> implements Fr
 	public Page<FreeFileVO> queryPage(FreeFileQueryParam param) throws CustomException {
 		param.setOrder("id");
 		PageRequest request = PageUtils.toPageRequest(param);
+
+		if(null != param.getKeyWords() && !param.getKeyWords().isEmpty()){
+			Page<FreeFileVO> searchPage = searcher.fullTextSearch(param);
+			List<Long> idList = new ArrayList<>();
+			for(FreeFileVO e:  searchPage.getContent()) {
+				idList.add(e.getId());
+			}
+			if(idList.isEmpty()) {
+				idList.add(-1L);
+			}
+			param.setIdList(idList);
+		}
 
 		Specification<FreeFile> example = buildSpec(param);
 
@@ -102,6 +122,10 @@ public class FreeFileServiceImpl extends BaseServiceImpl<FreeFile> implements Fr
 			public Predicate toPredicate(Root<FreeFile> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				QueryBuilder<FreeFile> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
+				builder.addEqual("fileCategory", param.getFileCategory());
+				builder.addEqual("ownerId", param.getOwnerId());
+
+				builder.addIn("id", param.getIdList());
 
 				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
 				return query.where(builder.getPredicate()).getRestriction();
@@ -125,12 +149,14 @@ public class FreeFileServiceImpl extends BaseServiceImpl<FreeFile> implements Fr
 		vo.setOwnerId(e.getOwnerId());
 		vo.setPrice(e.getPrice());
 		vo.setPriceCategory(e.getPriceCategory());
+		vo.setFileCategory(e.getFileCategory());
 
 		return vo;
 	}
 
 	@Override
 	public void softDelete(Long id) throws CustomException {
+		searcher.deleteIndex(this.findById(id));
 		objectCaches.delete(id, FreeFileVO.class);
 		super.softDelete(id);
 	}

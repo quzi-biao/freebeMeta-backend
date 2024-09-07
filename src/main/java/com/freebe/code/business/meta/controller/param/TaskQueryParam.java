@@ -2,6 +2,7 @@ package com.freebe.code.business.meta.controller.param;
 
 import java.util.List;
 
+import com.freebe.code.common.KeyWordsQueryParam;
 import com.freebe.code.common.PageBean;
 
 import io.swagger.annotations.ApiModel;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("项目任务查询参数")
-public class TaskQueryParam extends PageBean {
+public class TaskQueryParam extends KeyWordsQueryParam {
 	@ApiModelProperty("关联的项目 ID")
 	private Long projectId;
 
