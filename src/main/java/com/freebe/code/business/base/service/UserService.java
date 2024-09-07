@@ -64,6 +64,12 @@ public interface UserService extends BaseService<User> {
 	void deleteAuthentication(String token);
 
 	/**
+	 *
+	 * @param token
+	 */
+	void validateAuthentication(String token) throws CustomException;
+
+	/**
 	 * 用户注册
 	 * @param loginParam
 	 * @return

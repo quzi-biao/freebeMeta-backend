@@ -26,6 +26,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 	private SecurityWhitePaths whitePaths;
 	
 	private UserService userService;
+
+
 	
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, 
 			SecurityWhitePaths whitePaths, 
@@ -94,6 +96,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                 // 解密Token
                 userName = JwtUtils.getAudience(token);
                 if (StringUtils.isNotBlank(userName)) {
+					userService.validateAuthentication(token);
                     return new UsernamePasswordAuthenticationToken(userName, null, new ArrayList<>());
                 }
             }catch (Exception e){
