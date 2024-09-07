@@ -23,23 +23,23 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
-import com.freebe.code.business.meta.controller.param.TaskAuditParam;
-import com.freebe.code.business.meta.controller.param.TaskParam;
-import com.freebe.code.business.meta.controller.param.TaskQueryParam;
+import com.freebe.code.business.meta.controller.param.BountyAuditParam;
+import com.freebe.code.business.meta.controller.param.BountyParam;
+import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
-import com.freebe.code.business.meta.entity.Task;
-import com.freebe.code.business.meta.entity.TaskTaker;
-import com.freebe.code.business.meta.repository.TaskRepository;
+import com.freebe.code.business.meta.entity.Bounty;
+import com.freebe.code.business.meta.entity.BountyTaker;
+import com.freebe.code.business.meta.repository.BountyRepository;
 import com.freebe.code.business.meta.service.ProjectService;
-import com.freebe.code.business.meta.service.TaskService;
-import com.freebe.code.business.meta.service.TaskTakerService;
+import com.freebe.code.business.meta.service.BountyService;
+import com.freebe.code.business.meta.service.BountyTakerService;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.type.Currency;
-import com.freebe.code.business.meta.type.TaskState;
-import com.freebe.code.business.meta.type.TaskTakerState;
+import com.freebe.code.business.meta.type.BountyState;
+import com.freebe.code.business.meta.type.BountyTakerState;
 import com.freebe.code.business.meta.type.TransactionType;
-import com.freebe.code.business.meta.vo.TaskVO;
+import com.freebe.code.business.meta.vo.BountyVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
@@ -52,15 +52,15 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
  *
  */
 @Service
-public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskService {
+public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements BountyService {
 	@Autowired
-	private TaskRepository repository;
+	private BountyRepository repository;
 
 	@Autowired
 	private ObjectCaches objectCaches;
 	
 	@Autowired
-	private TaskTakerService taskTakerService;
+	private BountyTakerService bountyTakerService;
 	
 	@Autowired
 	private WalletService walletService;
@@ -72,10 +72,10 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	private ProjectService projectService;
 
 	@Override
-	public TaskVO findById(Long id) throws CustomException {
-		TaskVO ret = this.objectCaches.get(id, TaskVO.class);
+	public BountyVO findById(Long id) throws CustomException {
+		BountyVO ret = this.objectCaches.get(id, BountyVO.class);
 		if(null == ret){
-			Optional<Task> op = this.repository.findById(id);
+			Optional<Bounty> op = this.repository.findById(id);
 			if(!op.isPresent()){
 				return null;
 			}
@@ -86,16 +86,16 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	}
 
 	@Override
-	public TaskVO createOrUpdate(TaskParam param) throws CustomException {
+	public BountyVO createOrUpdate(BountyParam param) throws CustomException {
 		checkParam(param);
 		
-		Task e = this.getUpdateEntity(param, false);
+		Bounty e = this.getUpdateEntity(param, false);
 
 		e.setProjectId(param.getProjectId());
 		e.setOwnerId(getCurrentUser().getId());
 		e.setTitle(param.getTitle());
 		e.setDescription(param.getDescription());
-		e.setState(TaskState.WAIT_TAKER);
+		e.setState(BountyState.WAIT_TAKER);
 		e.setLimitTime(param.getLimitTime());
 		e.setTakerWaitTime(param.getTakerWaitTime());
 		if(param.getId() == null) {
@@ -104,7 +104,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 
 		e = repository.save(e);
 
-		TaskVO vo = toVO(e);
+		BountyVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 
 		return vo;
@@ -112,40 +112,40 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	
 	@Transactional
 	@Override
-	public TaskVO auditTask(TaskAuditParam param) throws CustomException {
+	public BountyVO auditBounty(BountyAuditParam param) throws CustomException {
 		if(StringUtils.isEmpty(param.getEvaluate())) {
-			throw new CustomException("请输入任务评价");
+			throw new CustomException("请输入悬赏评价");
 		}
 		if(null == param.getPass()) {
 			throw new CustomException("参数错误");
 		}
 		
-		Task e = this.getById(param.getTaskId());
+		Bounty e = this.getById(param.getBountyId());
 		if(null == e) {
-			throw new CustomException("任务不存在");
+			throw new CustomException("悬赏不存在");
 		}
 		
-		if(e.getState() != TaskState.WAIT_AUDIT) {
-			throw new CustomException("任务状态异常");
+		if(e.getState() != BountyState.WAIT_AUDIT) {
+			throw new CustomException("悬赏状态异常");
 		}
 		
 		if(e.getOwnerId().longValue() != getCurrentUser().getId().longValue()) {
 			throw new CustomException("您无权执行此操作");
 		}
 		
-		TaskTaker tt = this.taskTakerService.getReference(e.getTakeId());
+		BountyTaker tt = this.bountyTakerService.getReference(e.getTakeId());
 		if(null == tt) {
 			throw new CustomException("认领不存在");
 		}
 		
-		if(tt.getState() != TaskTakerState.DONE) {
+		if(tt.getState() != BountyTakerState.DONE) {
 			throw new CustomException("认领未完成或已超时");
 		}
 		
 		tt.setEvaluate(param.getEvaluate());
 		e.setAuditTime(System.currentTimeMillis());
 		if(param.getPass()) {
-			e.setState(TaskState.DONE);
+			e.setState(BountyState.DONE);
 			this.repository.save(e);
 			Long taker = e.getTakerId();
 			if(taker != tt.getTaker()) {
@@ -155,21 +155,21 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			long transactionId = createTransaction(e);
 			tt.setEvaluate(param.getEvaluate());
 			tt.setTransactionId(transactionId);
-			this.taskTakerService.save(tt);
+			this.bountyTakerService.save(tt);
 		}else {
-			tt.setState(TaskTakerState.AUDIT_FAILED);
-			e.setState(TaskState.AUDIT_FAILED);
+			tt.setState(BountyTakerState.AUDIT_FAILED);
+			e.setState(BountyState.AUDIT_FAILED);
 			this.repository.save(e);
-			this.taskTakerService.save(tt);
+			this.bountyTakerService.save(tt);
 		}
 		
-		TaskVO vo = toVO(e);
+		BountyVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 
 		return vo;
 	}
 
-	private Long createTransaction(Task e) throws CustomException {
+	private Long createTransaction(Bounty e) throws CustomException {
 		// 创建交易
 		TransactionParam param = new TransactionParam();
 		param.setAmount(e.getReward().doubleValue());
@@ -179,7 +179,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		
 		WalletVO wallet = this.walletService.findByUser(e.getTakerId());
 		param.setDstWalletId(wallet.getId());
-		param.setMark("完成任务:" + e.getTitle());
+		param.setMark("完成悬赏:" + e.getTitle());
 		if(null == param.getCurrency()) {
 			param.setCurrency(Currency.FREE_BE);
 		}
@@ -191,24 +191,24 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	}
 
 	@Override
-	public TaskVO cancelTask(Long taskId) throws CustomException {
-		Task e = this.getById(taskId);
+	public BountyVO cancelBounty(Long bountyId) throws CustomException {
+		Bounty e = this.getById(bountyId);
 		if(null == e) {
-			throw new CustomException("任务不存在");
+			throw new CustomException("悬赏不存在");
 		}
 
 		if(e.getTakeId() != null) {
-			throw new CustomException("任务已被认领，不可取消");
+			throw new CustomException("悬赏已被认领，不可取消");
 		}
 		
 		if(e.getOwnerId().longValue() != this.getCurrentUser().getId().longValue()) {
 			throw new CustomException("您没有权限");
 		}
 		
-		e.setState(TaskState.CANCEL);
+		e.setState(BountyState.CANCEL);
 		e = repository.save(e);
 
-		TaskVO vo = toVO(e);
+		BountyVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 
 		return vo;
@@ -216,40 +216,40 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	
 
 	@Override
-	public void updateTake(Long taskId, Long takeId) throws CustomException {
-		Task task = this.getById(taskId);
+	public void updateTake(Long bountyId, Long takeId) throws CustomException {
+		Bounty bounty = this.getById(bountyId);
 		
-		if(null == task) {
+		if(null == bounty) {
 			return;
 		}
 		
-		task.setTakerId(getCurrentUser().getId());
-		task.setTakeId(takeId);
-		task.setState(TaskState.RUNNING);
-		task = this.repository.save(task);
+		bounty.setTakerId(getCurrentUser().getId());
+		bounty.setTakeId(takeId);
+		bounty.setState(BountyState.RUNNING);
+		bounty = this.repository.save(bounty);
 		
-		TaskVO vo = toVO(task);
+		BountyVO vo = toVO(bounty);
 		objectCaches.put(vo.getId(), vo);
 	}
 	
 	@Override
-	public void doneTask(Long taskId) throws CustomException {
-		Task task = this.getById(taskId);
+	public void doneBounty(Long bountyId) throws CustomException {
+		Bounty bounty = this.getById(bountyId);
 		
-		if(null == task) {
+		if(null == bounty) {
 			return;
 		}
 		
-		task.setState(TaskState.WAIT_AUDIT);
-		task.setAuditStartTime(System.currentTimeMillis());
+		bounty.setState(BountyState.WAIT_AUDIT);
+		bounty.setAuditStartTime(System.currentTimeMillis());
 		
-		task = this.repository.save(task);
-		TaskVO vo = toVO(task);
+		bounty = this.repository.save(bounty);
+		BountyVO vo = toVO(bounty);
 		objectCaches.put(vo.getId(), vo);
 	}
 
 	@Override
-	public Page<TaskVO> queryPage(TaskQueryParam param) throws CustomException {
+	public Page<BountyVO> queryPage(BountyQueryParam param) throws CustomException {
 		param.setOrder("id");
 		List<Order> orders = null;
 		if(param.getDesc() == null || param.getDesc()) {
@@ -260,24 +260,24 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		
 		PageRequest request = PageRequest.of((int)param.getCurrPage(), (int)param.getLimit(), Sort.by(orders));
 
-		Specification<Task> example = buildSpec(param);
+		Specification<Bounty> example = buildSpec(param);
 
-		Page<Task> page = repository.findAll(example, request);
-		List<TaskVO> retList = new ArrayList<>();
+		Page<Bounty> page = repository.findAll(example, request);
+		List<BountyVO> retList = new ArrayList<>();
 
-		for(Task e:  page.getContent()) {
+		for(Bounty e:  page.getContent()) {
 			retList.add(toVO(e));
 		}
-		return new PageImpl<TaskVO>(retList, page.getPageable(), page.getTotalElements());
+		return new PageImpl<BountyVO>(retList, page.getPageable(), page.getTotalElements());
 	}
 
-	private Specification<Task> buildSpec(TaskQueryParam param) throws CustomException {
-		return new Specification<Task>() {
+	private Specification<Bounty> buildSpec(BountyQueryParam param) throws CustomException {
+		return new Specification<Bounty>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				QueryBuilder<Task> builder = new QueryBuilder<>(root, criteriaBuilder);
+			public Predicate toPredicate(Root<Bounty> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				QueryBuilder<Bounty> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
 				
 				builder.addEqual("projectId", param.getProjectId());
@@ -291,8 +291,8 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		};
 	}
 
-	private TaskVO toVO(Task e) throws CustomException {
-		TaskVO vo = new TaskVO();
+	private BountyVO toVO(Bounty e) throws CustomException {
+		BountyVO vo = new BountyVO();
 		vo.setId(e.getId());
 		vo.setName(e.getName());
 		vo.setCode(e.getCode());
@@ -311,7 +311,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		vo.setLimitTime(e.getLimitTime());
 		
 		if(null != e.getTakeId()) {
-			vo.setTake(taskTakerService.findById(e.getTakeId()));
+			vo.setTake(bountyTakerService.findById(e.getTakeId()));
 		}
 		
 		vo.setTakerWaitTime(e.getTakerWaitTime());
@@ -323,35 +323,35 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 
 	@Override
 	public void softDelete(Long id) throws CustomException {
-		objectCaches.delete(id, TaskVO.class);
+		objectCaches.delete(id, BountyVO.class);
 		super.softDelete(id);
 	}
 	
 	
-	private void checkParam(TaskParam param) throws CustomException {
+	private void checkParam(BountyParam param) throws CustomException {
 		if(null == param.getProjectId()) {
 			throw new CustomException("请设置项目");
 		}
 		if(StringUtils.isEmpty(param.getTitle())) {
-			throw new CustomException("请设置任务名称");
+			throw new CustomException("请设置悬赏名称");
 		}
 		if(StringUtils.isEmpty(param.getDescription())) {
-			throw new CustomException("请填写任务说明");
+			throw new CustomException("请填写悬赏说明");
 		}
 		if(null == param.getReward() || param.getReward() == 0) {
-			throw new CustomException("请设置任务赏金");
+			throw new CustomException("请设置悬赏赏金");
 		}
 		if(null == param.getTakerWaitTime()) {
-			throw new CustomException("请设置任务认领等待时间");
+			throw new CustomException("请设置悬赏认领等待时间");
 		}
 		if(param.getTakerWaitTime() <= 0 || param.getTakerWaitTime() > 10) {
-			throw new CustomException("任务等待时间不得超过10天");
+			throw new CustomException("悬赏等待时间不得超过10天");
 		}
 		if(null == param.getLimitTime()) {
-			throw new CustomException("请设置任务完成时间");
+			throw new CustomException("请设置悬赏完成时间");
 		}
 		if(param.getLimitTime() <= 0 || param.getLimitTime() > 7) {
-			throw new CustomException("任务完成时间不得超过7天，您应该细分您的任务");
+			throw new CustomException("悬赏完成时间不得超过7天，您应该细分您的悬赏");
 		}
 		
 		WalletVO wallet = this.walletService.findByUser(this.getCurrentUser().getId());

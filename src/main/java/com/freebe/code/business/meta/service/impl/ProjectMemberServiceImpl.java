@@ -320,7 +320,7 @@ public class ProjectMemberServiceImpl extends BaseServiceImpl<ProjectMember> imp
 		ProjectMemberVO vo = this.findById(projectMemberId);
 		ProjectMember pm = getCurr(vo.getProjectId());
 		if(pm.getMemberId().longValue() != vo.getMemberId()) {
-			throw new CustomException("您不能为其他成员提交完成任务");
+			throw new CustomException("您不能为其他成员提交完成悬赏");
 		}
 		
 		if(pm.getProjectMemberState().intValue() != ProjectMemberState.NORMAL) {
@@ -337,7 +337,7 @@ public class ProjectMemberServiceImpl extends BaseServiceImpl<ProjectMember> imp
 		pm.setWorkState(WorkState.DONE);
 		pm.setDoneTime(System.currentTimeMillis());
 		
-		this.projectRecordService.addRecord(pm.getProjectId(), "完成了任务");	
+		this.projectRecordService.addRecord(pm.getProjectId(), "完成了悬赏");	
 		return toVO(pm);
 	}
 	

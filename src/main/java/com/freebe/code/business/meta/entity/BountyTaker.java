@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 任务认领
+ * 悬赏认领
  * @author zhengbiaoxie
  *
  */
@@ -20,31 +20,31 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @NoArgsConstructor
-@Table(name="t_task_taker", 
+@Table(name="t_bounty_taker", 
 	indexes = { @Index(columnList = "Id")})
-public class TaskTaker extends BaseEntity {
+public class BountyTaker extends BaseEntity {
 	/**
-	 * 任务 ID
+	 * 悬赏 ID
 	 */
-	private Long taskId;
+	private Long bountyId;
 	
 	/**
-	 * 任务认领时间
+	 * 悬赏认领时间
 	 */
 	private Long takeTime;
 	
 	/**
-	 * 任务认领者
+	 * 悬赏认领者
 	 */
 	private Long taker;
 	
 	/**
-	 * 任务完成时间
+	 * 悬赏完成时间
 	 */
 	private Long doneTime;
 	
 	/**
-	 * 任务耗时
+	 * 悬赏耗时
 	 */
 	private Long costTime;
 	
@@ -59,12 +59,12 @@ public class TaskTaker extends BaseEntity {
 	private String evaluate;
 	
 	/**
-	 * 任务奖励
+	 * 悬赏奖励
 	 */
 	private Long freeBe;
 	
 	/**
-	 * 任务结算交易信息
+	 * 悬赏结算交易信息
 	 */
 	private Long transactionId;
 	

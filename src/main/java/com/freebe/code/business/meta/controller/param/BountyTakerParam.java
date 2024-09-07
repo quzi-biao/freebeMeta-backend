@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@ApiModel("任务认领参数")
-public class TaskTakerParam extends BaseEntityParam {
-	@ApiModelProperty("任务 ID")
-	private Long taskId;
+@ApiModel("悬赏认领参数")
+public class BountyTakerParam extends BaseEntityParam {
+	@ApiModelProperty("悬赏 ID")
+	private Long bountyId;
 }

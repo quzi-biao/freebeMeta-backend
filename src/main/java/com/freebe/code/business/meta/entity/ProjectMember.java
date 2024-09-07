@@ -55,7 +55,7 @@ public class ProjectMember extends BaseEntity {
 	private Integer projectMemberState;
 	
 	/**
-	 * 任务完成状态
+	 * 悬赏完成状态
 	 */
 	private Integer workState;
 	
@@ -86,7 +86,7 @@ public class ProjectMember extends BaseEntity {
 	private String dismissionReason;
 	
 	/**
-	 * 任务完成时间
+	 * 悬赏完成时间
 	 */
 	private Long doneTime;
 	

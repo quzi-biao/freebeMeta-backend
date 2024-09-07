@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonExecutor {
 	private static final Executor executor = Executors.newScheduledThreadPool(100);
 	
-	public static final void execute(Runnable task) {
-		log.info("启动线程： " + task);
-		executor.execute(task);
+	public static final void execute(Runnable bounty) {
+		log.info("启动线程： " + bounty);
+		executor.execute(bounty);
 	}
 	
 	public static void sleep(long time) {

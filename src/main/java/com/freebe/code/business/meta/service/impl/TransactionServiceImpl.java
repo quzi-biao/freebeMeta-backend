@@ -191,7 +191,7 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 
 		e = repository.save(e);
 		
-		// 任务奖励直接发放
+		// 悬赏奖励直接发放
 //		if(TransactionType.FREEBE_DISTRIBUTE != param.getTransactionType()) {
 //			this.confirm(e.getId());
 //		}

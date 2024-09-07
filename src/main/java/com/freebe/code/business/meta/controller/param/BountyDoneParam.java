@@ -6,10 +6,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@ApiModel("任务完成参数")
+@ApiModel("悬赏完成参数")
 @Data
-public class TaskDoneParam {
-	@ApiModelProperty("任务ID")
+public class BountyDoneParam {
+	@ApiModelProperty("悬赏ID")
 	private Long takeId;
 	
 	@ApiModelProperty("交付文件")

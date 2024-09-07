@@ -1,11 +1,11 @@
 package com.freebe.code.business.meta.type;
 
 /**
- * 任务认领状态
+ * 悬赏认领状态
  * @author zhengbiaoxie
  *
  */
-public class TaskTakerState {
+public class BountyTakerState {
 	/**
 	 * 状态正常
 	 */

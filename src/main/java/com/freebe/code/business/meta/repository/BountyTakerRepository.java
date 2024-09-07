@@ -1,7 +1,7 @@
 package com.freebe.code.business.meta.repository;
 
 import org.springframework.stereotype.Repository;
-import com.freebe.code.business.meta.entity.Task;
+import com.freebe.code.business.meta.entity.BountyTaker;
 import com.freebe.code.business.base.repository.BaseRepository;
 
 /**
@@ -10,6 +10,6 @@ import com.freebe.code.business.base.repository.BaseRepository;
  *
  */
 @Repository
-public interface TaskRepository extends BaseRepository<Task> {
+public interface BountyTakerRepository extends BaseRepository<BountyTaker> {
 
 }

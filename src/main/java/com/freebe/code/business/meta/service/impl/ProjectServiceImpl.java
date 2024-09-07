@@ -297,7 +297,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		
 		for(ProjectMemberVO member : members) {
 			if(member.getWorkState().intValue() == WorkState.WORKING) {
-				throw new CustomException("有成员还未完成任务，项目不能结束");
+				throw new CustomException("有成员还未完成悬赏，项目不能结束");
 			}
 		}
 		

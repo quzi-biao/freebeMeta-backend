@@ -1,7 +1,5 @@
 package com.freebe.code.business.meta.controller.param;
 
-import java.util.List;
-
 import com.freebe.code.common.PageBean;
 
 import io.swagger.annotations.ApiModel;
@@ -19,19 +17,16 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@ApiModel("项目任务查询参数")
-public class TaskQueryParam extends PageBean {
-	@ApiModelProperty("关联的项目 ID")
-	private Long projectId;
+@ApiModel("悬赏认领查询参数")
+public class BountyTakerQueryParam extends PageBean {
+	@ApiModelProperty("悬赏 ID")
+	private Long bountyId;
 
-	@ApiModelProperty("任务所有者")
-	private Long ownerId;
+	@ApiModelProperty("悬赏认领者")
+	private Long taker;
 
-	@ApiModelProperty("任务状态")
-	private List<Integer> state;
-
-	@ApiModelProperty("当前认领 ID")
-	private Long takerId;
+	@ApiModelProperty("完成状态")
+	private Integer state;
 
 	@ApiModelProperty("开始时间")
 	private Long createStartTime;
