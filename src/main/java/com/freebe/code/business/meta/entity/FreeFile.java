@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name="t_file", 
-	indexes = { @Index(columnList = "Id")})
+	indexes = { @Index(columnList = "Id"), @Index(columnList = "fileCategory") })
 public class FreeFile extends BaseEntity {
 	
 	/**
@@ -65,9 +65,14 @@ public class FreeFile extends BaseEntity {
 	 * 文件定价
 	 */
 	private String price;
-	
+
 	/**
 	 * 定价策略：次/不限次
 	 */
 	private Integer priceCategory;
+
+	/**
+	 * 文件类别
+	 */
+	private Integer fileCategory;
 }

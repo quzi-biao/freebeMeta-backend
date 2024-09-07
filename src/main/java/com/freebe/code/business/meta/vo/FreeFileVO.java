@@ -49,4 +49,7 @@ public class FreeFileVO extends BaseVO {
 
 	@ApiModelProperty("定价策略：次/不限次")
 	private Integer priceCategory;
+
+	@ApiModelProperty("文件类别")
+	private Integer fileCategory;
 }

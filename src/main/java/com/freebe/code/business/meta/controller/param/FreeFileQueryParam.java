@@ -1,6 +1,6 @@
 package com.freebe.code.business.meta.controller.param;
 
-import com.freebe.code.common.PageBean;
+import com.freebe.code.common.KeyWordsQueryParam;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("文件查询参数")
-public class FreeFileQueryParam extends PageBean {
+public class FreeFileQueryParam extends KeyWordsQueryParam {
 	@ApiModelProperty("文件标题")
 	private String title;
 
@@ -45,6 +45,9 @@ public class FreeFileQueryParam extends PageBean {
 
 	@ApiModelProperty("定价策略：次/不限次")
 	private Integer priceCategory;
+
+	@ApiModelProperty("文件类别")
+	private Integer fileCategory;
 
 	@ApiModelProperty("开始时间")
 	private Long createStartTime;
