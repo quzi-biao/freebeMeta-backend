@@ -33,6 +33,7 @@ import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.ProjectRecordService;
 import com.freebe.code.business.meta.service.ProjectService;
+import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.impl.lucene.ProjectLuceneSearch;
 import com.freebe.code.business.meta.type.ProjectBillState;
 import com.freebe.code.business.meta.type.ProjectMemberState;
@@ -78,6 +79,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 	
 	@Autowired
 	private ProjectRecordService projectRecordService;
+	
+	@Autowired
+	private TransactionService transactionService;
 
 	@Override
 	public ProjectVO findById(Long id) throws CustomException {
@@ -90,7 +94,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			ret = op.get();
 		}
 		objectCaches.put(ret.getId(), ret);
-		return toVO(ret);
+		return toVO(ret, true);
 	}
 
 	@Override
@@ -386,8 +390,13 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			}
 		};
 	}
-
+	
 	private ProjectVO toVO(Project e) throws CustomException {
+		return toVO(e, false);
+	}
+	
+
+	private ProjectVO toVO(Project e, boolean isDetail) throws CustomException {
 		ProjectVO vo = new ProjectVO();
 		vo.setId(e.getId());
 		vo.setName(e.getName());
@@ -411,6 +420,10 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		vo.setBillTime(e.getBillTime());
 		vo.setBillState(e.getBillState());
 		vo.setProjectType(e.getProjectType());
+		
+		if(isDetail) {
+			vo.setProjectReward(this.transactionService.getProjectReward(e.getId()));
+		}
 		
 		vo.setMembers(this.projectMemberService.getProjectMembers(e.getId()));
 		return vo;

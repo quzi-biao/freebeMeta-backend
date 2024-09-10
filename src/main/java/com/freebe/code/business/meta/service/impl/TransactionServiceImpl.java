@@ -35,6 +35,8 @@ import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.type.TransactionState;
 import com.freebe.code.business.meta.type.TransactionType;
 import com.freebe.code.business.meta.vo.MemberVO;
+import com.freebe.code.business.meta.vo.ProjectReward;
+import com.freebe.code.business.meta.vo.ProjectReward.RewardItem;
 import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
@@ -260,6 +262,33 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		}
 		
 		return toVO(transaction);
+	}
+	
+	@Override
+	public ProjectReward getProjectReward(Long projectId) throws CustomException {
+		List<Object[]> records = this.repository.getProjectReward(projectId);
+		
+		if(null != records && records.size() > 0) {
+			ProjectReward r = new ProjectReward();
+			r.setTotalAmount(0D);
+			r.setRewards(new ArrayList<>());
+			
+			for(Object[] record : records) {
+				Long dstId = Long.parseLong(String.valueOf(record[0]));
+				Double amount = Double.parseDouble(String.valueOf(record[1]));
+				
+				RewardItem item = new RewardItem();
+				item.setAmount(numbericCurrency(amount.longValue()));
+				item.setWallet(this.walletService.findById(dstId));
+				r.setTotalAmount(r.getTotalAmount() + item.getAmount());
+				
+				r.getRewards().add(item);
+			}
+			
+			return r;
+		}
+		
+		return null;
 	}
 
 	private Specification<Transaction> buildSpec(TransactionQueryParam param) throws CustomException {

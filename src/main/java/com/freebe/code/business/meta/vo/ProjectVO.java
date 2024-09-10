@@ -66,6 +66,9 @@ public class ProjectVO extends BaseVO {
 	
 	@ApiModelProperty("项目类型")
 	private Integer projectType;
+	
+	@ApiModelProperty("积分总消耗")
+	private ProjectReward projectReward;
 
 	@ApiModelProperty("项目成员")
 	private List<ProjectMemberVO> members;

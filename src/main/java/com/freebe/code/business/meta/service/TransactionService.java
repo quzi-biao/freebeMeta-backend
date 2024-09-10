@@ -3,11 +3,12 @@ package com.freebe.code.business.meta.service;
 import org.springframework.data.domain.Page;
 
 import com.freebe.code.business.base.service.BaseService;
-import com.freebe.code.common.CustomException;
-import com.freebe.code.business.meta.entity.Transaction;
-import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.controller.param.TransactionQueryParam;
+import com.freebe.code.business.meta.entity.Transaction;
+import com.freebe.code.business.meta.vo.ProjectReward;
+import com.freebe.code.business.meta.vo.TransactionVO;
+import com.freebe.code.common.CustomException;
 
 /**
  *
@@ -54,5 +55,13 @@ public interface TransactionService extends BaseService<Transaction> {
 	 * @throws CustomException
 	 */
 	TransactionVO reback(Long transactionId) throws CustomException;
+	
+	/**
+	 * 交易确认,确认后的交易进入公示期
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	ProjectReward getProjectReward(Long projectId) throws CustomException;
 
 }
