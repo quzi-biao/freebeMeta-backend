@@ -149,8 +149,8 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 
 	@Override
 	public TransactionVO createOrUpdate(TransactionParam param) throws CustomException {
-		// 接口只有财务官或项目所有者可以调用
-		// checkFinanceOfficer();
+		 //接口只有财务官或项目所有者可以调用
+		 checkFinanceOfficer();
 		param.setTransactionType(TransactionType.FREEBE_DISTRIBUTE);
 		
 		return this.innerCreateOrUpdate(param);
@@ -181,11 +181,7 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 			e.setSrcWalletId(param.getSrcWalletId());
 			e.setDstWalletId(param.getDstWalletId());
 			e.setTransactionType(param.getTransactionType());
-			if(TransactionType.FREEBE_DISTRIBUTE == param.getTransactionType()) {
-				e.setState(TransactionState.WAIT_AUDIT);
-			}else {
-				e.setState(TransactionState.CONFIRMING);
-			}
+			e.setState(TransactionState.WAIT_AUDIT);
 			e.setProjectId(param.getProjectId());
 			e.setCurrency(param.getCurrency());
 		}
@@ -195,10 +191,10 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 
 		e = repository.save(e);
 		
-		// 任务奖励直接发放
-		if(TransactionType.FREEBE_DISTRIBUTE != param.getTransactionType()) {
-			this.confirm(e.getId());
-		}
+		// 悬赏奖励直接发放
+//		if(TransactionType.FREEBE_DISTRIBUTE != param.getTransactionType()) {
+//			this.confirm(e.getId());
+//		}
 
 		TransactionVO vo = toVO(e);
 		objectCaches.put(e.getId(), e);

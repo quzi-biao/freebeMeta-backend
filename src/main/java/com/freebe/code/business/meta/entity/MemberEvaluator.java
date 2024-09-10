@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name="t_member_evaluator", indexes = { @Index(columnList = "Id")})
 public class MemberEvaluator extends BaseEntity {
 	/**
-	 * 小时价值，等于 任务总回报/任务总耗时*(8/24)，我们默认 8 小时工作制
+	 * 小时价值，等于 悬赏总回报/悬赏总耗时*(8/24)，我们默认 8 小时工作制
 	 */
 	private Long hourValue;
 	
@@ -37,14 +37,14 @@ public class MemberEvaluator extends BaseEntity {
 	private Long totalHours;
 	
 	/**
-	 * 总任务数
+	 * 总悬赏数
 	 */
-	private Long totalTakeTask;
+	private Long totalTakeBounty;
 	
 	/**
-	 * 总超时任务数
+	 * 总超时悬赏数
 	 */
-	private Long timeoutTask;
+	private Long timeoutBounty;
 	
 	/**
 	 * 平均评分
@@ -52,9 +52,9 @@ public class MemberEvaluator extends BaseEntity {
 	private Double avgScore;
 	
 	/**
-	 * 总创建的任务数
+	 * 总创建的悬赏数
 	 */
-	private Long totalOwnerTask;
+	private Long totalOwnerBounty;
 	
 	/**
 	 * 总发出的奖励

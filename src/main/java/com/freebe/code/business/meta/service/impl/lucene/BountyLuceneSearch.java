@@ -1,10 +1,12 @@
 package com.freebe.code.business.meta.service.impl.lucene;
 
-import com.freebe.code.business.meta.vo.TaskVO;
-import com.freebe.code.common.KeyWordsQueryParam;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.SortedNumericDocValuesField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -14,13 +16,16 @@ import org.apache.lucene.search.Query;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.freebe.code.business.meta.vo.BountyVO;
+import com.freebe.code.common.KeyWordsQueryParam;
+
 /**
  * Lucene 全文检索
  * @author zhengbiaoxie
  *
  */
 @Component
-public class TaskLuceneSearch extends AbstractLuceneSearch<TaskVO> {
+public class BountyLuceneSearch extends AbstractLuceneSearch<BountyVO> {
 	@Value("${lucene.taskIndexLibrary}")
 	private String luceneIndex;
 	
@@ -28,7 +33,7 @@ public class TaskLuceneSearch extends AbstractLuceneSearch<TaskVO> {
 		return luceneIndex;
 	}
 	
-	public void addIndex(TaskVO vo, Document doc) {
+	public void addIndex(BountyVO vo, Document doc) {
 		 doc.add(new StringField("id", String.valueOf(vo.getId()), Field.Store.YES));
          doc.add(new TextField("title", vo.getTitle(), Field.Store.YES));
         

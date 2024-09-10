@@ -12,10 +12,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
-import com.freebe.code.business.base.service.UserService;
-import com.freebe.code.business.meta.service.*;
-import com.freebe.code.business.meta.service.impl.lucene.ProjectLuceneSearch;
-import com.freebe.code.business.meta.vo.ProjectVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,26 +22,31 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
-import com.freebe.code.business.meta.controller.param.TaskAuditParam;
-import com.freebe.code.business.meta.controller.param.TaskParam;
-import com.freebe.code.business.meta.controller.param.TaskQueryParam;
+import com.freebe.code.business.meta.controller.param.BountyAuditParam;
+import com.freebe.code.business.meta.controller.param.BountyParam;
+import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
-import com.freebe.code.business.meta.entity.Task;
-import com.freebe.code.business.meta.entity.TaskTaker;
-import com.freebe.code.business.meta.repository.TaskRepository;
+import com.freebe.code.business.meta.entity.Bounty;
+import com.freebe.code.business.meta.entity.BountyTaker;
+import com.freebe.code.business.meta.repository.BountyRepository;
+import com.freebe.code.business.meta.service.BountyService;
+import com.freebe.code.business.meta.service.BountyTakerService;
+import com.freebe.code.business.meta.service.ProjectService;
+import com.freebe.code.business.meta.service.TransactionService;
+import com.freebe.code.business.meta.service.WalletService;
+import com.freebe.code.business.meta.service.impl.lucene.BountyLuceneSearch;
+import com.freebe.code.business.meta.type.BountyState;
+import com.freebe.code.business.meta.type.BountyTakerState;
 import com.freebe.code.business.meta.type.Currency;
-import com.freebe.code.business.meta.type.TaskState;
-import com.freebe.code.business.meta.type.TaskTakerState;
 import com.freebe.code.business.meta.type.TransactionType;
-import com.freebe.code.business.meta.vo.TaskVO;
+import com.freebe.code.business.meta.vo.BountyVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
-import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
-import com.freebe.code.business.meta.service.impl.lucene.TaskLuceneSearch;
 
 /**
  *
@@ -53,15 +54,15 @@ import com.freebe.code.business.meta.service.impl.lucene.TaskLuceneSearch;
  *
  */
 @Service
-public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskService {
+public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements BountyService {
 	@Autowired
-	private TaskRepository repository;
+	private BountyRepository repository;
 
 	@Autowired
 	private ObjectCaches objectCaches;
 
 	@Autowired
-	private TaskTakerService taskTakerService;
+	private BountyTakerService taskTakerService;
 
 	@Autowired
 	private UserService userService;
@@ -76,13 +77,13 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	private ProjectService projectService;
 
 	@Autowired
-	private TaskLuceneSearch searcher;
+	private BountyLuceneSearch searcher;
 
 	@Override
-	public TaskVO findById(Long id) throws CustomException {
-		TaskVO ret = this.objectCaches.get(id, TaskVO.class);
+	public BountyVO findById(Long id) throws CustomException {
+		BountyVO ret = this.objectCaches.get(id, BountyVO.class);
 		if(null == ret){
-			Optional<Task> op = this.repository.findById(id);
+			Optional<Bounty> op = this.repository.findById(id);
 			if(!op.isPresent()){
 				return null;
 			}
@@ -93,16 +94,16 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	}
 
 	@Override
-	public TaskVO createOrUpdate(TaskParam param) throws CustomException {
+	public BountyVO createOrUpdate(BountyParam param) throws CustomException {
 		checkParam(param);
 		
-		Task e = this.getUpdateEntity(param, false);
+		Bounty e = this.getUpdateEntity(param, false);
 
 		e.setProjectId(param.getProjectId());
 		e.setOwnerId(getCurrentUser().getId());
 		e.setTitle(param.getTitle());
 		e.setDescription(param.getDescription());
-		e.setState(TaskState.WAIT_TAKER);
+		e.setState(BountyState.WAIT_TAKER);
 		e.setLimitTime(param.getLimitTime());
 		e.setTakerWaitTime(param.getTakerWaitTime());
 		if(param.getId() == null) {
@@ -111,7 +112,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 
 		e = repository.save(e);
 
-		TaskVO vo = toVO(e);
+		BountyVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 		searcher.addOrUpdateIndex(vo);
 
@@ -120,7 +121,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	
 	@Transactional
 	@Override
-	public TaskVO auditTask(TaskAuditParam param) throws CustomException {
+	public BountyVO auditBounty(BountyAuditParam param) throws CustomException {
 		if(StringUtils.isEmpty(param.getEvaluate())) {
 			throw new CustomException("请输入任务评价");
 		}
@@ -128,12 +129,12 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			throw new CustomException("参数错误");
 		}
 		
-		Task e = this.getById(param.getTaskId());
+		Bounty e = this.getById(param.getBountyId());
 		if(null == e) {
 			throw new CustomException("任务不存在");
 		}
 		
-		if(e.getState() != TaskState.WAIT_AUDIT) {
+		if(e.getState() != BountyState.WAIT_AUDIT) {
 			throw new CustomException("任务状态异常");
 		}
 		
@@ -141,19 +142,19 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			throw new CustomException("您无权执行此操作");
 		}
 		
-		TaskTaker tt = this.taskTakerService.getReference(e.getTakeId());
+		BountyTaker tt = this.taskTakerService.getReference(e.getTakeId());
 		if(null == tt) {
 			throw new CustomException("认领不存在");
 		}
 		
-		if(tt.getState() != TaskTakerState.DONE) {
+		if(tt.getState() != BountyTakerState.DONE) {
 			throw new CustomException("认领未完成或已超时");
 		}
 		
 		tt.setEvaluate(param.getEvaluate());
 		e.setAuditTime(System.currentTimeMillis());
 		if(param.getPass()) {
-			e.setState(TaskState.DONE);
+			e.setState(BountyState.DONE);
 			this.repository.save(e);
 			Long taker = e.getTakerId();
 			if(taker != tt.getTaker()) {
@@ -165,19 +166,19 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			tt.setTransactionId(transactionId);
 			this.taskTakerService.save(tt);
 		}else {
-			tt.setState(TaskTakerState.AUDIT_FAILED);
-			e.setState(TaskState.AUDIT_FAILED);
+			tt.setState(BountyTakerState.AUDIT_FAILED);
+			e.setState(BountyState.AUDIT_FAILED);
 			this.repository.save(e);
 			this.taskTakerService.save(tt);
 		}
 		
-		TaskVO vo = toVO(e);
+		BountyVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 
 		return vo;
 	}
 
-	private Long createTransaction(Task e) throws CustomException {
+	private Long createTransaction(Bounty e) throws CustomException {
 		// 创建交易
 		TransactionParam param = new TransactionParam();
 		param.setAmount(e.getReward().doubleValue());
@@ -199,8 +200,8 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	}
 
 	@Override
-	public TaskVO cancelTask(Long taskId) throws CustomException {
-		Task e = this.getById(taskId);
+	public BountyVO cancelBounty(Long taskId) throws CustomException {
+		Bounty e = this.getById(taskId);
 		if(null == e) {
 			throw new CustomException("任务不存在");
 		}
@@ -213,10 +214,10 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			throw new CustomException("您没有权限");
 		}
 		
-		e.setState(TaskState.CANCEL);
+		e.setState(BountyState.CANCEL);
 		e = repository.save(e);
 
-		TaskVO vo = toVO(e);
+		BountyVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 
 		return vo;
@@ -225,7 +226,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 
 	@Override
 	public void updateTake(Long taskId, Long takeId) throws CustomException {
-		Task task = this.getById(taskId);
+		Bounty task = this.getById(taskId);
 		
 		if(null == task) {
 			return;
@@ -233,31 +234,31 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		
 		task.setTakerId(getCurrentUser().getId());
 		task.setTakeId(takeId);
-		task.setState(TaskState.RUNNING);
+		task.setState(BountyState.RUNNING);
 		task = this.repository.save(task);
 		
-		TaskVO vo = toVO(task);
+		BountyVO vo = toVO(task);
 		objectCaches.put(vo.getId(), vo);
 	}
 	
 	@Override
-	public void doneTask(Long taskId) throws CustomException {
-		Task task = this.getById(taskId);
+	public void doneBounty(Long taskId) throws CustomException {
+		Bounty task = this.getById(taskId);
 		
 		if(null == task) {
 			return;
 		}
 		
-		task.setState(TaskState.WAIT_AUDIT);
+		task.setState(BountyState.WAIT_AUDIT);
 		task.setAuditStartTime(System.currentTimeMillis());
 		
 		task = this.repository.save(task);
-		TaskVO vo = toVO(task);
+		BountyVO vo = toVO(task);
 		objectCaches.put(vo.getId(), vo);
 	}
 
 	@Override
-	public Page<TaskVO> queryPage(TaskQueryParam param) throws CustomException {
+	public Page<BountyVO> queryPage(BountyQueryParam param) throws CustomException {
 //		if(null != param.getKeyWords() && param.getKeyWords().length() != 0){
 //			return queryPageWithKeywords(param);
 //		}
@@ -273,9 +274,9 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		PageRequest request = PageRequest.of((int)param.getCurrPage(), (int)param.getLimit(), Sort.by(orders));
 
 		if(null != param.getKeyWords() && !param.getKeyWords().isEmpty()){
-			Page<TaskVO> searchPage = searcher.fullTextSearch(param);
+			Page<BountyVO> searchPage = searcher.fullTextSearch(param);
 			List<Long> idList = new ArrayList<>();
-			for(TaskVO e:  searchPage.getContent()) {
+			for(BountyVO e:  searchPage.getContent()) {
 				idList.add(e.getId());
 			}
 			if(idList.isEmpty()) {
@@ -284,33 +285,24 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 			param.setIdList(idList);
 		}
 
-		Specification<Task> example = buildSpec(param);
+		Specification<Bounty> example = buildSpec(param);
 
-		Page<Task> page = repository.findAll(example, request);
-		List<TaskVO> retList = new ArrayList<>();
+		Page<Bounty> page = repository.findAll(example, request);
+		List<BountyVO> retList = new ArrayList<>();
 
-		for(Task e:  page.getContent()) {
+		for(Bounty e:  page.getContent()) {
 			retList.add(toVO(e));
 		}
-		return new PageImpl<TaskVO>(retList, page.getPageable(), page.getTotalElements());
+		return new PageImpl<BountyVO>(retList, page.getPageable(), page.getTotalElements());
 	}
 
-	private Page<TaskVO> queryPageWithKeywords(TaskQueryParam param) throws CustomException {
-		Page<TaskVO> page = searcher.fullTextSearch(param);
-		List<TaskVO> retList = new ArrayList<>();
-		for(TaskVO e:  page.getContent()) {
-			retList.add(toVO(this.getById(e.getId())));
-		}
-		return new PageImpl<TaskVO>(retList, page.getPageable(), page.getTotalElements());
-	}
-
-	private Specification<Task> buildSpec(TaskQueryParam param) throws CustomException {
-		return new Specification<Task>() {
+	private Specification<Bounty> buildSpec(BountyQueryParam param) throws CustomException {
+		return new Specification<Bounty>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				QueryBuilder<Task> builder = new QueryBuilder<>(root, criteriaBuilder);
+			public Predicate toPredicate(Root<Bounty> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				QueryBuilder<Bounty> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
 				
 				builder.addEqual("projectId", param.getProjectId());
@@ -325,8 +317,8 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 		};
 	}
 
-	private TaskVO toVO(Task e) throws CustomException {
-		TaskVO vo = new TaskVO();
+	private BountyVO toVO(Bounty e) throws CustomException {
+		BountyVO vo = new BountyVO();
 		vo.setId(e.getId());
 		vo.setName(e.getName());
 		vo.setCode(e.getCode());
@@ -363,12 +355,12 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements TaskServic
 	@Override
 	public void softDelete(Long id) throws CustomException {
 		searcher.deleteIndex(this.findById(id));
-		objectCaches.delete(id, TaskVO.class);
+		objectCaches.delete(id, BountyVO.class);
 		super.softDelete(id);
 	}
 	
 	
-	private void checkParam(TaskParam param) throws CustomException {
+	private void checkParam(BountyParam param) throws CustomException {
 		if(null == param.getProjectId()) {
 			throw new CustomException("请设置项目");
 		}

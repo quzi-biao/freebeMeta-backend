@@ -3,9 +3,9 @@ package com.freebe.code.business.meta.controller.param;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-@ApiModel("任务审核参数")
+@ApiModel("悬赏审核参数")
 @Data
-public class TaskAuditParam {
+public class BountyAuditParam {
 	/**
 	 * 审核说明
 	 */
@@ -17,7 +17,7 @@ public class TaskAuditParam {
 	private Boolean pass;
 	
 	/**
-	 * 任务 ID
+	 * 悬赏 ID
 	 */
-	private Long taskId;
+	private Long bountyId;
 }

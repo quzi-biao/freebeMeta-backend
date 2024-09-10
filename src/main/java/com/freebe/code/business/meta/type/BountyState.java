@@ -1,33 +1,33 @@
 package com.freebe.code.business.meta.type;
 
 /**
- * 任务状态
+ * 悬赏状态
  * @author zhengbiaoxie
  *
  */
-public class TaskState {
+public class BountyState {
 	/**
 	 * 等待认领
 	 */
 	public static final int WAIT_TAKER = 0;
 	
 	/**
-	 * 任务进行中
+	 * 悬赏进行中
 	 */
 	public static final int RUNNING = 1;
 	
 	/**
-	 * 任务完成待审核
+	 * 悬赏完成待审核
 	 */
 	public static final int WAIT_AUDIT = 2;
 	
 	/**
-	 * 任务完成
+	 * 悬赏完成
 	 */
 	public static final int DONE = 3;
 	
 	/**
-	 * 任务审核不通过，审核不通过表示任务失败，发布者和认领者都有责任
+	 * 悬赏审核不通过，审核不通过表示悬赏失败，发布者和认领者都有责任
 	 */
 	public static final int AUDIT_FAILED = 4;
 	

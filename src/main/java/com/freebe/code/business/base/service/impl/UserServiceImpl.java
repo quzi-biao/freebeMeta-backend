@@ -86,16 +86,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 			return null;
 		}
 		try {
-			UserVO vo = this.objectCaches.get(userId, UserVO.class);
-			if(null != vo) {
-				return vo;
+			User u = this.objectCaches.get(userId, User.class);
+			if(null != u) {
+				return toVO(u);
 			}
 			
 			User user = this.getReference(userId);
-			vo = toVO(user);
-			objectCaches.put(user.getId(), vo);
-			
-			return vo;
+			objectCaches.put(user.getId(), user);
+	
+			return toVO(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,7 +130,18 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	}
 	
 	@Override
-	public UserVO updateUserInfo(String name, String avator) throws CustomException {
+	public UserVO updateUserInfo(String name, String avator, String freebeId) throws CustomException {
+		if(StringUtils.isEmpty(freebeId)) {
+			throw new CustomException("请设置FreeBeId");
+		}
+		if(!CharChecker.checkFreeBeId(freebeId)) {
+			throw new CustomException("FreeBe ID只能由数字和字母组成（区分大小写）");
+		}
+		
+		if(!freebeId.endsWith(".freebe")) {
+			throw new CustomException("FreeBe ID不合法");
+		}
+		
 		UserVO user = getCurrentUser();
 		User u = this.getReference(user.getId());
 		if(null == u) {
@@ -142,12 +152,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		if(null != avator) {
 			u.setAvator(avator);
 		}
+		if(null != freebeId) {
+			u.setFreeBeId(freebeId);
+		}
 		
 		u = this.repository.save(u);
 		
 		user = toVO(u);
 		
-		objectCaches.put(user.getId(), user); 
+		objectCaches.put(user.getId(), u); 
 		
 		return user;
 	}

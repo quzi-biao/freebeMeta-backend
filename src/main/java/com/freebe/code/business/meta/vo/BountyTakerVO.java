@@ -20,18 +20,18 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@ApiModel("任务认领")
-public class TaskTakerVO extends BaseVO {
-	@ApiModelProperty("任务 ID")
-	private Long taskId;
+@ApiModel("悬赏认领")
+public class BountyTakerVO extends BaseVO {
+	@ApiModelProperty("悬赏 ID")
+	private Long bountyId;
 
-	@ApiModelProperty("任务认领时间")
+	@ApiModelProperty("悬赏认领时间")
 	private Long takeTime;
 
-	@ApiModelProperty("任务认领者")
+	@ApiModelProperty("悬赏认领者")
 	private UserVO taker;
 
-	@ApiModelProperty("任务完成时间")
+	@ApiModelProperty("悬赏完成时间")
 	private Long doneTime;
 
 	@ApiModelProperty("完成状态")
@@ -40,10 +40,10 @@ public class TaskTakerVO extends BaseVO {
 	@ApiModelProperty("完成评价")
 	private String evaluate;
 
-	@ApiModelProperty("任务奖励")
+	@ApiModelProperty("悬赏奖励")
 	private Long freeBe;
 
-	@ApiModelProperty("任务结算交易信息")
+	@ApiModelProperty("悬赏结算交易信息")
 	private Long transactionId;
 
 	@ApiModelProperty("交付文件")

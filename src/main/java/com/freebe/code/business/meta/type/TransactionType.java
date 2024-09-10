@@ -17,7 +17,7 @@ public class TransactionType {
 	public static final int FREEBE_RECYCLE = 1;
 	
 	/**
-	 * 任务奖励
+	 * 悬赏奖励
 	 */
 	public static final int TASK_REWARD = 2;
 }

@@ -10,8 +10,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.freebe.code.business.meta.service.impl.lucene.ProjectLuceneSearch;
-import com.freebe.code.business.meta.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,18 +17,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.freebe.code.common.ObjectCaches;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
-import com.freebe.code.common.CustomException;
-import com.freebe.code.util.PageUtils;
-import com.freebe.code.util.QueryUtils.QueryBuilder;
-import com.freebe.code.business.meta.entity.FreeFile;
-import com.freebe.code.business.meta.service.FreeFileService;
-import com.freebe.code.business.meta.vo.FreeFileVO;
 import com.freebe.code.business.meta.controller.param.FreeFileParam;
 import com.freebe.code.business.meta.controller.param.FreeFileQueryParam;
+import com.freebe.code.business.meta.entity.FreeFile;
 import com.freebe.code.business.meta.repository.FreeFileRepository;
+import com.freebe.code.business.meta.service.FreeFileService;
 import com.freebe.code.business.meta.service.impl.lucene.FreeFileLuceneSearch;
+import com.freebe.code.business.meta.vo.FreeFileVO;
+import com.freebe.code.common.CustomException;
+import com.freebe.code.common.ObjectCaches;
+import com.freebe.code.util.PageUtils;
+import com.freebe.code.util.QueryUtils.QueryBuilder;
 
 /**
  *

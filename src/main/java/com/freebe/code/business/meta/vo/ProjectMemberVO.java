@@ -40,7 +40,7 @@ public class ProjectMemberVO extends BaseVO {
 	@ApiModelProperty("成员状态")
 	private Integer projectMemberState;
 
-	@ApiModelProperty("任务完成状态")
+	@ApiModelProperty("悬赏完成状态")
 	private Integer workState;
 
 	@ApiModelProperty("成员结算状态")

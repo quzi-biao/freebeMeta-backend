@@ -1,7 +1,7 @@
 package com.freebe.code.business.meta.type;
 
 /**
- * 项目成员的任务完成状态
+ * 项目成员的悬赏完成状态
  * @author zhengbiaoxie
  *
  */

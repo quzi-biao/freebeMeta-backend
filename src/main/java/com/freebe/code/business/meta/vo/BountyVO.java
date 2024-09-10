@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("项目任务")
-public class TaskVO extends BaseVO {
+public class BountyVO extends BaseVO {
 	@ApiModelProperty("关联的项目 ID")
 	private Long projectId;
 	
@@ -45,7 +45,7 @@ public class TaskVO extends BaseVO {
 	private Long limitTime;
 
 	@ApiModelProperty("当前认领 ID")
-	private TaskTakerVO take;
+	private BountyTakerVO take;
 
 	@ApiModelProperty("认领等待时间，超过，则任务自动取消")
 	private Long takerWaitTime;
