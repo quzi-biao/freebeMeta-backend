@@ -22,6 +22,7 @@ import com.freebe.code.business.base.entity.FileObject;
 import com.freebe.code.business.base.service.StorageService;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ResultBean;
+import com.freebe.code.web.config.OssConfig;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +40,9 @@ public class StorageController extends AbstractController {
 
 	@Autowired
     private StorageService storageService;
+	
+	@Autowired
+	private OssConfig ossConfig;
 
     /**
      * 上传文件接口，需要校验权限
@@ -77,7 +81,7 @@ public class StorageController extends AbstractController {
         
         JSONObject jo = new JSONObject();
         jo.put("uploaded", 1);
-        jo.put("url", "https://water-dev-test.oss-cn-hangzhou.aliyuncs.com/" + url);
+        jo.put("url", "https:/" + ossConfig.getBucketName() + ".oss-cn-hangzhou.aliyuncs.com/" + url);
         
         return jo;
     }
