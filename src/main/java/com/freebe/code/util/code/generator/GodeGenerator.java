@@ -24,7 +24,7 @@ import com.freebe.code.util.code.generator.generator.VOClassGenerator;
  */
 public class GodeGenerator {
 	private static String srcPath = "/Users/zhengbiaoxie/Workspace/freebe.meta/meta-be/src/main/java";
-	private static String basePath = "com.freebe.code.business.meta";
+	private static String basePath = "com.freebe.code.business.advanture";
 	
 	private static String entityPath = basePath + ".entity";
 	private static String repositoryPath = basePath + ".repository";
@@ -43,10 +43,7 @@ public class GodeGenerator {
 			}
 			String name = entity.getName();
 			String entityName = name.substring(0, name.indexOf('.'));
-			if(entityName.startsWith("MarkerProvider")) {
-				System.out.println(entityName);
-				createFiles(entityName);
-			}
+			createFiles(entityName);
 		}
 		
 	}

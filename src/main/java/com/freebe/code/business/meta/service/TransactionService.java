@@ -17,6 +17,8 @@ import com.freebe.code.common.CustomException;
  */
 public interface TransactionService extends BaseService<Transaction> {
 	public static final String ROLE_CF_CODE = "CF";
+	
+	public static final String ROLE_ADVANTURE_AUDITOR_CODE = "ADVANTURE_AUDITOR";
 
 	TransactionVO findById(Long id) throws CustomException;
 
