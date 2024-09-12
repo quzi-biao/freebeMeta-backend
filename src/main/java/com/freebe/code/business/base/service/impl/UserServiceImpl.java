@@ -1,5 +1,8 @@
 package com.freebe.code.business.base.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
@@ -277,7 +280,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
 	@Override
 	public String getSmsByPersonId(String personId) throws CustomException{
-		System.out.println(personId);
 		if(StringUtils.isEmpty(personId)) {
 			return "请输入邮箱地址";
 		}
@@ -298,6 +300,25 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		
 		codeManager.updateCodeAttemptedRecord(uniqueId,code);
 		return "短信验证码发送成功";
+	}
+	
+
+	@Override
+	public List<Long> queryUserByName(String takerName) {
+		User user = new User();
+		user.setName(takerName);
+		user.setIsDelete(false);
+		List<User> users = this.repository.findAll(Example.of(user));
+		if(null == users || users.size() == 0) {
+			return null;
+		}
+		
+		List<Long> ret = new ArrayList<>();
+		for(User u : users) {
+			ret.add(u.getId());
+		}
+		
+		return ret;
 	}
 
 	

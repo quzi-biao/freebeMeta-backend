@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.alipay.api.kms.aliyun.utils.StringUtils;
 import com.freebe.code.business.advanture.controller.param.AdvantureCardParam;
 import com.freebe.code.business.advanture.controller.param.AdvantureTaskTakeAuditParam;
 import com.freebe.code.business.advanture.controller.param.AdvantureTaskTakeParam;
@@ -218,7 +219,16 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 	@Override
 	public Page<AdvantureTaskTakeVO> queryPage(AdvantureTaskTakeQueryParam param) throws CustomException {
 		param.setOrder("id");
+		
 		PageRequest request = PageUtils.toPageRequest(param);
+		
+		if(!StringUtils.isEmpty(param.getTakerName())) {
+			List<Long> takerIds = this.userService.queryUserByName(param.getTakerName());
+			if(null == takerIds || takerIds.size() == 0) {
+				return new PageImpl<AdvantureTaskTakeVO>(new ArrayList<>(), request, 0);
+			}
+			param.setTakerIds(takerIds);
+		}
 
 		Specification<AdvantureTaskTake> example = buildSpec(param);
 
@@ -241,7 +251,12 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 				builder.addEqual("isDelete", false);
 				
 				builder.addEqual("state", param.getState());
-				builder.addEqual("takerId", param.getTakerId());
+				if(null != param.getTakerIds() && param.getTakerIds().size()> 0){
+					builder.addIn("takerId", param.getTakerIds());
+				}else {
+					builder.addEqual("takerId", param.getTakerId());
+				}
+				
 				builder.addEqual("taskId", param.getTaskId());
 
 				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());

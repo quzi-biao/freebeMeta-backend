@@ -1,5 +1,7 @@
 package com.freebe.code.business.advanture.controller.param;
 
+import java.util.List;
+
 import com.freebe.code.common.PageBean;
 
 import io.swagger.annotations.ApiModel;
@@ -21,6 +23,12 @@ import lombok.NoArgsConstructor;
 public class AdvantureTaskTakeQueryParam extends PageBean {
 	@ApiModelProperty("领取者 ID")
 	private Long takerId;
+	
+	@ApiModelProperty("领取者名称")
+	private String takerName;
+	
+	@ApiModelProperty("领取者 ID")
+	private List<Long> takerIds;
 
 	@ApiModelProperty("领取的任务 ID")
 	private Long taskId;

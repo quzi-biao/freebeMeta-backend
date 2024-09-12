@@ -1,5 +1,7 @@
 package com.freebe.code.business.base.service;
 
+import java.util.List;
+
 import com.freebe.code.business.base.controller.param.LoginParam;
 import com.freebe.code.business.base.controller.param.UpdatePasswordParam;
 import com.freebe.code.business.base.entity.User;
@@ -77,5 +79,12 @@ public interface UserService extends BaseService<User> {
 	 * @throws CustomException
 	 */
 	String register(LoginParam loginParam) throws CustomException;
+
+	/**
+	 * 根据姓名查找用户 ID
+	 * @param takerName
+	 * @return
+	 */
+	List<Long> queryUserByName(String takerName);
 
 }
