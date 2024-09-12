@@ -29,7 +29,7 @@ public class TransactionTimer implements AutoCloseable {
 	private String PUBLIC_KEEP_KEY = "PUBLIC_KEEP_KEY";
 	
 	// 默认公示期是 48h
-	private long DEFAULT_PUBLIC_KEEP = 2 * 60 * 1000;//48 * 3600 * 1000;
+	private long DEFAULT_PUBLIC_KEEP = 48 * 3600 * 1000;
 	
 	@Autowired
 	private TransactionRepository repository;

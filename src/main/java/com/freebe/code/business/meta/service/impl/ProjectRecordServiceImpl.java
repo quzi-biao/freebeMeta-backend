@@ -33,7 +33,6 @@ import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.ProjectRecordService;
 import com.freebe.code.business.meta.service.ProjectService;
 import com.freebe.code.business.meta.type.ProjectState;
-import com.freebe.code.business.meta.type.ProjectType;
 import com.freebe.code.business.meta.type.RecordType;
 import com.freebe.code.business.meta.vo.ProjectRecordVO;
 import com.freebe.code.common.CustomException;
@@ -87,14 +86,15 @@ public class ProjectRecordServiceImpl extends BaseServiceImpl<ProjectRecord> imp
 			throw new CustomException("项目已结束, 不能再添加项目记录");
 		}
 		
-		if(project.getProjectType() != ProjectType.BUSINESS) {
+		// 取消限制
+//		if(project.getProjectType() != ProjectType.BUSINESS) {
 			Long memberId = this.memberService.getMemberIdByUserId(getCurrentUser().getId());
 			ProjectMember pm = this.projectMemberService.findOne(param.getProjectId(), memberId);
 			if(null == pm) {
 				throw new CustomException("只有项目组成员才可以添加项目记录");
 			}
 			param.setProjectRole(pm.getRole());
-		}
+//		}
 		
 		if(null == param.getRecordType()) {
 			param.setRecordType(RecordType.NORMAL);

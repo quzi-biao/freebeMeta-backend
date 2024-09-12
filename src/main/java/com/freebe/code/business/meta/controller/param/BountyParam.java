@@ -39,4 +39,7 @@ public class BountyParam extends BaseEntityParam {
 
 	@ApiModelProperty("审核等待时间")
 	private Long auditWaitTime;
+	
+	@ApiModelProperty("悬赏优先级")
+	private Integer priority;
 }

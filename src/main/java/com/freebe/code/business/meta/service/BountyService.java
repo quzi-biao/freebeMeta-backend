@@ -53,4 +53,11 @@ public interface BountyService extends BaseService<Bounty> {
 	 */
 	void doneBounty(Long id) throws CustomException;
 
+	/**
+	 * 悬赏可重新认领
+	 * @param id
+	 * @throws CustomException 
+	 */
+	void restartBounty(Long id) throws CustomException;
+
 }

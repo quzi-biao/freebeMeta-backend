@@ -39,6 +39,9 @@ public class BountyTakerVO extends BaseVO {
 
 	@ApiModelProperty("完成评价")
 	private String evaluate;
+	
+	@ApiModelProperty("放弃原因")
+	private String giveoutReason;
 
 	@ApiModelProperty("悬赏奖励")
 	private Long freeBe;

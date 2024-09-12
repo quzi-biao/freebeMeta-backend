@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.BountyDoneParam;
+import com.freebe.code.business.meta.controller.param.BountyGiveoutParam;
 import com.freebe.code.business.meta.controller.param.BountyTakerParam;
 import com.freebe.code.business.meta.controller.param.BountyTakerQueryParam;
 import com.freebe.code.business.meta.entity.Bounty;
@@ -105,6 +106,34 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		return vo;
 	}
 	
+
+	@Override
+	public BountyTakerVO giveOut(BountyGiveoutParam param) throws CustomException {
+		if(null == param.getTakeId()) {
+			throw new CustomException("参数错误");
+		}
+		
+		BountyTaker take = this.getById(param.getTakeId());
+		Bounty bounty = this.bountyService.getReference(take.getBountyId());
+		if(take.getState() != BountyTakerState.NORMAL) {
+			throw new CustomException("悬赏状态异常");
+		}
+		
+		checkBounty(take, bounty);
+		
+		take.setDoneTime(System.currentTimeMillis());
+		take.setState(BountyTakerState.GIVE_OUT);
+		take.setGiveoutReason(param.getReason());
+		
+		// 放弃认领后，悬赏可重新认领
+		this.bountyService.restartBounty(bounty.getId());
+		
+		BountyTakerVO vo = toVO(take);
+		objectCaches.put(vo.getId(), vo);
+		return vo;
+	}
+
+	
 	@Override
 	public BountyTakerVO doneBounty(BountyDoneParam param) throws CustomException {
 		if(null == param.getTakeId()) {
@@ -117,20 +146,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 			throw new CustomException("悬赏状态异常");
 		}
 		
-		if(!checkBountyTimeLimie(take, bounty)) {
-			take.setState(BountyTakerState.TIMEOUT_CANCEL);
-			take.setDoneTime(System.currentTimeMillis());
-			this.repository.save(take);
-			throw new CustomException("悬赏已超时");
-		}
-		
-		if(bounty.getState() != BountyState.RUNNING && bounty.getState() != BountyState.WAIT_AUDIT) {
-			throw new CustomException("悬赏状态异常");
-		}
-		
-		if(bounty.getTakerId().longValue() != getCurrentUser().getId()) {
-			throw new CustomException("您不是悬赏认领者");
-		}
+		checkBounty(take, bounty);
 		
 		take.setSubmitPictures(toStr(param.getSubmitPictures()));
 		take.setSubmitFiles(toStr(param.getSubmitFiles()));
@@ -147,7 +163,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		return vo;
 	}
 
-	private boolean checkBountyTimeLimie(BountyTaker take, Bounty bounty) {
+	private boolean checkBountyTimeLimit(BountyTaker take, Bounty bounty) {
 		if(bounty.getState() == BountyState.TIMEOUT_FAILED) {
 			return false;
 		}
@@ -216,8 +232,32 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		vo.setSubmitFiles(toList(e.getSubmitFiles()));
 		vo.setSubmitPictures(toList(e.getSubmitPictures()));
 		vo.setSubmitDescription(e.getSubmitDescription());
-
+		vo.setGiveoutReason(e.getGiveoutReason());
+		
 		return vo;
+	}
+	
+	/**
+	 * 检查悬赏的状态
+	 * @param take
+	 * @param bounty
+	 * @throws CustomException
+	 */
+	private void checkBounty(BountyTaker take, Bounty bounty) throws CustomException {
+		if(!checkBountyTimeLimit(take, bounty)) {
+			take.setState(BountyTakerState.TIMEOUT_CANCEL);
+			take.setDoneTime(System.currentTimeMillis());
+			this.repository.save(take);
+			throw new CustomException("悬赏已超时");
+		}
+		
+		if(bounty.getState() != BountyState.RUNNING && bounty.getState() != BountyState.WAIT_AUDIT) {
+			throw new CustomException("悬赏状态异常");
+		}
+		
+		if(bounty.getTakerId().longValue() != getCurrentUser().getId()) {
+			throw new CustomException("您不是悬赏认领者");
+		}
 	}
 
 	@Override
@@ -225,5 +265,4 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		objectCaches.delete(id, BountyTakerVO.class);
 		super.softDelete(id);
 	}
-
 }
