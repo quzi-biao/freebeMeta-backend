@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -107,6 +108,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 	}
 	
 
+	@Transactional
 	@Override
 	public BountyTakerVO giveOut(BountyGiveoutParam param) throws CustomException {
 		if(null == param.getTakeId()) {

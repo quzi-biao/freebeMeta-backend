@@ -207,9 +207,9 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			throw new CustomException("任务不存在");
 		}
 		
-		if(e.getOwnerId().longValue() != this.getCurrentUser().getId().longValue()) {
-			throw new CustomException("您没有权限");
-		}
+//		if(e.getOwnerId().longValue() != this.getCurrentUser().getId().longValue()) {
+//			throw new CustomException("您没有权限");
+//		}
 		
 		e.setState(BountyState.WAIT_TAKER);
 		e.setTakeId(null);
