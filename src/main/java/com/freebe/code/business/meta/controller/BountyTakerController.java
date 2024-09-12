@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.freebe.code.business.meta.controller.param.BountyDoneParam;
+import com.freebe.code.business.meta.controller.param.BountyGiveoutParam;
 import com.freebe.code.business.meta.controller.param.BountyTakerParam;
 import com.freebe.code.business.meta.controller.param.BountyTakerQueryParam;
 import com.freebe.code.business.meta.service.BountyTakerService;
@@ -52,6 +53,12 @@ public class BountyTakerController {
 	@PostMapping("list")
 	public ResultBean<Page<BountyTakerVO>> list(@Valid @RequestBody BountyTakerQueryParam param) throws CustomException {
 		return ResultBean.ok(bountytakerService.queryPage(param));
+	}
+	
+	@ApiOperation(value = "放弃悬赏认领")
+	@PostMapping("giveout")
+	public ResultBean<BountyTakerVO> list(@Valid @RequestBody BountyGiveoutParam param) throws CustomException {
+		return ResultBean.ok(bountytakerService.giveOut(param));
 	}
 	
 	@ApiOperation(value = "完成悬赏")

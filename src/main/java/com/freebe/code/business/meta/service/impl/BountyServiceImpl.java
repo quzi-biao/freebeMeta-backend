@@ -106,6 +106,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setState(BountyState.WAIT_TAKER);
 		e.setLimitTime(param.getLimitTime());
 		e.setTakerWaitTime(param.getTakerWaitTime());
+		e.setPriority(param.getPriority());
 		if(param.getId() == null) {
 			e.setReward(param.getReward());
 		}
@@ -197,6 +198,27 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		TransactionVO transaction = this.transactionService.innerCreateOrUpdate(param);
 		return transaction.getId();
+	}
+	
+	@Override
+	public void restartBounty(Long id) throws CustomException {
+		Bounty e = this.getById(id);
+		if(null == e) {
+			throw new CustomException("任务不存在");
+		}
+		
+		if(e.getOwnerId().longValue() != this.getCurrentUser().getId().longValue()) {
+			throw new CustomException("您没有权限");
+		}
+		
+		e.setState(BountyState.WAIT_TAKER);
+		e.setTakeId(null);
+		e.setTakerId(null);
+		
+		e = repository.save(e);
+
+		BountyVO vo = toVO(e);
+		objectCaches.put(vo.getId(), vo);
 	}
 
 	@Override
@@ -340,7 +362,8 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		vo.setDescription(e.getDescription());
 		vo.setState(e.getState());
 		vo.setLimitTime(e.getLimitTime());
-
+		vo.setPriority(e.getPriority());
+		
 		if(null != e.getTakeId()) {
 			vo.setTake(taskTakerService.findById(e.getTakeId()));
 		}

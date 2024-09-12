@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import com.freebe.code.business.base.entity.BaseEntity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -67,6 +68,11 @@ public class BountyTaker extends BaseEntity {
 	 * 悬赏结算交易信息
 	 */
 	private Long transactionId;
+	
+	/**
+	 * 放弃原因
+	 */
+	private String giveoutReason;
 	
 	/**
 	 * 交付文件

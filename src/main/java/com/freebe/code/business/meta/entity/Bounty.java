@@ -88,4 +88,9 @@ public class Bounty extends BaseEntity {
 	 * 悬赏赏金
 	 */
 	private Long reward;
+	
+	/**
+	 * 悬赏优先级
+	 */
+	private Integer priority;
 }

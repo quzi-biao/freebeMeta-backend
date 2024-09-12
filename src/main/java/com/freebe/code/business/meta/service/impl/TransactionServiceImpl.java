@@ -207,11 +207,13 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 	@Override
 	public Page<TransactionVO> queryPage(TransactionQueryParam param) throws CustomException {
 		param.setOrder("id");
+		PageRequest request = PageUtils.toPageRequest(param);
 		if(!StringUtils.isEmpty(param.getUserName())) {
 			param.setWalletIds(this.queryWalletIdByUserName(param.getUserName()));
+			if(null == param.getWalletIds() || param.getWalletIds().size() == 0) {
+				return new PageImpl<TransactionVO>(new ArrayList<>(), request, 0);
+			}
 		}
-		
-		PageRequest request = PageUtils.toPageRequest(param);
 
 		Specification<Transaction> example = buildSpec(param);
 

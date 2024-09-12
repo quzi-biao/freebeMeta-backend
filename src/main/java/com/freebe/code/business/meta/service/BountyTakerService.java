@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 
 import com.freebe.code.business.base.service.BaseService;
 import com.freebe.code.business.meta.controller.param.BountyDoneParam;
+import com.freebe.code.business.meta.controller.param.BountyGiveoutParam;
 import com.freebe.code.business.meta.controller.param.BountyTakerParam;
 import com.freebe.code.business.meta.controller.param.BountyTakerQueryParam;
 import com.freebe.code.business.meta.entity.BountyTaker;
@@ -30,4 +31,12 @@ public interface BountyTakerService extends BaseService<BountyTaker> {
 	 * @throws CustomException
 	 */
 	BountyTakerVO doneBounty(BountyDoneParam param) throws CustomException;
+	
+	/**
+	 * 放弃悬赏
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	BountyTakerVO giveOut(BountyGiveoutParam param) throws CustomException;
 }
