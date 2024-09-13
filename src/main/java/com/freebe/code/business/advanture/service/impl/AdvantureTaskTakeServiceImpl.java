@@ -36,8 +36,13 @@ import com.freebe.code.business.advanture.vo.AdvantureTaskTakeVO;
 import com.freebe.code.business.advanture.vo.AdvantureTaskVO;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
+import com.freebe.code.business.base.vo.UserVO;
+import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.TransactionService;
+import com.freebe.code.business.meta.service.WalletService;
+import com.freebe.code.business.meta.type.Currency;
+import com.freebe.code.business.meta.type.TransactionType;
 import com.freebe.code.business.meta.vo.MemberVO;
 import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.common.CustomException;
@@ -52,6 +57,9 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
  */
 @Service
 public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskTake> implements AdvantureTaskTakeService {
+	// 任务审核获得回报比例，如 100 经验值的任务审核获得 20 积分的奖励
+	private static final float AUDITOR_REWARD_SCALE = 0.2f;
+	
 	@Autowired
 	private AdvantureTaskTakeRepository repository;
 	
@@ -66,6 +74,12 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private TransactionService transactionService;
+	
+	@Autowired
+	private WalletService walletService;
 
 	@Autowired
 	private ObjectCaches objectCaches;
@@ -177,12 +191,16 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 		AdvantureTaskVO task = this.advantureTaskService.findById(e.getTaskId());
 		
 		e.setAuditTime(System.currentTimeMillis());
+		e.setAuditor(this.getCurrentUser().getId());
+		
 		if(param.getPass()) {
 			e.setState(AdvantureTaskTakeState.DONE);
 			this.advantureCardService.addExperience(e.getTakerId(), task.getExperience());
 		}else {
 			e.setState(AdvantureTaskTakeState.FAILED);
 		}
+		
+		transferAuditReward(task, e);
 		
 		e = this.repository.save(e);
 		
@@ -240,6 +258,33 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 		}
 		return new PageImpl<AdvantureTaskTakeVO>(retList, page.getPageable(), page.getTotalElements());
 	}
+	
+
+	/**
+	 * 任务审核奖励转账
+	 * @param e 
+	 * @throws CustomException 
+	 */
+	private void transferAuditReward(AdvantureTaskVO task, AdvantureTaskTake e) throws CustomException {
+		TransactionParam param = new TransactionParam();
+		param.setAmount((double) (task.getExperience() * AUDITOR_REWARD_SCALE));
+		param.setCurrency(Currency.FREE_BE);
+		// 目标地址为任务审核者地址
+		param.setDstWalletId(this.walletService.findByUser(this.getCurrentUser().getId()).getId());		
+		param.setSrcWalletId(TransactionService.PUBLIC_WALLET_ID);
+		
+		UserVO taker = this.userService.getUser(e.getTakerId());
+		if(StringUtils.isEmpty(taker.getFreeBeId())) {
+			param.setMark("冒险任务审核: " + task.getTitle() + ", " + taker.getName());	
+		}else {
+			param.setMark("冒险任务审核: " + task.getTitle() + ", " + taker.getFreeBeId());	
+		}
+		
+		param.setTransactionType(TransactionType.WORK_REWARD);	
+		
+		transactionService.innerCreateOrUpdate(param);
+		
+	}
 
 	private Specification<AdvantureTaskTake> buildSpec(AdvantureTaskTakeQueryParam param) throws CustomException {
 		return new Specification<AdvantureTaskTake>() {
@@ -280,6 +325,10 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 		vo.setSubmitDescription(e.getSubmitDescription());
 		vo.setAuditDescription(e.getAuditDescription());
 		vo.setState(e.getState());
+		
+		if(null != vo.getAuditor()) {
+			vo.setAuditor(this.userService.getUser(e.getAuditor()));
+		}
 		
 		vo.setTaker(userService.getUser(e.getTakerId()));
 		vo.setTask(advantureTaskService.findById(vo.getTaskId()));

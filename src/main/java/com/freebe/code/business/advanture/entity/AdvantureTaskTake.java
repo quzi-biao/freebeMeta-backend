@@ -48,6 +48,11 @@ public class AdvantureTaskTake extends BaseEntity{
 	private Long auditTime;
 	
 	/**
+	 * 审核人
+	 */
+	private Long auditor;
+	
+	/**
 	 * 提交说明
 	 */
 	private String submitDescription;

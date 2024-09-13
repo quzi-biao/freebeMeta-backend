@@ -20,4 +20,9 @@ public class TransactionType {
 	 * 悬赏奖励
 	 */
 	public static final int TASK_REWARD = 2;
+	
+	/**
+	 * 工作奖励
+	 */
+	public static final int WORK_REWARD = 3;
 }

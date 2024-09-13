@@ -40,6 +40,9 @@ public class AdvantureTaskTakeVO extends BaseVO {
 
 	@ApiModelProperty("审核时间")
 	private Long auditTime;
+	
+	@ApiModelProperty("审核人")
+	private UserVO auditor;
 
 	@ApiModelProperty("提交说明")
 	private String submitDescription;
