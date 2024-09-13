@@ -325,7 +325,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			return new PageImpl<MemberVO>(retList, wallets.getPageable(), wallets.getTotalElements());
 		}
 		
-		if(null == param.getKeyWords() || param.getKeyWords().length() == 0) {
+		if(StringUtils.isEmpty(param.getKeyWords())) {
 			if(null == param.getOrder()) {
 				param.setOrder("id");
 			}
@@ -335,7 +335,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				// 没有搜索条件的时候，随机返回一个列表
 				retList = this.randomList(param.getLimit());
 				return new PageImpl<MemberVO>(retList, request, this.countMembers());
-			}else {
+			} else {
 				// 根据条件查询
 				Specification<Member> example = buildSpec(param);
 				Page<Member> page = repository.findAll(example, request);
@@ -344,16 +344,21 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				}
 				return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
 			}
-			
-		}else {
+		} else {
 			if(param.getKeyWords().length() > 256) {
 				throw new CustomException("查询关键词太长");
 			}
-			// 全文检索
-			Page<MemberVO> page = searcher.fullTextSearch(param);
+			// 模糊查询
+			Specification<Member> example = (root, query, criteriaBuilder) -> {
+				List<Predicate> predicates = new ArrayList<>();
+				predicates.add(criteriaBuilder.like(root.get("name"), "%" + param.getKeyWords() + "%"));
+				return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+			};
+			PageRequest request = PageUtils.toPageRequest(param);
+			Page<Member> page = repository.findAll(example, request);
 			List<MemberVO> retList = new ArrayList<>();
-			for(MemberVO e:  page.getContent()) {
-				retList.add(toVO(this.getById(e.getId())));
+			for(Member e : page.getContent()) {
+				retList.add(toVO(e));
 			}
 			return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
 		}
