@@ -229,10 +229,13 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		}
 		
 		String oldPassword = param.getOldPassword();
-		oldPassword = JwtUtils.getHashSecret(oldPassword);
-		if(null == oldPassword || !oldPassword.equals(user.getPassword())) {
-			throw new CustomException("旧密码输入错误");
+		if(!StringUtils.isEmpty(oldPassword)) {
+			oldPassword = JwtUtils.getHashSecret(oldPassword);
+			if(null == oldPassword || !oldPassword.equals(user.getPassword())) {
+				throw new CustomException("旧密码输入错误");
+			}
 		}
+		
 		user.setPassword(JwtUtils.getHashSecret(param.getNewPassword()));
 		
 		this.update(user.getId(), user);
