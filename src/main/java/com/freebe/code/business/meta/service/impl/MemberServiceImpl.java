@@ -62,38 +62,38 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 	@Autowired
 	private ObjectCaches objectCaches;
-	
+
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private MemberLuceneSearch searcher;
-	
+
 	@Autowired
 	private WalletService walletService;
-	
+
 	@Autowired
 	private ProjectMemberService projectMemberService;
-	
+
 	@Autowired
 	private MemberRoleRelationService memberRoleRelationService;
-	
+
 	private Random r = new Random();
-	
+
 	@PostConstruct
 	public void loadData() {
 		Member probe = new Member();
 		probe.setIsDelete(false);
-		
+
 		List<Member> members = this.repository.findAll(Example.of(probe));
 		for(Member member : members) {
 			objectCaches.put(member.getId(), member);
 		}
 	}
-	
+
 	@Override
 	public Long countMembers() throws CustomException {
 		Member probe = new Member();
@@ -115,10 +115,10 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			ret = op.get();
 		}
 		objectCaches.put(ret.getId(), ret);
-		
+
 		return toVO(ret);
 	}
-	
+
 	@Override
 	public MemberVO findByUserId(Long userId) throws CustomException {
 		if(null == userId) {
@@ -139,14 +139,14 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		objectCaches.put(id, ret);
 		return toVO(ret);
 	}
-	
-	
+
+
 	@Override
 	public Long getUserIdByMemberId(Long id) throws CustomException {
 		if(null == id) {
 			throw new CustomException("参数错误");
 		}
-		
+
 		Member ret = this.objectCaches.get(id, Member.class);
 		if(null == ret){
 			Optional<Member> op = this.repository.findById(id);
@@ -155,14 +155,14 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			}
 			ret = op.get();
 		}
-		
+
 		if(null == ret) {
 			throw new CustomException("用户不存在");
 		}
-		
+
 		return ret.getUserId();
 	}
-	
+
 	@Override
 	public Long getMemberIdByUserId(Long userId) throws CustomException {
 		if(null == userId) {
@@ -180,26 +180,26 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			}
 			ret = op.get();
 		}
-		
+
 		if(null == ret) {
 			throw new CustomException("用户不存在");
 		}
-		
+
 		return ret.getId();
 	}
-	
+
 	@Override
 	public MemberVO createOrUpdate(MemberParam param) throws CustomException {
 		checkParam(param);
-		
+
 		UserVO user = getCurrentUser();
 		MemberVO member = this.findByUserId(user.getId());
-		
+
 		// 已注册的用户，则更新原先的信息
 		if(null != member) {
 			param.setId(member.getId());
 		}
-		
+
 		Member e = this.getUpdateEntity(param, false);
 		e.setUserId(user.getId());
 		e.setName(param.getName());
@@ -217,90 +217,90 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 		return vo;
 	}
-	
+
 	@Transactional
 	@Override
 	public MemberVO removeRole(Long memberId, Long roleId) throws CustomException {
 		if(this.getCurrentUser().getId() != 1) {
 			throw new CustomException("您无权执行此操作");
 		}
-		
+
 		Member member = this.getById(memberId);
 		MemberRoleRelationVO relation = this.memberRoleRelationService.getRelation(roleId, memberId);
 		if(null == relation) {
 			return toVO(member);
 		}
-		
+
 		String roleStr = member.getRoles();
 		Set<Long> roleIds = new HashSet<>();
 		if(!StringUtils.isEmpty(roleStr)) {
 			roleIds = new HashSet<>(toList(roleStr, Long.class));
 		}
-		
+
 		this.memberRoleRelationService.softDelete(relation.getId());
-		
+
 		roleIds.remove(roleId);
 		member.setRoles(JSONObject.toJSONString(roleIds));
 		this.repository.save(member);
-		
+
 		objectCaches.put(member.getId(), member);
 		objectCaches.put("user:" + member.getUserId(), member);
-		
+
 		MemberVO ret = toVO(member);
 		searcher.addOrUpdateIndex(ret);
-		
+
 		return ret;
 	}
-	
+
 	@Transactional
 	@Override
 	public MemberVO addRole(Long memberId, Long roleId) throws CustomException {
 		if(this.getCurrentUser().getId() != 1) {
 			throw new CustomException("您无权执行此操作");
 		}
-		
+
 		MemberRoleRelationVO relation = this.memberRoleRelationService.getRelation(roleId, memberId);
 		if(null != relation) {
 			throw new CustomException("已经是该岗位的成员");
 		}
-		
+
 		Member member = this.getById(memberId);
 		if(null == member) {
 			throw new CustomException("成员不存在");
 		}
-		
+
 		RoleVO role = this.roleService.findById(roleId);
 		if(null == role) {
 			throw new CustomException("角色不存在");
 		}
-		
+
 		if(null != role.getRoleKeeper()) {
 			System.out.println(role.getRoleKeeper());
 			if(role.getNumber().intValue() <= role.getRoleKeeper().size()) {
 				throw new CustomException("角色限制为" + role.getNumber() + '人');
 			}
 		}
-		
+
 		String roleStr = member.getRoles();
 		Set<Long> roleIds = new HashSet<>();
 		if(!StringUtils.isEmpty(roleStr)) {
 			roleIds = new HashSet<>(toList(roleStr, Long.class));
 		}
-		
+
 		MemberRoleRelationParam relationParam = new MemberRoleRelationParam();
 		relationParam.setMemberId(memberId);
 		relationParam.setRoleId(roleId);
 		this.memberRoleRelationService.createOrUpdate(relationParam);
-		
+
 		roleIds.add(roleId);
 		member.setRoles(JSONObject.toJSONString(roleIds));
 		this.repository.save(member);
-		
+
 		MemberVO vo = toVO(member);
 		objectCaches.put(vo.getId(), member);
 		objectCaches.put("user:" + member.getUserId(), member);
 		searcher.addOrUpdateIndex(vo);
-		
+
 		return vo;
 	}
 
@@ -313,7 +313,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			walletQuery.setDesc(param.getDesc());
 			walletQuery.setCurrPage(param.getCurrPage());
 			walletQuery.setLimit(param.getLimit());
-			
+
 			Page<WalletVO> wallets = this.walletService.queryPage(walletQuery);
 			List<MemberVO> retList = new ArrayList<>();
 			for(WalletVO e:  wallets.getContent()) {
@@ -324,8 +324,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			}
 			return new PageImpl<MemberVO>(retList, wallets.getPageable(), wallets.getTotalElements());
 		}
-		
-		if(null == param.getKeyWords() || param.getKeyWords().length() == 0) {
+
+		if(StringUtils.isEmpty(param.getKeyWords())) {
 			if(null == param.getOrder()) {
 				param.setOrder("id");
 			}
@@ -335,7 +335,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				// 没有搜索条件的时候，随机返回一个列表
 				retList = this.randomList(param.getLimit());
 				return new PageImpl<MemberVO>(retList, request, this.countMembers());
-			}else {
+			} else {
 				// 根据条件查询
 				Specification<Member> example = buildSpec(param);
 				Page<Member> page = repository.findAll(example, request);
@@ -344,16 +344,21 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				}
 				return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
 			}
-			
-		}else {
+		} else {
 			if(param.getKeyWords().length() > 256) {
 				throw new CustomException("查询关键词太长");
 			}
-			// 全文检索
-			Page<MemberVO> page = searcher.fullTextSearch(param);
+			// 模糊查询
+			Specification<Member> example = (root, query, criteriaBuilder) -> {
+				List<Predicate> predicates = new ArrayList<>();
+				predicates.add(criteriaBuilder.like(root.get("name"), "%" + param.getKeyWords() + "%"));
+				return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+			};
+			PageRequest request = PageUtils.toPageRequest(param);
+			Page<Member> page = repository.findAll(example, request);
 			List<MemberVO> retList = new ArrayList<>();
-			for(MemberVO e:  page.getContent()) {
-				retList.add(toVO(this.getById(e.getId())));
+			for(Member e : page.getContent()) {
+				retList.add(toVO(e));
 			}
 			return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
 		}
@@ -376,15 +381,15 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				this.repository.save(m);
 			}
 			vo.setName(vo.getUser().getName());
-			vo.setAvator(vo.getUser().getAvator());	
+			vo.setAvator(vo.getUser().getAvator());
 			vo.setFreeBeId(vo.getUser().getFreeBeId());
 		}
-		
+
 		vo.setDescription(e.getDescription());
 		vo.setSkills(toList(e.getSkills(), Skill.class));
 		vo.setLastTime(e.getLastTime());
 		vo.setRoles(roleService.findByIds(toList(e.getRoles(), Long.class)));
-		
+
 		WalletVO wallet = walletService.findByUser(e.getUserId());
 		vo.setFreeBe(wallet.getFreeBe());
 		vo.setJoinProjects(this.projectMemberService.countProject(e.getId()));
@@ -401,7 +406,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		objectCaches.delete("freeBe:" + vo.getFreeBeId(), Member.class);
 		super.softDelete(id);
 	}
-	
+
 	private Specification<Member> buildSpec(MemberQueryParam param) throws CustomException {
 		return new Specification<Member>() {
 			private static final long serialVersionUID = 1L;
@@ -410,13 +415,13 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			public Predicate toPredicate(Root<Member> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				QueryBuilder<Member> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
-				builder.addEqual("name", param.getName());
+				builder.addLike("name", param.getName());
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}
 		};
 	}
-	
+
 	private List<MemberVO> randomList(long size) throws CustomException {
 		Long maxId = Optional.ofNullable(this.repository.getMaxId()).orElse(0L);
 		List<MemberVO> retList = new ArrayList<>();
@@ -424,7 +429,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		if(size > count) {
 			size = count;
 		}
-				
+
 		if(count > 100) {
 			Set<Long> retIds = new HashSet<>();
 			while(size > 0) {
@@ -442,11 +447,11 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			}
 		}else {
 			List<Long> ids = new ArrayList<>();
-			
+
 			for(int i = 0; i < maxId + 1; i++) {
 				ids.add((long) i + 1);
 			}
-			
+
 			while(size > 0) {
 				if(ids.size() == 0) {
 					break;
@@ -459,32 +464,32 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				}else {
 					continue;
 				}
-				
+
 				size--;
 			}
 		}
-		
+
 		return retList;
 	}
-	
+
 
 	private void checkParam(MemberParam param) throws CustomException {
 		if(param.getName() == null || param.getName().length() == 0) {
 			throw new CustomException("昵称不能为空");
 		}
-		
+
 		if(param.getName().length() > 16) {
 			throw new CustomException("名称不能超过16个字");
 		}
-		
+
 		if(StringUtils.isEmpty(param.getDescription())) {
 			throw new CustomException("请介绍下你自己");
 		}
-		
+
 		if(param.getDescription().length() > 1024) {
 			throw new CustomException("介绍不能超过1024个字");
 		}
-		
+
 		if(null != param.getSkills()) {
 			if(param.getSkills().size() > 16) {
 				throw new CustomException("最多为自己添加16个标签");
