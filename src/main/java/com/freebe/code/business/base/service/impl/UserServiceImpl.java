@@ -218,7 +218,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
 	@Override
 	public Long updatePassword(@Valid UpdatePasswordParam param) throws CustomException {
-		if(StringUtils.isEmpty(param.getOldPassword()) || StringUtils.isEmpty(param.getNewPassword())) {
+		if(StringUtils.isEmpty(param.getNewPassword())) {
 			throw new CustomException("参数错误");
 		}
 		

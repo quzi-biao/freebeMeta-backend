@@ -15,7 +15,6 @@ import lombok.Data;
 @Data
 public class UpdatePasswordParam {
 	
-	@NotEmpty
     @ApiModelProperty(value = "旧密码")
 	private String oldPassword;
 
