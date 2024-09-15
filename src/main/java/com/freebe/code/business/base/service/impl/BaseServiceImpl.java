@@ -27,6 +27,9 @@ import com.freebe.code.business.base.repository.CommonRepository;
 import com.freebe.code.business.base.repository.Selections;
 import com.freebe.code.business.base.service.BaseService;
 import com.freebe.code.business.base.vo.UserVO;
+import com.freebe.code.business.meta.service.MemberService;
+import com.freebe.code.business.meta.vo.MemberVO;
+import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.common.Constants;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.util.CodeUtils;
@@ -41,6 +44,9 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 	private Class clazz;
 	
 	private ConcurrentHashMap<Long, T> cache = null;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	public CommonRepository getBaseDao() {
 		return baseDao;
@@ -78,6 +84,51 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 		HttpServletRequest request = requestAttributes.getRequest();
 		UserVO ret = (UserVO) request.getAttribute(Constants.USER_INFO);
 		return ret;
+	}
+	
+	/**
+	 * 获取当前成员
+	 * @return
+	 * @throws CustomException
+	 */
+	public MemberVO getCurrentMemeber() throws CustomException {
+		ServletRequestAttributes requestAttributes = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes());
+		if(null == requestAttributes) {
+			throw new CustomException("上下文异常");
+		}
+		HttpServletRequest request = requestAttributes.getRequest();
+		UserVO ret = (UserVO) request.getAttribute(Constants.USER_INFO);
+		if(null == ret) {
+			throw new CustomException("请先登录");
+		}
+		
+		MemberVO member = this.memberService.findByUserId(ret.getId());
+		
+		if(null == member) {
+			throw new CustomException("请还不是社区成员");
+		}
+		
+		return member;
+	}
+	
+	/**
+	 * 权限检查
+	 * @param permissionCode
+	 * @throws CustomException
+	 */
+	public void checkPermssion(String permissionCode) throws CustomException {
+		MemberVO member = this.getCurrentMemeber();
+		
+		if(null == member.getRoles() || member.getRoles().size() == 0) {
+			throw new CustomException("请联系" + permissionCode + "执行此操作");
+		}
+		
+		for(RoleVO role : member.getRoles()) {
+			if(permissionCode.equals(role.getRoleCode())) {
+				return;
+			}
+		}
+		throw new CustomException("请联系" + permissionCode + "执行此操作");
 	}
 	
 	/**

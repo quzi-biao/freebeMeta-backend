@@ -38,13 +38,10 @@ import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
-import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.type.Currency;
 import com.freebe.code.business.meta.type.TransactionType;
-import com.freebe.code.business.meta.vo.MemberVO;
-import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
 import com.freebe.code.util.PageUtils;
@@ -71,9 +68,6 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 	
 	@Autowired
 	private AdvantureCardService advantureCardService;
-	
-	@Autowired
-	private MemberService memberService;
 	
 	@Autowired
 	private TransactionService transactionService;
@@ -344,18 +338,6 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 	
 
 	private void checkPermssion() throws CustomException {
-		Long currUser = this.getCurrentUser().getId();
-		MemberVO member = this.memberService.findByUserId(currUser);
-		
-		if(null == member.getRoles() || member.getRoles().size() == 0) {
-			throw new CustomException("请联系冒险者审核官执行此操作");
-		}
-		
-		for(RoleVO role : member.getRoles()) {
-			if(TransactionService.ROLE_ADVANTURE_AUDITOR_CODE.equals(role.getRoleCode())) {
-				return;
-			}
-		}
-		throw new CustomException("请联系冒险者审核官执行此操作");
+		this.checkPermssion(ROLE_ADVANTURE_AUDITOR_CODE);
 	}
 }

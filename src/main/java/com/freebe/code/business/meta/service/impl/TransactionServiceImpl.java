@@ -27,17 +27,14 @@ import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.controller.param.TransactionQueryParam;
 import com.freebe.code.business.meta.entity.Transaction;
 import com.freebe.code.business.meta.repository.TransactionRepository;
-import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.ProjectRecordService;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.type.TransactionState;
 import com.freebe.code.business.meta.type.TransactionType;
-import com.freebe.code.business.meta.vo.MemberVO;
 import com.freebe.code.business.meta.vo.ProjectReward;
 import com.freebe.code.business.meta.vo.ProjectReward.RewardItem;
-import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
@@ -69,9 +66,6 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 	
 	@Autowired
 	private ProjectMemberService projectMemberService;
-	
-	@Autowired
-	private MemberService memberService;
 	
 	@Autowired
 	private ProjectRecordService projectRecordService;
@@ -364,21 +358,8 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		super.softDelete(id);
 	}
 	
-	
 	private void checkFinanceOfficer() throws CustomException {
-		Long currUser = this.getCurrentUser().getId();
-		MemberVO member = this.memberService.findByUserId(currUser);
-		
-		if(null == member.getRoles() || member.getRoles().size() == 0) {
-			throw new CustomException("请联系财务官执行此操作");
-		}
-		
-		for(RoleVO role : member.getRoles()) {
-			if(TransactionService.ROLE_CF_CODE.equals(role.getRoleCode())) {
-				return;
-			}
-		}
-		throw new CustomException("请联系财务官执行此操作");
+		this.checkPermssion(ROLE_CF_CODE);
 	}
 	
 	private List<Long> queryWalletIdByUserName(String userName) throws CustomException {

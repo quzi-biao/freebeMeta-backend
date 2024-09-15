@@ -7,7 +7,6 @@ import javax.persistence.Table;
 
 import com.freebe.code.business.base.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

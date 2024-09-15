@@ -17,6 +17,7 @@ import com.freebe.code.common.CustomException;
  *
  */
 public interface AdvantureTaskTakeService extends BaseService<AdvantureTaskTake> {
+	public static final String ROLE_ADVANTURE_AUDITOR_CODE = "ADVANTURE_AUDITOR";
 
 	AdvantureTaskTakeVO findById(Long id) throws CustomException;
 
