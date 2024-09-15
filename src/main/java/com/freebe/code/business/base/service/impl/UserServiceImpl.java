@@ -71,7 +71,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 			user.setName("FreeBe");
 			user.setIsDelete(false);
 			user.setFreeBeId("01.freebe");
-			user.setPassword(JwtUtils.getHashSecret("freebe2024"));
+			user.setPassword(JwtUtils.getHashSecret("123456"));
 			user.setCreateTime(System.currentTimeMillis());
 			user.setCode(CodeUtils.generateCode(User.class));
 			user.setInUse(true);
