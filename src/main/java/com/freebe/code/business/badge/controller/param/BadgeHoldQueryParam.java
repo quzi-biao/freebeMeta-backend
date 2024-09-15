@@ -1,5 +1,7 @@
 package com.freebe.code.business.badge.controller.param;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,4 +24,7 @@ public class BadgeHoldQueryParam {
 
 	@ApiModelProperty("成员 ID，非成员，仅有 userId 不能获取徽章")
 	private Long memberId;
+	
+	@ApiModelProperty("查询多个成员")
+	private List<Long> memberIds;
 }

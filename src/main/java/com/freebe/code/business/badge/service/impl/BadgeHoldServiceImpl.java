@@ -212,7 +212,12 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 				builder.addEqual("inHold", true);
 				
 				builder.addEqual("badgeId", param.getBadgeId());
-				builder.addEqual("memberId", param.getMemberId());
+				
+				if(null != param.getMemberIds() && param.getMemberIds().size() > 0) {
+					builder.addIn("memberId", param.getMemberIds());
+				}else {
+					builder.addEqual("memberId", param.getMemberId());
+				}
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}
