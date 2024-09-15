@@ -81,7 +81,7 @@ public class StorageController extends AbstractController {
         
         JSONObject jo = new JSONObject();
         jo.put("uploaded", 1);
-        jo.put("url", "https:/" + ossConfig.getBucketName() + ".oss-cn-hangzhou.aliyuncs.com/" + url);
+        jo.put("url", "https://" + ossConfig.getBucketName() + ".oss-cn-hangzhou.aliyuncs.com/" + url);
         
         return jo;
     }
