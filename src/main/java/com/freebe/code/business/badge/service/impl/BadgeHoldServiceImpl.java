@@ -232,7 +232,7 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 		vo.setCreateTime(e.getCreateTime());
 
 		vo.setBadge(badgeService.findById(e.getBadgeId()));
-		vo.setMemberId(e.getMemberId());
+		vo.setMember(memberService.findById(e.getMemberId()));
 		vo.setInHold(e.getInHold());
 
 		return vo;

@@ -1,6 +1,7 @@
 package com.freebe.code.business.badge.vo;
 
 import com.freebe.code.business.base.vo.BaseVO;
+import com.freebe.code.business.meta.vo.MemberVO;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +24,7 @@ public class BadgeHoldVO extends BaseVO {
 	private BadgeVO badge;
 
 	@ApiModelProperty("成员 ID，非成员，仅有 userId 不能获取徽章")
-	private Long memberId;
+	private MemberVO member;
 
 	@ApiModelProperty("是否持有中")
 	private Boolean inHold;
