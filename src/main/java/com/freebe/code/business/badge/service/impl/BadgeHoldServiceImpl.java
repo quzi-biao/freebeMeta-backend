@@ -3,7 +3,10 @@ package com.freebe.code.business.badge.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -55,6 +58,8 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 	
 	@Autowired
 	private BadgeActionRecordService actionRecordService;
+	
+	private Map<Long, List<Long>> memberBadgeCache = new ConcurrentHashMap<>();
 
 	@Override
 	public BadgeHoldVO findById(Long id) throws CustomException {
@@ -89,6 +94,8 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 			throw new CustomException("徽章不存在");
 		}
 		
+		this.memberBadgeCache.remove(member.getId());
+		
 		param.setActionType(BadgeActionType.AWARD);
 		this.actionRecordService.createOrUpdate(param);
 		
@@ -116,6 +123,8 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 			throw new CustomException("他(她)没有这个徽章");
 		}
 		
+		this.memberBadgeCache.remove(hold.getMemberId());
+		
 		param.setActionType(BadgeActionType.RETAKE);
 		this.actionRecordService.createOrUpdate(param);
 		
@@ -140,6 +149,8 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 		if(null == hold) {
 			throw new CustomException("你没有这个徽章");
 		}
+		
+		this.memberBadgeCache.remove(hold.getMemberId());
 		
 		param.setActionType(BadgeActionType.GIVEOUT);
 		this.actionRecordService.createOrUpdate(param);
@@ -181,11 +192,43 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 		e.setInHold(true);
 
 		e = repository.save(e);
+		
+		this.memberBadgeCache.remove(e.getMemberId());
 
 		BadgeHoldVO vo = toVO(e);
 		objectCaches.put(e.getId(), e);
 
 		return vo;
+	}
+	
+	@Override
+	public List<BadgeVO> queryMemberBadges(Long id) throws CustomException {
+		List<Long> ids = this.memberBadgeCache.get(id);
+		if(null != ids) {
+			if(ids.size() == 0) {
+				return null;
+			}
+			List<BadgeVO> ret = new ArrayList<>();
+			for(Long badgeId:  ids) {
+				ret.add(badgeService.findById(badgeId));
+			}
+			return ret;
+		}
+		
+		BadgeHold param = new BadgeHold();
+		param.setMemberId(id);
+		param.setIsDelete(false);
+		param.setInHold(true);
+		
+		List<BadgeHold> retList = this.findAll(Example.of(param));
+		if(null == retList || retList.size() == 0) {
+			this.memberBadgeCache.put(id, new ArrayList<>());
+			return null;
+		}else {
+			List<Long> badgeIds = retList.stream().map(item -> item.getBadgeId()).collect(Collectors.toList());
+			this.memberBadgeCache.put(id, badgeIds);
+			return queryMemberBadges(id);
+		}
 	}
 
 	@Override
@@ -263,5 +306,4 @@ public class BadgeHoldServiceImpl extends BaseServiceImpl<BadgeHold> implements 
 	private void checkPermission() throws CustomException {
 		this.checkPermssion(BADGE_MANAGER);
 	}
-
 }

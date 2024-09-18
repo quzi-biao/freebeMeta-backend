@@ -2,6 +2,7 @@ package com.freebe.code.business.meta.vo;
 
 import java.util.List;
 
+import com.freebe.code.business.badge.vo.BadgeVO;
 import com.freebe.code.business.base.vo.BaseVO;
 import com.freebe.code.business.base.vo.UserVO;
 
@@ -60,4 +61,7 @@ public class MemberVO extends BaseVO {
 	
 	@ApiModelProperty("成员邀请者")
 	private Long invitor;
+	
+	@ApiModelProperty("持有的徽章")
+	private List<BadgeVO> holdBadges;
 }

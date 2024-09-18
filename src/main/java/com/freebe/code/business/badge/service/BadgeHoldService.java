@@ -7,6 +7,7 @@ import com.freebe.code.business.badge.controller.param.BadgeHoldParam;
 import com.freebe.code.business.badge.controller.param.BadgeHoldQueryParam;
 import com.freebe.code.business.badge.entity.BadgeHold;
 import com.freebe.code.business.badge.vo.BadgeHoldVO;
+import com.freebe.code.business.badge.vo.BadgeVO;
 import com.freebe.code.business.base.service.BaseService;
 import com.freebe.code.common.CustomException;
 
@@ -45,5 +46,13 @@ public interface BadgeHoldService extends BaseService<BadgeHold> {
 	 * @return
 	 */
 	BadgeHoldVO giveOutBadge(BadgeActionParam param) throws CustomException;
+
+	/**
+	 * 查询某个成员持有的徽章列表
+	 * @param id
+	 * @return
+	 * @throws CustomException 
+	 */
+	List<BadgeVO> queryMemberBadges(Long id) throws CustomException;
 
 }

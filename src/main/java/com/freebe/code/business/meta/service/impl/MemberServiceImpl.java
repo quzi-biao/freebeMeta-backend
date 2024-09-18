@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.kms.aliyun.utils.StringUtils;
+import com.freebe.code.business.badge.service.BadgeHoldService;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.base.vo.UserVO;
@@ -80,6 +81,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 	@Autowired
 	private MemberRoleRelationService memberRoleRelationService;
+	
+	@Autowired
+	private BadgeHoldService badgeHoldService;
 
 	private Random r = new Random();
 
@@ -393,7 +397,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		WalletVO wallet = walletService.findByUser(e.getUserId());
 		vo.setFreeBe(wallet.getFreeBe());
 		vo.setJoinProjects(this.projectMemberService.countProject(e.getId()));
-
+		
+		vo.setHoldBadges(this.badgeHoldService.queryMemberBadges(e.getId()));
+		
 		return vo;
 	}
 
