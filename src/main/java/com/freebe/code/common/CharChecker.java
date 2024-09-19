@@ -34,7 +34,7 @@ public class CharChecker {
 	 * @return 验证成功返回true，验证失败返回false 
 	 */ 
 	public static boolean checkEmail(String email) { 
-		String regex = "\\w+@\\w+\\.[a-z]+(\\.[a-z]+)?"; 
+		String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@\\w+\\.[a-z]+(\\.[a-z]+)?"; 
 		return Pattern.matches(regex, email); 
 	} 
 	
