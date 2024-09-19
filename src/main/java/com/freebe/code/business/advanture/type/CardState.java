@@ -15,5 +15,5 @@ public class CardState {
 	/**
 	 * 不通过
 	 */
-	public static final int UNPASS = 0;
+	public static final int UNPASS = 2;
 }
