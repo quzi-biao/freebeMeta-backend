@@ -924,6 +924,9 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 	 * @return
 	 */
 	public String toStr(Object v) {
+		if(null == v) {
+			return null;
+		}
 		return JSONObject.toJSONString(v);
 	}
 	

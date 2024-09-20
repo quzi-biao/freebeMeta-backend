@@ -1,5 +1,7 @@
 package com.freebe.code.business.meta.vo;
 
+import java.util.List;
+
 import com.freebe.code.business.base.vo.BaseVO;
 import com.freebe.code.business.base.vo.UserVO;
 
@@ -58,4 +60,13 @@ public class BountyVO extends BaseVO {
 	
 	@ApiModelProperty("悬赏优先级")
 	private Integer priority;
+	
+	@ApiModelProperty("是否可认领")
+	private Boolean canTake;
+	
+	@ApiModelProperty("前置任务列表")
+	private List<BountyBaseVO> frontBounties;
+	
+	@ApiModelProperty("后置任务列表")
+	private List<BountyBaseVO> nextBounties;
 }

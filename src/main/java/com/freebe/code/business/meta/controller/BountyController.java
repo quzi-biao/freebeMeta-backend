@@ -17,6 +17,7 @@ import com.freebe.code.business.meta.controller.param.BountyAuditParam;
 import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.service.BountyService;
+import com.freebe.code.business.meta.vo.BountyGraph;
 import com.freebe.code.business.meta.vo.BountyVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ResultBean;
@@ -48,8 +49,14 @@ public class BountyController {
 	public ResultBean<BountyVO> get(@PathVariable("id") Long id) throws CustomException {
 		return ResultBean.ok(bountyService.findById(id));
 	}
+	
+	@ApiOperation(value = "获取项目悬赏")
+	@GetMapping("graph/{projectId}")
+	public ResultBean<BountyGraph> getGraph(@PathVariable("projectId") Long projectId) throws CustomException {
+		return ResultBean.ok(bountyService.getBountyGraph(projectId));
+	}
 
-	@ApiOperation(value = "查询项目悬赏")
+	@ApiOperation(value = "查询悬赏")
 	@PostMapping("list")
 	public ResultBean<Page<BountyVO>> list(@Valid @RequestBody BountyQueryParam param) throws CustomException {
 		return ResultBean.ok(bountyService.queryPage(param));

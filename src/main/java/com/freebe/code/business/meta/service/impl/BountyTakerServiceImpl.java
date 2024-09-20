@@ -71,6 +71,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		return ret;
 	}
 
+	@Transactional
 	@Override
 	public BountyTakerVO createOrUpdate(BountyTakerParam param) throws CustomException {
 		if(null == param.getBountyId()) {
@@ -135,7 +136,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		return vo;
 	}
 
-	
+	@Transactional
 	@Override
 	public BountyTakerVO doneBounty(BountyDoneParam param) throws CustomException {
 		if(null == param.getTakeId()) {

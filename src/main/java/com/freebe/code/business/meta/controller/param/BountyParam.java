@@ -1,5 +1,7 @@
 package com.freebe.code.business.meta.controller.param;
 
+import java.util.List;
+
 import com.freebe.code.business.base.controller.param.BaseEntityParam;
 
 import io.swagger.annotations.ApiModel;
@@ -42,4 +44,7 @@ public class BountyParam extends BaseEntityParam {
 	
 	@ApiModelProperty("悬赏优先级")
 	private Integer priority;
+	
+	@ApiModelProperty("前置任务")
+	private List<Long> fronts;
 }

@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
+import com.freebe.code.business.graph.FreeNode;
+import com.freebe.code.business.graph.FreeRelation;
 import com.freebe.code.business.meta.controller.param.BountyAuditParam;
 import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
@@ -41,6 +44,8 @@ import com.freebe.code.business.meta.type.BountyState;
 import com.freebe.code.business.meta.type.BountyTakerState;
 import com.freebe.code.business.meta.type.Currency;
 import com.freebe.code.business.meta.type.TransactionType;
+import com.freebe.code.business.meta.vo.BountyBaseVO;
+import com.freebe.code.business.meta.vo.BountyGraph;
 import com.freebe.code.business.meta.vo.BountyVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
@@ -62,7 +67,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	private ObjectCaches objectCaches;
 
 	@Autowired
-	private BountyTakerService taskTakerService;
+	private BountyTakerService bountyTakerService;
 
 	@Autowired
 	private UserService userService;
@@ -81,18 +86,34 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 
 	@Override
 	public BountyVO findById(Long id) throws CustomException {
-		BountyVO ret = this.objectCaches.get(id, BountyVO.class);
-		if(null == ret){
-			Optional<Bounty> op = this.repository.findById(id);
-			if(!op.isPresent()){
-				return null;
-			}
-			ret = toVO(op.get());
+		Bounty ret = findEntityById(id);
+		return toVO(ret);
+	}
+
+	@Override
+	public List<BountyBaseVO> getBaseInfo(List<Long> ids) throws CustomException {
+		if(null == ids || ids.size() == 0) {
+			return null;
 		}
-		objectCaches.put(ret.getId(), ret);
+		
+		List<BountyBaseVO> ret = new ArrayList<>();
+		for(Long id : ids) {
+			Bounty b = this.findEntityById(id);
+			if(null == b) {
+				continue;
+			}
+			BountyBaseVO base = new BountyBaseVO();
+			base.setId(b.getId());
+			base.setTitle(b.getTitle());
+			base.setState(b.getState());
+			
+			ret.add(base);
+		}
+		
 		return ret;
 	}
 
+	@Transactional
 	@Override
 	public BountyVO createOrUpdate(BountyParam param) throws CustomException {
 		checkParam(param);
@@ -110,16 +131,28 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		if(param.getId() == null) {
 			e.setReward(param.getReward());
 		}
-
+		
+		List<Long> fronts = param.getFronts();
+		List<Long> existFronts = toList(e.getFrontBounties(), Long.class);
+		
+		e.setFrontBounties(toStr(fronts));
+		
 		e = repository.save(e);
-
+		
+		if(null != existFronts && existFronts.size() > 0) {
+			updateNextBounty(e.getId() ,fronts, existFronts);
+		}else {
+			addNextBounty(e.getId(), fronts);
+		}
+		
+		objectCaches.put(e.getId(), e);
+		
 		BountyVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
 		searcher.addOrUpdateIndex(vo);
 
 		return vo;
 	}
-	
+
 	@Transactional
 	@Override
 	public BountyVO auditBounty(BountyAuditParam param) throws CustomException {
@@ -143,7 +176,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			throw new CustomException("您无权执行此操作");
 		}
 		
-		BountyTaker tt = this.taskTakerService.getReference(e.getTakeId());
+		BountyTaker tt = this.bountyTakerService.getReference(e.getTakeId());
 		if(null == tt) {
 			throw new CustomException("认领不存在");
 		}
@@ -165,39 +198,18 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			long transactionId = createTransaction(e);
 			tt.setEvaluate(param.getEvaluate());
 			tt.setTransactionId(transactionId);
-			this.taskTakerService.save(tt);
+			this.bountyTakerService.save(tt);
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
 			e.setState(BountyState.AUDIT_FAILED);
 			this.repository.save(e);
-			this.taskTakerService.save(tt);
+			this.bountyTakerService.save(tt);
 		}
+		
+		objectCaches.put(e.getId(), e);
 		
 		BountyVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
-
 		return vo;
-	}
-
-	private Long createTransaction(Bounty e) throws CustomException {
-		// 创建交易
-		TransactionParam param = new TransactionParam();
-		param.setAmount(e.getReward().doubleValue());
-		param.setCurrency(Currency.FREE_BE);
-		
-		param.setSrcWalletId(this.walletService.findByUser(e.getOwnerId()).getId());
-		
-		WalletVO wallet = this.walletService.findByUser(e.getTakerId());
-		param.setDstWalletId(wallet.getId());
-		param.setMark("完成任务:" + e.getTitle());
-		if(null == param.getCurrency()) {
-			param.setCurrency(Currency.FREE_BE);
-		}
-		param.setTransactionType(TransactionType.TASK_REWARD);
-		param.setProjectId(e.getProjectId());
-		
-		TransactionVO transaction = this.transactionService.innerCreateOrUpdate(param);
-		return transaction.getId();
 	}
 	
 	@Override
@@ -217,13 +229,12 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		e = repository.save(e);
 
-		BountyVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
+		objectCaches.put(e.getId(), e);
 	}
 
 	@Override
-	public BountyVO cancelBounty(Long taskId) throws CustomException {
-		Bounty e = this.getById(taskId);
+	public BountyVO cancelBounty(Long bountyId) throws CustomException {
+		Bounty e = this.getById(bountyId);
 		if(null == e) {
 			throw new CustomException("任务不存在");
 		}
@@ -238,53 +249,52 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		e.setState(BountyState.CANCEL);
 		e = repository.save(e);
-
+		objectCaches.put(e.getId(), e);
+		
 		BountyVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
 
 		return vo;
 	}
 	
 
 	@Override
-	public void updateTake(Long taskId, Long takeId) throws CustomException {
-		Bounty task = this.getById(taskId);
+	public void updateTake(Long bountyId, Long takeId) throws CustomException {
+		Bounty bounty = this.getById(bountyId);
 		
-		if(null == task) {
+		if(null == bounty) {
 			return;
 		}
 		
-		task.setTakerId(getCurrentUser().getId());
-		task.setTakeId(takeId);
-		task.setState(BountyState.RUNNING);
-		task = this.repository.save(task);
+		checkFrontIsDone(bounty);
 		
-		BountyVO vo = toVO(task);
-		objectCaches.put(vo.getId(), vo);
+		bounty.setTakerId(getCurrentUser().getId());
+		bounty.setTakeId(takeId);
+		bounty.setState(BountyState.RUNNING);
+		bounty = this.repository.save(bounty);
+		
+		objectCaches.put(bounty.getId(), bounty);
 	}
 	
 	@Override
-	public void doneBounty(Long taskId) throws CustomException {
-		Bounty task = this.getById(taskId);
+	public void doneBounty(Long bountyId) throws CustomException {
+		Bounty bounty = this.getById(bountyId);
 		
-		if(null == task) {
+		if(null == bounty) {
 			return;
 		}
 		
-		task.setState(BountyState.WAIT_AUDIT);
-		task.setAuditStartTime(System.currentTimeMillis());
+		checkFrontIsDone(bounty);
 		
-		task = this.repository.save(task);
-		BountyVO vo = toVO(task);
-		objectCaches.put(vo.getId(), vo);
+		bounty.setState(BountyState.WAIT_AUDIT);
+		bounty.setAuditStartTime(System.currentTimeMillis());
+		
+		bounty = this.repository.save(bounty);
+		objectCaches.put(bounty.getId(), bounty);
 	}
+
 
 	@Override
 	public Page<BountyVO> queryPage(BountyQueryParam param) throws CustomException {
-//		if(null != param.getKeyWords() && param.getKeyWords().length() != 0){
-//			return queryPageWithKeywords(param);
-//		}
-
 		param.setOrder("id");
 		List<Order> orders = null;
 		if(param.getDesc() == null || param.getDesc()) {
@@ -316,6 +326,27 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			retList.add(toVO(e));
 		}
 		return new PageImpl<BountyVO>(retList, page.getPageable(), page.getTotalElements());
+	}
+	
+	private Long createTransaction(Bounty e) throws CustomException {
+		// 创建交易
+		TransactionParam param = new TransactionParam();
+		param.setAmount(e.getReward().doubleValue());
+		param.setCurrency(Currency.FREE_BE);
+		
+		param.setSrcWalletId(this.walletService.findByUser(e.getOwnerId()).getId());
+		
+		WalletVO wallet = this.walletService.findByUser(e.getTakerId());
+		param.setDstWalletId(wallet.getId());
+		param.setMark("完成任务:" + e.getTitle());
+		if(null == param.getCurrency()) {
+			param.setCurrency(Currency.FREE_BE);
+		}
+		param.setTransactionType(TransactionType.TASK_REWARD);
+		param.setProjectId(e.getProjectId());
+		
+		TransactionVO transaction = this.transactionService.innerCreateOrUpdate(param);
+		return transaction.getId();
 	}
 
 	private Specification<Bounty> buildSpec(BountyQueryParam param) throws CustomException {
@@ -365,14 +396,65 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		vo.setPriority(e.getPriority());
 		
 		if(null != e.getTakeId()) {
-			vo.setTake(taskTakerService.findById(e.getTakeId()));
+			vo.setTake(bountyTakerService.findById(e.getTakeId()));
 		}
 		
 		vo.setTakerWaitTime(e.getTakerWaitTime());
 		vo.setAuditStartTime(e.getAuditStartTime());
 		vo.setReward(e.getReward());
-
+		
+		vo.setFrontBounties(this.getBaseInfo(toList(e.getFrontBounties(), Long.class)));
+		vo.setNextBounties(this.getBaseInfo(toList(e.getNextBounties(), Long.class)));
+		
+		vo.setCanTake(canTake(vo));
+		
 		return vo;
+	}
+
+	@Override
+	public BountyGraph getBountyGraph(Long projectId) throws CustomException {
+		Bounty e = new Bounty();
+		e.setProjectId(projectId);
+		e.setIsDelete(false);
+		
+		List<Bounty> bounties = this.repository.findAll(Example.of(e));
+		if(null == bounties || bounties.size() == 0) {
+			return null;
+		}
+		List<BountyVO> vos = new ArrayList<>();
+		for(Bounty b : bounties) {
+			vos.add(toVO(b));
+		}
+		
+		BountyGraph g = new BountyGraph();
+		g.setNodes(new ArrayList<>());
+		g.setRelations(new ArrayList<>());
+		
+		for(BountyVO vo : vos) {
+			if(null == g.getProjectId()) {
+				g.setProjectId(vo.getProjectId());
+				g.setProjectName(vo.getProjectName());
+			}
+			
+			FreeNode<BountyVO, Long> node = new FreeNode<>();
+			node.setNode(vo);
+			node.setId(vo.getId());
+			
+			g.getNodes().add(node);
+			
+			if(null == vo.getNextBounties() || vo.getNextBounties().size() == 0) {
+				continue;
+			}
+			
+			for(BountyBaseVO base : vo.getNextBounties()) {
+				FreeRelation<Long> relation = new FreeRelation<>();
+				relation.setSrcNode(vo.getId());
+				relation.setDstNode(base.getId());
+				g.getRelations().add(relation);
+			}
+		}
+		
+		return g;
 	}
 
 	@Override
@@ -380,6 +462,161 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		searcher.deleteIndex(this.findById(id));
 		objectCaches.delete(id, BountyVO.class);
 		super.softDelete(id);
+	}
+	
+	/**
+	 * 任务是否可领取，后续扩张成任务领取者的筛选机制
+	 * @param vo
+	 * @return
+	 */
+	private Boolean canTake(BountyVO vo) {
+		if(null == vo.getFrontBounties() || vo.getFrontBounties().size() == 0) {
+			return true;
+		}
+		
+		for(BountyBaseVO base : vo.getFrontBounties()) {
+			int state = base.getState().intValue();
+			if(state != BountyState.DONE || state != BountyState.CANCEL) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 检查前置悬赏是否完成
+	 * @param bounty
+	 * @throws CustomException
+	 */
+	private void checkFrontIsDone(Bounty bounty) throws CustomException {
+		List<Long> fronts = toList(bounty.getFrontBounties(), Long.class);
+		if(null != fronts && fronts.size() > 0) {
+			for(Long front : fronts) {
+				Bounty frontBounty = this.findEntityById(front);
+				if(null == frontBounty) {
+					continue;
+				}
+				int state = frontBounty.getState();
+				if(state != BountyState.DONE && state != BountyState.CANCEL) {
+					throw new CustomException("请先完成前置任务");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 比对更新前节点的后置节点
+	 * @param id
+	 * @param fronts
+	 * @param existFronts
+	 * @throws CustomException 
+	 */
+	private void updateNextBounty(Long id, List<Long> fronts, List<Long> existFronts) throws CustomException {
+		if(null == existFronts || existFronts.size() == 0) {
+			this.addNextBounty(id, fronts);
+			return;
+		}
+		List<Long> added = new ArrayList<>();
+		// 不在之前的，在现在的，为新增
+		for(Long front : fronts) {
+			if(existFronts.indexOf(front) <= 0) {
+				added.add(front);
+			}
+		}
+		if(added.size() > 0) {
+			addNextBounty(id, added);
+		}
+		
+		// 在之前的，不在现在的，为删除
+		List<Long> removed = new ArrayList<>();
+		for(Long existFront : existFronts) {
+			if(fronts.indexOf(existFront) <= 0) {
+				removed.add(existFront);
+			}
+		}
+		if(removed.size() > 0) {
+			removeNextBounty(id, removed);
+		}
+	}
+	
+	/**
+	 * 添加后续任务
+	 * @param id
+	 * @param fronts
+	 */
+	private void removeNextBounty(Long id, List<Long> fronts) {
+		if(null == fronts || fronts.size() == 0) {
+			return;
+		}
+		for(Long front : fronts) {
+			Bounty frontBounty = this.findEntityById(front);
+			if(null == frontBounty) {
+				continue;
+			}
+			List<Long> nextIds = toList(frontBounty.getNextBounties(), Long.class);
+			if(null == nextIds) {
+				continue;
+			}else {
+				if(nextIds.indexOf(id) >= 0) {
+					nextIds.remove(id);
+					frontBounty.setNextBounties(toStr(nextIds));
+					frontBounty = this.repository.save(frontBounty);
+					objectCaches.put(frontBounty.getId(), frontBounty);
+				}else {
+					continue;
+				}
+			}
+		}
+	}
+
+	/**
+	 * 添加后续任务
+	 * @param id
+	 * @param fronts
+	 * @throws CustomException 
+	 */
+	private void addNextBounty(Long id, List<Long> fronts) throws CustomException {
+		if(null == fronts || fronts.size() == 0) {
+			return;
+		}
+		for(Long front : fronts) {
+			Bounty frontBounty = this.findEntityById(front);
+			if(null == frontBounty) {
+				throw new CustomException("更新失败，前置节点不存在");
+			}
+			List<Long> nextIds = toList(frontBounty.getNextBounties(), Long.class);
+			if(null == nextIds) {
+				nextIds = new ArrayList<>();
+				nextIds.add(id);
+			}else {
+				if(nextIds.indexOf(id) >= 0) {
+					continue;
+				}else {
+					nextIds.add(id);
+				}
+			}
+			frontBounty.setNextBounties(toStr(nextIds));
+			frontBounty = this.repository.save(frontBounty);
+			objectCaches.put(frontBounty.getId(), frontBounty);
+		}
+	}
+	
+	/**
+	 * 查询对象
+	 * @param id
+	 * @return
+	 */
+	private Bounty findEntityById(Long id) {
+		Bounty ret = this.objectCaches.get(id, Bounty.class);
+		if(null == ret){
+			Optional<Bounty> op = this.repository.findById(id);
+			if(!op.isPresent()){
+				return null;
+			}
+			ret = op.get();
+		}
+		objectCaches.put(ret.getId(), ret);
+		return ret;
 	}
 	
 	
@@ -414,5 +651,4 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			throw new CustomException("您的钱包余额不足");
 		}
 	}
-
 }

@@ -93,4 +93,14 @@ public class Bounty extends BaseEntity {
 	 * 悬赏优先级
 	 */
 	private Integer priority;
+	
+	/**
+	 * 前置悬赏
+	 */
+	private String frontBounties;
+	
+	/**
+	 * 后续悬赏
+	 */
+	private String nextBounties;
 }

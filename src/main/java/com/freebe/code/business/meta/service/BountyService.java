@@ -1,5 +1,7 @@
 package com.freebe.code.business.meta.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.freebe.code.business.base.service.BaseService;
@@ -7,6 +9,8 @@ import com.freebe.code.business.meta.controller.param.BountyAuditParam;
 import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.entity.Bounty;
+import com.freebe.code.business.meta.vo.BountyBaseVO;
+import com.freebe.code.business.meta.vo.BountyGraph;
 import com.freebe.code.business.meta.vo.BountyVO;
 import com.freebe.code.common.CustomException;
 
@@ -22,6 +26,14 @@ public interface BountyService extends BaseService<Bounty> {
 	BountyVO createOrUpdate(BountyParam param) throws CustomException;
 
 	Page<BountyVO> queryPage(BountyQueryParam param) throws CustomException;
+	
+	/**
+	 * 查询基础信息
+	 * @param ids
+	 * @return
+	 * @throws CustomException
+	 */
+	List<BountyBaseVO> getBaseInfo(List<Long> ids) throws CustomException;
 
 	/**
 	 * 更新悬赏的认领信息
@@ -59,5 +71,13 @@ public interface BountyService extends BaseService<Bounty> {
 	 * @throws CustomException 
 	 */
 	void restartBounty(Long id) throws CustomException;
+	
+	/**
+	 * 获取项目悬的悬赏图谱
+	 * @param projectId
+	 * @return
+	 * @throws CustomException
+	 */
+	BountyGraph getBountyGraph(Long projectId) throws CustomException;
 
 }
