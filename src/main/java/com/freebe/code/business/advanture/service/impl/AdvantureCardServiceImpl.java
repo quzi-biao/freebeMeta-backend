@@ -132,6 +132,17 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 			public Predicate toPredicate(Root<AdvantureCard> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				QueryBuilder<AdvantureCard> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
+				
+				// 查询状态
+				if(param.getState() != null) {
+					if(param.getState().intValue() == CardState.PASS) {
+						builder.addBetween("experience", Constant.EXPERIENCE, null);
+					}else if(param.getState().intValue() == CardState.TESTING) {
+						builder.addBetween("endTime", System.currentTimeMillis(), null);
+					}else if(param.getState().intValue() == CardState.UNPASS) {
+						builder.addBetween("endTime", null, System.currentTimeMillis());
+					}
+				}
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}
