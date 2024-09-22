@@ -58,6 +58,9 @@ public class BountyVO extends BaseVO {
 	@ApiModelProperty("审核开始时间")
 	private Long auditStartTime;
 	
+	@ApiModelProperty("审核时间")
+	private Long auditTime;
+	
 	@ApiModelProperty("悬赏优先级")
 	private Integer priority;
 	

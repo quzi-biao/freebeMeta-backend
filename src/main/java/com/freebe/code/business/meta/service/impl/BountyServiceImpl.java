@@ -140,7 +140,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e = repository.save(e);
 		
 		if(null != existFronts && existFronts.size() > 0) {
-			updateNextBounty(e.getId() ,fronts, existFronts);
+			updateNextBounty(e.getId(), fronts, existFronts);
 		}else {
 			addNextBounty(e.getId(), fronts);
 		}
@@ -189,7 +189,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setAuditTime(System.currentTimeMillis());
 		if(param.getPass()) {
 			e.setState(BountyState.DONE);
-			this.repository.save(e);
+			e = this.repository.save(e);
 			Long taker = e.getTakerId();
 			if(taker != tt.getTaker()) {
 				throw new CustomException("系统混乱");
@@ -202,7 +202,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
 			e.setState(BountyState.AUDIT_FAILED);
-			this.repository.save(e);
+			e = this.repository.save(e);
 			this.bountyTakerService.save(tt);
 		}
 		
@@ -401,6 +401,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		vo.setTakerWaitTime(e.getTakerWaitTime());
 		vo.setAuditStartTime(e.getAuditStartTime());
+		vo.setAuditTime(e.getAuditTime());
 		vo.setReward(e.getReward());
 		
 		vo.setFrontBounties(this.getBaseInfo(toList(e.getFrontBounties(), Long.class)));
@@ -476,7 +477,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		for(BountyBaseVO base : vo.getFrontBounties()) {
 			int state = base.getState().intValue();
-			if(state != BountyState.DONE || state != BountyState.CANCEL) {
+			if(state != BountyState.DONE && state != BountyState.CANCEL) {
 				return false;
 			}
 		}
@@ -512,19 +513,9 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	 * @throws CustomException 
 	 */
 	private void updateNextBounty(Long id, List<Long> fronts, List<Long> existFronts) throws CustomException {
-		if(null == existFronts || existFronts.size() == 0) {
-			this.addNextBounty(id, fronts);
+		if(null == fronts) {
+			removeNextBounty(id, existFronts);
 			return;
-		}
-		List<Long> added = new ArrayList<>();
-		// 不在之前的，在现在的，为新增
-		for(Long front : fronts) {
-			if(existFronts.indexOf(front) <= 0) {
-				added.add(front);
-			}
-		}
-		if(added.size() > 0) {
-			addNextBounty(id, added);
 		}
 		
 		// 在之前的，不在现在的，为删除
@@ -537,6 +528,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		if(removed.size() > 0) {
 			removeNextBounty(id, removed);
 		}
+		this.addNextBounty(id, fronts);
 	}
 	
 	/**
@@ -585,7 +577,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 				throw new CustomException("更新失败，前置节点不存在");
 			}
 			List<Long> nextIds = toList(frontBounty.getNextBounties(), Long.class);
-			if(null == nextIds) {
+			if(null == nextIds || nextIds.size() == 0) {
 				nextIds = new ArrayList<>();
 				nextIds.add(id);
 			}else {

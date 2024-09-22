@@ -97,10 +97,12 @@ public class Bounty extends BaseEntity {
 	/**
 	 * 前置悬赏
 	 */
+	@Column(columnDefinition = "TEXT")
 	private String frontBounties;
 	
 	/**
 	 * 后续悬赏
 	 */
+	@Column(columnDefinition = "TEXT")
 	private String nextBounties;
 }

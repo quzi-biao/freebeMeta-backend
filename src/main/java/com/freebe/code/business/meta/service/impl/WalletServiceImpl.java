@@ -69,7 +69,7 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 
 	@Override
 	public WalletVO findByAddress(String address) throws CustomException {
-		String id = "address: " + address;
+		String id = "address:" + address;
 		
 		Wallet ret = this.objectCaches.get(id, Wallet.class);
 		if(null != ret) {
@@ -94,7 +94,7 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 
 	@Override
 	public WalletVO findByUser(Long userId) throws CustomException {
-		String id = "u: " + userId;
+		String id = "u:" + userId;
 		
 		Wallet ret = this.objectCaches.get(id, Wallet.class);
 		if(null != ret) {
@@ -126,7 +126,7 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 
 	@Override
 	public Double getAmount(Long userId, Integer freeBe) throws CustomException {
-		String id = "u: " + userId;
+		String id = "u:" + userId;
 		
 		Wallet ret = this.objectCaches.get(id, Wallet.class);
 		if(null != ret) {
