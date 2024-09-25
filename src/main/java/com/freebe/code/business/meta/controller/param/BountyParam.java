@@ -38,6 +38,9 @@ public class BountyParam extends BaseEntityParam {
 
 	@ApiModelProperty("悬赏赏金")
 	private Long reward;
+	
+	@ApiModelProperty("任务U赏金")
+	private Double ureward;
 
 	@ApiModelProperty("审核等待时间")
 	private Long auditWaitTime;

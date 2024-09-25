@@ -55,6 +55,9 @@ public class BountyVO extends BaseVO {
 	@ApiModelProperty("任务赏金")
 	private Long reward;
 	
+	@ApiModelProperty("任务U赏金")
+	private Double ureward;
+	
 	@ApiModelProperty("审核开始时间")
 	private Long auditStartTime;
 	

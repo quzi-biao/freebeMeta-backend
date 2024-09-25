@@ -130,6 +130,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setPriority(param.getPriority());
 		if(param.getId() == null) {
 			e.setReward(param.getReward());
+			e.setUreward(currencyStr(param.getUreward()));
 		}
 		
 		List<Long> fronts = param.getFronts();
@@ -403,6 +404,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		vo.setAuditStartTime(e.getAuditStartTime());
 		vo.setAuditTime(e.getAuditTime());
 		vo.setReward(e.getReward());
+		vo.setUreward(numbericCurrency(e.getUreward()));
 		
 		vo.setFrontBounties(this.getBaseInfo(toList(e.getFrontBounties(), Long.class)));
 		vo.setNextBounties(this.getBaseInfo(toList(e.getNextBounties(), Long.class)));
