@@ -128,7 +128,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setLimitTime(param.getLimitTime());
 		e.setTakerWaitTime(param.getTakerWaitTime());
 		e.setPriority(param.getPriority());
-		if(param.getId() == null) {
+		if(param.getId() == null || e.getState() == BountyState.WAIT_TAKER) {
 			e.setReward(param.getReward());
 			e.setUreward(currencyStr(param.getUreward()));
 		}
