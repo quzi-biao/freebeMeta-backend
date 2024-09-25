@@ -50,4 +50,9 @@ public class User extends BaseEntity {
 	 * 注册时用于验证的账号如邮箱手机号等，MD5值
 	 */
 	private String verifyInfo;
+	
+	/**
+	 * 贡献分
+	 */
+	private Long contribution;
 }

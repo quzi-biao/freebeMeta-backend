@@ -192,6 +192,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		return ret.getId();
 	}
 
+	@Transactional
 	@Override
 	public MemberVO createOrUpdate(MemberParam param) throws CustomException {
 		checkParam(param);
@@ -391,7 +392,6 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 		vo.setDescription(e.getDescription());
 		vo.setSkills(toList(e.getSkills(), Skill.class));
-		vo.setLastTime(e.getLastTime());
 		vo.setRoles(roleService.findByIds(toList(e.getRoles(), Long.class)));
 
 		WalletVO wallet = walletService.findByUser(e.getUserId());

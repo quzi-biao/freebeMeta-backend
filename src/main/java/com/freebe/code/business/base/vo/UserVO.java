@@ -33,4 +33,10 @@ public class UserVO {
 	
 	@ApiModelProperty("freeBe积分")
 	private Double freeBe;
+	
+	@ApiModelProperty("最后一次登录时间")
+	private Long lastLogin;
+	
+	@ApiModelProperty("贡献分")
+	private Long contribution;
 }

@@ -196,10 +196,13 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 				throw new CustomException("系统混乱");
 			}
 			
+			// 积分回报发放
 			long transactionId = createTransaction(e);
 			tt.setEvaluate(param.getEvaluate());
 			tt.setTransactionId(transactionId);
 			this.bountyTakerService.save(tt);
+			// 贡献分发放(贡献分等于积分)
+			this.userService.addContribution(taker, e.getReward());
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
 			e.setState(BountyState.AUDIT_FAILED);

@@ -76,6 +76,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 			user.setCode(CodeUtils.generateCode(User.class));
 			user.setInUse(true);
 			user = this.repository.save(user);
+			user.setContribution(0L);
 			
 			WalletParam param = new WalletParam();
 			param.setUserId(user.getId());
@@ -104,6 +105,22 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		return null;
 	}
 	
+	@Override
+	public void addContribution(Long userId, Long added) throws CustomException {
+		User user = this.getReference(userId);
+		if(null == user) {
+			return;
+		}
+		
+		Long c = user.getContribution();
+		if(null == c) {
+			user.setContribution(0L);
+			c = 0L;
+		}
+		user.setContribution(c + added);
+		this.repository.save(user);
+	}
+	
 
 	@Override
 	public UserVO getOrCreateUserByAddress(String address) throws CustomException {
@@ -122,6 +139,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 			user.setVerifyInfo(toUniqueId(address));
 			user.setFreeBeId("");
 			user.setAddress(address);
+			user.setContribution(0L);
 			user = this.repository.save(user);
 			
 			WalletParam param = new WalletParam();
@@ -269,6 +287,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		user.setVerifyInfo(uniqueId);
 		user.setFreeBeId(loginParam.getFreeBeId());
 		user.setPassword(JwtUtils.getHashSecret(loginParam.getPassword()));
+		user.setContribution(0L);
 		user = this.repository.save(user);
 		
 		WalletParam param = new WalletParam();
@@ -393,6 +412,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		vo.setAddress(user.getAddress());
 		vo.setAvator(user.getAvator());
 		vo.setFreeBeId(user.getFreeBeId());
+		vo.setLastLogin(user.getLastLogin());
+		vo.setContribution(user.getContribution());
 		vo.setFreeBe(this.walletService.getAmount(user.getId(), Currency.FREE_BE));
 		
 		return vo;

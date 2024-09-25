@@ -33,6 +33,13 @@ public interface UserService extends BaseService<User> {
 	 */
 	UserVO getOrCreateUserByAddress(String address) throws CustomException;
 	
+	/**
+	 * 增加贡献分
+	 * @param added
+	 * @throws CustomException
+	 */
+	void addContribution(Long userId, Long added) throws CustomException;
+	
 	
 	/**
 	 * 更新用户密码
