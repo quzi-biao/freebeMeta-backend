@@ -147,6 +147,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 			walletService.createOrUpdate(param);
 		}
 		
+		user.setLastLogin(System.currentTimeMillis());
+		this.repository.save(user);
+		
         return toVO(user);
 	}
 	
