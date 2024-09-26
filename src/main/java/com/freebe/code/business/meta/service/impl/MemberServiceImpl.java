@@ -2,6 +2,7 @@ package com.freebe.code.business.meta.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.kms.aliyun.utils.StringUtils;
 import com.freebe.code.business.badge.service.BadgeHoldService;
+import com.freebe.code.business.base.entity.User;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.base.vo.UserVO;
@@ -312,63 +314,73 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	@Override
 	public Page<MemberVO> queryPage(MemberQueryParam param) throws CustomException {
 		if("freeBe".equals(param.getOrder())) {
-			// 积分排序的实现
-			WalletQueryParam walletQuery = new WalletQueryParam();
-			walletQuery.setOrder("freeBe");
-			walletQuery.setDesc(param.getDesc());
-			walletQuery.setCurrPage(param.getCurrPage());
-			walletQuery.setLimit(param.getLimit());
-
-			Page<WalletVO> wallets = this.walletService.queryPage(walletQuery);
-			List<MemberVO> retList = new ArrayList<>();
-			for(WalletVO e:  wallets.getContent()) {
-				MemberVO member = this.findByUserId(e.getUserId());
-				if(null != member) {
-					retList.add(member);
-				}
-			}
-			return new PageImpl<MemberVO>(retList, wallets.getPageable(), wallets.getTotalElements());
+			return freeBeOrderQuery(param);
+		}
+		
+		// freebeId 查询
+		if(null != param.getKeyWords() && param.getKeyWords().endsWith(UserService.FREEBE_ID_SUFFIX)){
+			String freebeId = param.getKeyWords();
+			return queryByFreebeId(param, freebeId);
+		}
+		
+		if(null != param.getName() && param.getName().endsWith(UserService.FREEBE_ID_SUFFIX)) {
+			String freebeId = param.getName();
+			return queryByFreebeId(param, freebeId);
 		}
 
 		if(StringUtils.isEmpty(param.getKeyWords())) {
-			if(null == param.getOrder()) {
-				param.setOrder("id");
-			}
-			List<MemberVO> retList = new ArrayList<>();
-			PageRequest request = PageUtils.toPageRequest(param);
-			if(StringUtils.isEmpty(param.getName())) {
-				// 没有搜索条件的时候，随机返回一个列表
-				retList = this.randomList(param.getLimit());
-				return new PageImpl<MemberVO>(retList, request, this.countMembers());
-			} else {
-				// 根据条件查询
-				Specification<Member> example = buildSpec(param);
-				Page<Member> page = repository.findAll(example, request);
-				for(Member e:  page.getContent()) {
-					retList.add(toVO(e));
-				}
-				return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
-			}
+			return conditionQuery(param);
 		} else {
-			if(param.getKeyWords().length() > 256) {
-				throw new CustomException("查询关键词太长");
-			}
-			// 模糊查询
-			Specification<Member> example = (root, query, criteriaBuilder) -> {
-				List<Predicate> predicates = new ArrayList<>();
-				predicates.add(criteriaBuilder.like(root.get("name"), "%" + param.getKeyWords() + "%"));
-				return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
-			};
-			PageRequest request = PageUtils.toPageRequest(param);
+			return keywordQuery(param);
+		}
+	}
+	
+	/**
+	 * 根据 freebeId 查询
+	 * @param param
+	 * @param freebeId
+	 * @return
+	 * @throws CustomException
+	 */
+	private Page<MemberVO> queryByFreebeId(MemberQueryParam param, String freebeId) throws CustomException {
+		PageRequest request = PageUtils.toPageRequest(param);
+		User user = this.userService.findUserByFreeBeId(freebeId);
+		if(null == user) {
+			return new PageImpl<MemberVO>(null, request, 0);
+		}
+		MemberVO member = this.findByUserId(user.getId());
+		if(null == member) {
+			return new PageImpl<MemberVO>(null, request, 0);
+		}
+		return new PageImpl<MemberVO>(Arrays.asList(member), request, 1);
+	}
+
+	/**
+	 * 条件查询
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	private Page<MemberVO> conditionQuery(MemberQueryParam param) throws CustomException {
+		if(null == param.getOrder()) {
+			param.setOrder("id");
+		}
+		List<MemberVO> retList = new ArrayList<>();
+		PageRequest request = PageUtils.toPageRequest(param);
+		if(StringUtils.isEmpty(param.getName())) {
+			// 没有搜索条件的时候，随机返回一个列表
+			retList = this.randomList(param.getLimit());
+			return new PageImpl<MemberVO>(retList, request, this.countMembers());
+		} else {
+			// 根据条件查询
+			Specification<Member> example = buildSpec(param);
 			Page<Member> page = repository.findAll(example, request);
-			List<MemberVO> retList = new ArrayList<>();
-			for(Member e : page.getContent()) {
+			for(Member e:  page.getContent()) {
 				retList.add(toVO(e));
 			}
 			return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
 		}
 	}
-
 
 	private MemberVO toVO(Member e) throws CustomException {
 		MemberVO vo = new MemberVO();
@@ -411,6 +423,56 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		objectCaches.delete("user:" + vo.getUserId(), Member.class);
 		objectCaches.delete("freeBe:" + vo.getFreeBeId(), Member.class);
 		super.softDelete(id);
+	}
+	
+	/**
+	 * 被改成了名称的模糊查询，后续要改回去
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	private Page<MemberVO> keywordQuery(MemberQueryParam param) throws CustomException {
+		if(param.getKeyWords().length() > 256) {
+			throw new CustomException("查询关键词太长");
+		}
+		// 模糊查询
+		Specification<Member> example = (root, query, criteriaBuilder) -> {
+			List<Predicate> predicates = new ArrayList<>();
+			predicates.add(criteriaBuilder.like(root.get("name"), "%" + param.getKeyWords() + "%"));
+			return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+		};
+		PageRequest request = PageUtils.toPageRequest(param);
+		Page<Member> page = repository.findAll(example, request);
+		List<MemberVO> retList = new ArrayList<>();
+		for(Member e : page.getContent()) {
+			retList.add(toVO(e));
+		}
+		return new PageImpl<MemberVO>(retList, page.getPageable(), page.getTotalElements());
+	}
+	
+	/**
+	 * 积分排序查询
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	private Page<MemberVO> freeBeOrderQuery(MemberQueryParam param) throws CustomException {
+		// 积分排序的实现
+		WalletQueryParam walletQuery = new WalletQueryParam();
+		walletQuery.setOrder("freeBe");
+		walletQuery.setDesc(param.getDesc());
+		walletQuery.setCurrPage(param.getCurrPage());
+		walletQuery.setLimit(param.getLimit());
+
+		Page<WalletVO> wallets = this.walletService.queryPage(walletQuery);
+		List<MemberVO> retList = new ArrayList<>();
+		for(WalletVO e:  wallets.getContent()) {
+			MemberVO member = this.findByUserId(e.getUserId());
+			if(null != member) {
+				retList.add(member);
+			}
+		}
+		return new PageImpl<MemberVO>(retList, wallets.getPageable(), wallets.getTotalElements());
 	}
 
 	private Specification<Member> buildSpec(MemberQueryParam param) throws CustomException {

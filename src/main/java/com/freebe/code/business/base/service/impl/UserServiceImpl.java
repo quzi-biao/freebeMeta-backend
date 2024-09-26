@@ -37,8 +37,6 @@ import cn.hutool.crypto.digest.MD5;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService{
 	
-	private static final String FREEBE_ID_SUFFIX = ".freebe";
-
 	@Autowired
 	private ObjectCaches objectCaches;
 	
@@ -384,6 +382,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	 * @param freeBeId
 	 * @return
 	 */
+	@Override
 	public User findUserByFreeBeId(String freeBeId) {
 		User user = new User();
 		user.setFreeBeId(freeBeId);

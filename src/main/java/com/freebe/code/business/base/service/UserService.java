@@ -9,6 +9,7 @@ import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.common.CustomException;
 
 public interface UserService extends BaseService<User> {
+	public static final String FREEBE_ID_SUFFIX = ".freebe";
 	
 	/**
 	 * 用户登录
@@ -93,5 +94,12 @@ public interface UserService extends BaseService<User> {
 	 * @return
 	 */
 	List<Long> queryUserByName(String takerName);
+
+	/**
+	 * 根据 freebeId 查找用户
+	 * @param keyWords
+	 * @return
+	 */
+	User findUserByFreeBeId(String freebeId);
 
 }
