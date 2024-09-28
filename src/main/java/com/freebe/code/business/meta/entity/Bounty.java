@@ -75,6 +75,16 @@ public class Bounty extends BaseEntity {
 	private Long auditTime;
 	
 	/**
+	 * 审核人
+	 */
+	private Long auditorId;
+	
+	/**
+	 * 审核奖励
+	 */
+	private Long auditTransactionId;
+	
+	/**
 	 * 审核开始时间
 	 */
 	private Long auditStartTime;
@@ -83,6 +93,11 @@ public class Bounty extends BaseEntity {
 	 * 审核等待时长
 	 */
 	private Long auditWaitTime;
+	
+	/**
+	 * 审核奖励
+	 */
+	private Integer auditReward;
 	
 	/**
 	 * 悬赏赏金
@@ -98,6 +113,12 @@ public class Bounty extends BaseEntity {
 	 * 悬赏优先级
 	 */
 	private Integer priority;
+	
+	/**
+	 * 审核员
+	 */
+	@Column(columnDefinition = "TEXT")
+	private String auditors;
 	
 	/**
 	 * 前置悬赏

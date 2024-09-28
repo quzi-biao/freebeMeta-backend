@@ -70,6 +70,13 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		objectCaches.put(ret.getId(), ret);
 		return ret;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public BountyTaker save(BountyTaker e) {
+		BountyTaker t = super.save(e);
+		objectCaches.delete(e.getId(), BountyTakerVO.class);
+		return t;
+	}
 
 	@Transactional
 	@Override
@@ -145,7 +152,8 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		
 		BountyTaker take = this.getById(param.getTakeId());
 		Bounty bounty = this.bountyService.getReference(take.getBountyId());
-		if(take.getState() != BountyTakerState.NORMAL) {
+		if(take.getState() != BountyTakerState.NORMAL && 
+				!(take.getState() == BountyTakerState.DONE && bounty.getState() == BountyState.WAIT_AUDIT)) {
 			throw new CustomException("悬赏状态异常");
 		}
 		

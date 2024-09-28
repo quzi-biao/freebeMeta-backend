@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,8 +24,10 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
+import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.graph.FreeNode;
 import com.freebe.code.business.graph.FreeRelation;
 import com.freebe.code.business.meta.controller.param.BountyAuditParam;
@@ -32,7 +35,9 @@ import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.entity.Bounty;
+import com.freebe.code.business.meta.entity.BountyAuditor;
 import com.freebe.code.business.meta.entity.BountyTaker;
+import com.freebe.code.business.meta.repository.BountyAuditorRepository;
 import com.freebe.code.business.meta.repository.BountyRepository;
 import com.freebe.code.business.meta.service.BountyService;
 import com.freebe.code.business.meta.service.BountyTakerService;
@@ -62,6 +67,9 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
 public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements BountyService {
 	@Autowired
 	private BountyRepository repository;
+	
+	@Autowired
+	private BountyAuditorRepository auditorRepository;
 
 	@Autowired
 	private ObjectCaches objectCaches;
@@ -124,13 +132,27 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setOwnerId(getCurrentUser().getId());
 		e.setTitle(param.getTitle());
 		e.setDescription(param.getDescription());
-		e.setState(BountyState.WAIT_TAKER);
 		e.setLimitTime(param.getLimitTime());
 		e.setTakerWaitTime(param.getTakerWaitTime());
 		e.setPriority(param.getPriority());
+		if(null == param.getAuditors() || param.getAuditors().size() == 0) {
+			param.setAuditors(Arrays.asList(e.getOwnerId()));
+		}
+		
+		if(param.getAuditors().size() > 3) {
+			throw new CustomException("审核人数不能超过 3 个");
+		}
+		
+		String auditorStr = auditorsIdToStr(param.getAuditors());
+		if(!auditorStr.equals(e.getAuditors())) {
+			e.setAuditors(auditorStr);
+		}
+		
 		if(param.getId() == null || e.getState() == BountyState.WAIT_TAKER) {
 			e.setReward(param.getReward());
 			e.setUreward(currencyStr(param.getUreward()));
+			e.setAuditReward(param.getAuditReward());
+			e.setState(BountyState.WAIT_TAKER);
 		}
 		
 		List<Long> fronts = param.getFronts();
@@ -145,6 +167,8 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		}else {
 			addNextBounty(e.getId(), fronts);
 		}
+		
+		updateAuditor(e);
 		
 		objectCaches.put(e.getId(), e);
 		
@@ -173,8 +197,15 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			throw new CustomException("任务状态异常");
 		}
 		
-		if(e.getOwnerId().longValue() != getCurrentUser().getId().longValue()) {
-			throw new CustomException("您无权执行此操作");
+		List<Long> auditors = strToAuditorIds(e.getAuditors());
+		if(null == auditors || auditors.size() == 0) {
+			if(e.getOwnerId().longValue() != getCurrentUser().getId().longValue()) {
+				throw new CustomException("您无权执行此操作");
+			}
+		}else {
+			if(auditors.indexOf(getCurrentUser().getId()) < 0) {
+				throw new CustomException("您无权进行审核");
+			}
 		}
 		
 		BountyTaker tt = this.bountyTakerService.getReference(e.getTakeId());
@@ -188,9 +219,9 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		tt.setEvaluate(param.getEvaluate());
 		e.setAuditTime(System.currentTimeMillis());
+		e.setAuditorId(getCurrentUser().getId());
 		if(param.getPass()) {
 			e.setState(BountyState.DONE);
-			e = this.repository.save(e);
 			Long taker = e.getTakerId();
 			if(taker != tt.getTaker()) {
 				throw new CustomException("系统混乱");
@@ -198,8 +229,12 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			
 			// 积分回报发放
 			long transactionId = createTransaction(e);
+			long auditTransactionId = createAuditTransaction(e);
 			tt.setEvaluate(param.getEvaluate());
 			tt.setTransactionId(transactionId);
+			e.setAuditTransactionId(auditTransactionId);
+			
+			e = this.repository.save(e);
 			this.bountyTakerService.save(tt);
 			// 贡献分发放(贡献分等于积分)
 			this.userService.addContribution(taker, e.getReward());
@@ -335,14 +370,41 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	private Long createTransaction(Bounty e) throws CustomException {
 		// 创建交易
 		TransactionParam param = new TransactionParam();
-		param.setAmount(e.getReward().doubleValue());
+		if(e.getAuditReward() == null) {
+			e.setAuditReward(0);
+		}
+		param.setAmount(e.getReward().doubleValue() * (100 - e.getAuditReward()) / 100);
 		param.setCurrency(Currency.FREE_BE);
 		
 		param.setSrcWalletId(this.walletService.findByUser(e.getOwnerId()).getId());
 		
 		WalletVO wallet = this.walletService.findByUser(e.getTakerId());
 		param.setDstWalletId(wallet.getId());
-		param.setMark("完成任务:" + e.getTitle());
+		param.setMark("完成任务:#" + e.getId() + ", " + e.getTitle());
+		if(null == param.getCurrency()) {
+			param.setCurrency(Currency.FREE_BE);
+		}
+		param.setTransactionType(TransactionType.TASK_REWARD);
+		param.setProjectId(e.getProjectId());
+		
+		TransactionVO transaction = this.transactionService.innerCreateOrUpdate(param);
+		return transaction.getId();
+	}
+	
+	private Long createAuditTransaction(Bounty e) throws CustomException {
+		if(e.getAuditorId() == null || e.getAuditReward() == null || e.getAuditReward() == 0) {
+			return null;
+		}
+		// 创建交易
+		TransactionParam param = new TransactionParam();
+		param.setAmount(e.getReward().doubleValue() * e.getAuditReward() / 100);
+		param.setCurrency(Currency.FREE_BE);
+		
+		param.setSrcWalletId(this.walletService.findByUser(e.getOwnerId()).getId());
+		
+		WalletVO wallet = this.walletService.findByUser(e.getAuditorId());
+		param.setDstWalletId(wallet.getId());
+		param.setMark("任务审核:#" + e.getId() + ", " + e.getTitle());
 		if(null == param.getCurrency()) {
 			param.setCurrency(Currency.FREE_BE);
 		}
@@ -367,6 +429,9 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 				builder.addIn("state", param.getState());
 				builder.addEqual("takerId", param.getTakerId());
 				builder.addIn("id", param.getIdList());
+				if(null != param.getAuditorId()) {
+					builder.addLike("auditors", AUDITOR_ID_TAG + param.getAuditorId());
+				}
 
 				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
 				return query.where(builder.getPredicate()).getRestriction();
@@ -393,6 +458,18 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			vo.setOwner(userService.getUser(e.getOwnerId()));
 		}
 		
+		if(null != e.getAuditors()) {
+			List<Long> auditorIds = strToAuditorIds(e.getAuditors());
+			List<UserVO> auditors = new ArrayList<>();
+			for(Long auditorId : auditorIds) {
+				auditors.add(this.userService.getUser(auditorId));
+			}
+			vo.setAuditors(auditors);
+		}else {
+			vo.setAuditors(Arrays.asList(vo.getOwner()));
+		}
+		
+		//vo.setAuditor(this.userService.getUser());
 		vo.setTitle(e.getTitle());
 		vo.setDescription(e.getDescription());
 		vo.setState(e.getState());
@@ -401,6 +478,20 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		if(null != e.getTakeId()) {
 			vo.setTake(bountyTakerService.findById(e.getTakeId()));
+		}
+		
+		if(e.getAuditorId() != null) {
+			vo.setAuditor(this.userService.getUser(e.getAuditorId()));
+		}else {
+			if(e.getState() == BountyState.AUDIT_FAILED || e.getState() == BountyState.DONE) {
+				vo.setAuditor(vo.getOwner());
+			}
+		}
+		
+		if(e.getAuditReward() == null) {
+			vo.setAuditReward(0);
+		}else {
+			vo.setAuditReward(e.getAuditReward());
 		}
 		
 		vo.setTakerWaitTime(e.getTakerWaitTime());
@@ -470,6 +561,69 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		super.softDelete(id);
 	}
 	
+	/**
+	 * 更新审核专员信息，过去不存在的新增，过去存在，现在不存在的移除
+	 * @param e
+	 * @param auditors
+	 */
+	private void updateAuditor(Bounty e) {
+		List<Long> auditors = strToAuditorIds(e.getAuditors());
+		if(null == auditors || auditors.size() == 0) {
+			return;
+		}
+		
+		BountyAuditor probe = new BountyAuditor();
+		probe.setBountyId(e.getId());
+		List<BountyAuditor> frontRelations = this.auditorRepository.findAll(Example.of(probe));
+		if(null == frontRelations || frontRelations.size() == 0) {
+			addAuditorRelation(e.getId(), auditors);
+		}
+		
+		for(Long auditor : auditors) {
+			boolean isNew = true;
+			for(BountyAuditor front : frontRelations) {
+				if(front.getUserId().longValue() == auditor.longValue()) {
+					isNew = false;
+					break;
+				}
+			}
+			if(isNew) {
+				BountyAuditor ba = new BountyAuditor();
+				ba.setBountyId(e.getId());
+				ba.setUserId(auditor);
+				this.auditorRepository.save(ba);
+			}
+		}
+		
+		for(BountyAuditor front : frontRelations) {
+			boolean remove = true;
+			for(Long auditor : auditors) {
+				if(front.getUserId().longValue() == auditor.longValue()) {
+					remove = false;
+					break;
+				}
+			}
+			if(remove) {
+				this.auditorRepository.delete(front);
+			}
+		}
+	}
+	
+	/**
+	 * 添加审核关系
+	 * @param id
+	 * @param auditors
+	 */
+	private void addAuditorRelation(Long id, List<Long> auditors) {
+		for(Long auditor : auditors) {
+			BountyAuditor ba = new BountyAuditor();
+			ba.setBountyId(id);
+			ba.setUserId(auditor);
+			
+			this.auditorRepository.save(ba);
+		}
+	}
+
 	/**
 	 * 任务是否可领取，后续扩张成任务领取者的筛选机制
 	 * @param vo
@@ -617,6 +771,18 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	}
 	
 	
+	private String auditorsIdToStr(List<Long> auditors) {
+		return JSONObject.toJSONString(
+			auditors.stream().map(item -> AUDITOR_ID_TAG + item).collect(Collectors.toList())
+		);
+	}
+	
+	private List<Long> strToAuditorIds(String auditorStr) {
+		List<String> list = toList(auditorStr, String.class);
+		return list.stream().map(item -> Long.parseLong(item.substring(1))).collect(Collectors.toList());
+	}
+	
+	
 	private void checkParam(BountyParam param) throws CustomException {
 		if(null == param.getProjectId()) {
 			throw new CustomException("请设置项目");
@@ -641,6 +807,13 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		}
 		if(param.getLimitTime() <= 0 || param.getLimitTime() > 7) {
 			throw new CustomException("任务完成时间不得超过7天，您应该细分您的任务");
+		}
+		if(param.getAuditReward() == null) {
+			param.setAuditReward(0);
+		}else {
+			if(param.getAuditReward() < 0 || param.getAuditReward() >= 100) {
+				throw new CustomException("任务审核奖励为百分比，取值范围为 0-100");
+			}
 		}
 		
 		WalletVO wallet = this.walletService.findByUser(this.getCurrentUser().getId());

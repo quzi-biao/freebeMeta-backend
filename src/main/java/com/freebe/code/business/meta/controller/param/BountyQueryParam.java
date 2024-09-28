@@ -32,6 +32,9 @@ public class BountyQueryParam extends KeyWordsQueryParam {
 
 	@ApiModelProperty("当前认领 ID")
 	private Long takerId;
+	
+	@ApiModelProperty("审核人ID")
+	private Long auditorId;
 
 	@ApiModelProperty("开始时间")
 	private Long createStartTime;

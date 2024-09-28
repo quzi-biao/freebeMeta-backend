@@ -20,6 +20,7 @@ import com.freebe.code.common.CustomException;
  *
  */
 public interface BountyService extends BaseService<Bounty> {
+	public static final String AUDITOR_ID_TAG = "#";
 
 	BountyVO findById(Long id) throws CustomException;
 

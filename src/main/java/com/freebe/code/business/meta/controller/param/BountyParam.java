@@ -50,4 +50,10 @@ public class BountyParam extends BaseEntityParam {
 	
 	@ApiModelProperty("前置任务")
 	private List<Long> fronts;
+	
+	@ApiModelProperty("审核员")
+	private List<Long> auditors;
+	
+	@ApiModelProperty("审核奖励百分比")
+	private Integer auditReward;
 }
