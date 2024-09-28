@@ -778,6 +778,9 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	}
 	
 	private List<Long> strToAuditorIds(String auditorStr) {
+		if(StringUtils.isEmpty(auditorStr)) {
+			return null;
+		}
 		List<String> list = toList(auditorStr, String.class);
 		return list.stream().map(item -> Long.parseLong(item.substring(1))).collect(Collectors.toList());
 	}
