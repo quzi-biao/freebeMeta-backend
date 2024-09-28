@@ -228,8 +228,8 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			}
 			
 			// 积分回报发放
-			long transactionId = createTransaction(e);
-			long auditTransactionId = createAuditTransaction(e);
+			Long transactionId = createTransaction(e);
+			Long auditTransactionId = createAuditTransaction(e);
 			tt.setEvaluate(param.getEvaluate());
 			tt.setTransactionId(transactionId);
 			e.setAuditTransactionId(auditTransactionId);
