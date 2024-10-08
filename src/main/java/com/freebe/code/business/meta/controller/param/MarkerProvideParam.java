@@ -20,10 +20,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("市场供应方参数")
-public class MarkerProviderParam extends BaseEntityParam {
-	@ApiModelProperty("供应所有者")
-	private Long ownerId;
-
+public class MarkerProvideParam extends BaseEntityParam {
 	@ApiModelProperty("供应内容")
 	private String title;
 

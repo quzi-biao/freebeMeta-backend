@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="t_markert_provider", 
 	indexes = {@Index(columnList = "Id")})
-public class MarketProvider extends BaseEntity {
+public class MarketProvide extends BaseEntity {
 	/**
 	 * 供应所有者
 	 */
@@ -64,6 +64,12 @@ public class MarketProvider extends BaseEntity {
 	 */
 	@Column(columnDefinition = "TEXT")
 	private String priceDescription;
+	
+	/**
+	 * 供应者
+	 */
+	@Column(columnDefinition = "TEXT")
+	private String providers;
 	
 	/**
 	 * 标签

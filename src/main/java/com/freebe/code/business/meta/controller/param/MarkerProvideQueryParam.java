@@ -1,6 +1,6 @@
 package com.freebe.code.business.meta.controller.param;
 
-import com.freebe.code.common.PageBean;
+import com.freebe.code.common.KeyWordsQueryParam;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("市场供应方查询参数")
-public class MarkerProviderQueryParam extends PageBean {
+public class MarkerProvideQueryParam extends KeyWordsQueryParam {
 	@ApiModelProperty("供应所有者")
 	private Long ownerId;
 

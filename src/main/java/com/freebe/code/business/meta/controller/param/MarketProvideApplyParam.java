@@ -1,14 +1,16 @@
-package com.freebe.code.business.meta.vo;
-
-import com.freebe.code.business.base.vo.UserVO;
+package com.freebe.code.business.meta.controller.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@ApiModel("服务供应者")
+@ApiModel("供应方申请说明")
 @Data
-public class MarketProviderVO {
+public class MarketProvideApplyParam {
+	
+	@ApiModelProperty("服务ID")
+	private Long provideId;
+	
 	@ApiModelProperty("经验说明")
 	private String experience;
 	
@@ -17,7 +19,4 @@ public class MarketProviderVO {
 	
 	@ApiModelProperty("可提供服务的时间")
 	private String serviceTime;
-	
-	@ApiModelProperty("用户信息")
-	private UserVO user;
 }
