@@ -33,6 +33,4 @@ public class MessageParam extends BaseEntityParam {
 
 	@ApiModelProperty("消息内容")
 	private String content;
-
-
 }

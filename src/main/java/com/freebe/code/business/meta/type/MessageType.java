@@ -16,4 +16,9 @@ public class MessageType {
 	 * 系统消息
 	 */
 	public static final int SYSTEM = 2;
+	
+	/**
+	 * 用户发送的消息
+	 */
+	public static final int USER_MESSAGE = 3;
 }
