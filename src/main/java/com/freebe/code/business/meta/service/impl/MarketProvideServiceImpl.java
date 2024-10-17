@@ -80,9 +80,13 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		List<MarketProvide> provides = this.repository.findAll(Example.of(probe));
 		for(MarketProvide provide : provides) {
 			objectCaches.put(provide.getId(), provide);
-			MarketProvideVO vo;
 			try {
-				vo = toVO(provide);
+				MarketProvideVO vo = new MarketProvideVO();
+				vo.setId(provide.getId());
+				vo.setDescription(provide.getDescription());
+				vo.setTitle(provide.getTitle());
+				vo.setTags(toList(provide.getTags()));
+				
 				searcher.addOrUpdateIndex(vo);
 			} catch (CustomException e) {
 				e.printStackTrace();
