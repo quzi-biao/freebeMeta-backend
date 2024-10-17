@@ -40,10 +40,13 @@ import com.freebe.code.business.meta.vo.MarketProvideVO;
 import com.freebe.code.business.meta.vo.MarketProviderVO;
 import com.freebe.code.business.meta.vo.MemberVO;
 import com.freebe.code.business.meta.vo.RoleVO;
+import com.freebe.code.common.CommonExecutor;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
 import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -51,6 +54,7 @@ import com.freebe.code.util.QueryUtils.QueryBuilder;
  *
  */
 @Service
+@Slf4j
 public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> implements MarketProvideService {
 	@Autowired
 	private MarketProvideRepository repository;
@@ -74,24 +78,32 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 	
 	@PostConstruct
 	public void loadData() {
-		MarketProvide probe = new MarketProvide();
-		probe.setIsDelete(false);
+		CommonExecutor.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				CommonExecutor.sleep(20000);
+				log.info("重新构建服务索引");
+				MarketProvide probe = new MarketProvide();
+				probe.setIsDelete(false);
 
-		List<MarketProvide> provides = this.repository.findAll(Example.of(probe));
-		for(MarketProvide provide : provides) {
-			objectCaches.put(provide.getId(), provide);
-			try {
-				MarketProvideVO vo = new MarketProvideVO();
-				vo.setId(provide.getId());
-				vo.setDescription(provide.getDescription());
-				vo.setTitle(provide.getTitle());
-				vo.setTags(toList(provide.getTags()));
-				
-				searcher.addOrUpdateIndex(vo);
-			} catch (CustomException e) {
-				e.printStackTrace();
+				List<MarketProvide> provides = repository.findAll(Example.of(probe));
+				for(MarketProvide provide : provides) {
+					objectCaches.put(provide.getId(), provide);
+					try {
+						MarketProvideVO vo = new MarketProvideVO();
+						vo.setId(provide.getId());
+						vo.setDescription(provide.getDescription());
+						vo.setTitle(provide.getTitle());
+						vo.setTags(toList(provide.getTags()));
+						
+						searcher.addOrUpdateIndex(vo);
+					} catch (CustomException e) {
+						e.printStackTrace();
+					}
+				}
 			}
-		}
+		});
 	}
 
 	@Override
