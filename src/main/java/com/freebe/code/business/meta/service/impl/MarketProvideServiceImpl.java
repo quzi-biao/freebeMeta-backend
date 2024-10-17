@@ -440,6 +440,9 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		}
 		Long currUser = this.getCurrentUser().getId();
 		MemberVO member = this.memberService.findByUserId(currUser);
+		if(null == member) {
+			return false;
+		}
 		
 		if(null == member.getRoles() || member.getRoles().size() == 0) {
 			return false;
