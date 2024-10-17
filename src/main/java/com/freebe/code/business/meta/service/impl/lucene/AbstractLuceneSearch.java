@@ -96,7 +96,7 @@ public abstract class AbstractLuceneSearch<T extends BaseVO> {
                 indexWriter.updateDocument(new Term("id", String.valueOf(vo.getId())), doc);
             }
         } catch (Exception e) {
-            throw new CustomException("添加索引库出错：" + e.getMessage());
+            throw new CustomException("添加索引库出错：" + e.getMessage(), e);
         } finally {
             closeResources(indexWriter, indexReader, directory, analyzer);
         }
