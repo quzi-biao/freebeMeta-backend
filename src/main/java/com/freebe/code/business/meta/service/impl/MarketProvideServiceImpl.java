@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -70,6 +71,24 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 	private MarketProvideLuceneSearch searcher;
 	
 	private Map<Long, MarketProvideUser> providerCache = new HashMap<>();
+	
+	@PostConstruct
+	public void loadData() {
+		MarketProvide probe = new MarketProvide();
+		probe.setIsDelete(false);
+
+		List<MarketProvide> provides = this.repository.findAll(Example.of(probe));
+		for(MarketProvide provide : provides) {
+			objectCaches.put(provide.getId(), provide);
+			MarketProvideVO vo;
+			try {
+				vo = toVO(provide);
+				searcher.addOrUpdateIndex(vo);
+			} catch (CustomException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Override
 	public MarketProvideVO findById(Long id) throws CustomException {
@@ -111,7 +130,7 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		e = repository.save(e);
 		
 		MarketProvideVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
+		objectCaches.put(vo.getId(), e);
 		
 		searcher.addOrUpdateIndex(vo);
 
