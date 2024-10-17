@@ -91,7 +91,9 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		checkParam(param);
 		MarketProvide e = this.getUpdateEntity(param, false);
 
-		e.setCreator(getCurrentUser().getId());
+		if(null == e.getCreator()) {
+			e.setCreator(getCurrentUser().getId());
+		}
 		
 		if(e.getId() == null || e.getAudit() == null) {
 			e.setAudit(true);
