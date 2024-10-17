@@ -308,6 +308,7 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		vo.setCode(e.getCode());
 		vo.setCreateTime(e.getCreateTime());
 		
+		vo.setCreator(userService.getUser(e.getCreator()));
 		List<Long> providerIds = toList(e.getProviders(), Long.class);
 		if(null != providerIds && providerIds.size() > 0) {
 			List<MarketProviderVO> providers = new ArrayList<>();
@@ -318,9 +319,13 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 				}
 			}
 			vo.setProviders(providers);
+		}else {
+			List<MarketProviderVO> providers = new ArrayList<>();
+			MarketProviderVO provider = new MarketProviderVO();
+			provider.setUser(vo.getCreator());
+			providers.add(provider);
 		}
 		
-		vo.setCreator(userService.getUser(e.getCreator()));
 		vo.setTitle(e.getTitle());
 		vo.setPicture(e.getPicture());
 		vo.setDescription(e.getDescription());
