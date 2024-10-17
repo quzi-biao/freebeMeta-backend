@@ -96,7 +96,7 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 						vo.setDescription(provide.getDescription());
 						vo.setTitle(provide.getTitle());
 						vo.setTags(toList(provide.getTags()));
-						
+						vo.setCreateTime(provide.getCreateTime());						
 						searcher.addOrUpdateIndex(vo);
 					} catch (CustomException e) {
 						e.printStackTrace();
