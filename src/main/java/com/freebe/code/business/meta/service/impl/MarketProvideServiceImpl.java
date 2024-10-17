@@ -355,6 +355,9 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 					providers.add(provider);
 				}
 			}
+			MarketProviderVO provider = new MarketProviderVO();
+			provider.setUser(vo.getCreator());
+			providers.add(provider);
 			vo.setProviders(providers);
 		}else {
 			List<MarketProviderVO> providers = new ArrayList<>();

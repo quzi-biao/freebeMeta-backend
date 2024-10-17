@@ -508,7 +508,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		Long currUser = this.getCurrentUser().getId();
 		MemberVO owner = this.memberService.findByUserId(currUser);
 		if(null == owner) {
-			throw new CustomException("您还不是 FreeBe 成员，请填写成员问卷");
+			throw new CustomException("请您先填写个人信息");
 		}
 		
 		boolean hasOwner = false;
