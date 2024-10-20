@@ -18,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
+import com.freebe.code.business.collect.service.CollectService;
 import com.freebe.code.business.website.template.controller.param.WebsiteTemplateEntityParam;
 import com.freebe.code.business.website.template.controller.param.WebsiteTemplateEntityQueryParam;
 import com.freebe.code.business.website.template.entity.WebsiteTemplateEntity;
@@ -41,6 +42,9 @@ public class WebsiteTemplateEntityServiceImpl extends BaseServiceImpl<WebsiteTem
 
 	@Autowired
 	private ObjectCaches objectCaches;
+
+	@Autowired
+	private CollectService collectService;
 
 	@Override
 	public WebsiteTemplateEntityVO findById(Long id) throws CustomException {
@@ -121,6 +125,8 @@ public class WebsiteTemplateEntityServiceImpl extends BaseServiceImpl<WebsiteTem
 		vo.setPrice(e.getPrice());
 		vo.setTemplateUrl(e.getTemplateUrl());
 		vo.setContent(e.getContent());
+		
+		vo.setCollected(this.collectService.isCollect(0, e.getId()));
 
 		return vo;
 	}

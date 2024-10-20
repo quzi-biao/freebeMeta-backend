@@ -40,5 +40,6 @@ public class WebsiteTemplateEntityVO extends BaseVO {
 	@ApiModelProperty("模版内容")
 	private String content;
 
-
+	@ApiModelProperty("是否已收藏")
+	private Boolean collected;
 }

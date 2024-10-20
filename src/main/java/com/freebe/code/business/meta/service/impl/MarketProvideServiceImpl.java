@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import com.alipay.api.kms.aliyun.utils.StringUtils;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
+import com.freebe.code.business.collect.service.CollectService;
 import com.freebe.code.business.meta.controller.param.MarkerProvideParam;
 import com.freebe.code.business.meta.controller.param.MarkerProvideQueryParam;
 import com.freebe.code.business.meta.controller.param.MarketProvideApplyParam;
@@ -70,6 +71,9 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private CollectService collectService;
 	
 	@Autowired
 	private MarketProvideLuceneSearch searcher;
@@ -376,6 +380,7 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		vo.setTags(toList(e.getTags()));
 		vo.setAudit(e.getAudit());
 		//vo.setContact(e.getContact());
+		vo.setCollected(this.collectService.isCollect(0, e.getId()));
 
 		return vo;
 	}

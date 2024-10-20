@@ -54,4 +54,7 @@ public class MarketProvideVO extends BaseVO {
 
 	@ApiModelProperty("联系方式")
 	private String contact;
+	
+	@ApiModelProperty("是否已收藏")
+	private Boolean collected;
 }
