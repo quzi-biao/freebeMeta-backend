@@ -805,13 +805,13 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		if(null == param.getTakerWaitTime()) {
 			throw new CustomException("请设置任务认领等待时间");
 		}
-		if(param.getTakerWaitTime() <= 0 || param.getTakerWaitTime() > 10) {
+		if(param.getTakerWaitTime() <= 0 || param.getTakerWaitTime() > 100) {
 			throw new CustomException("任务等待时间不得超过10天");
 		}
 		if(null == param.getLimitTime()) {
 			throw new CustomException("请设置任务完成时间");
 		}
-		if(param.getLimitTime() <= 0 || param.getLimitTime() > 7) {
+		if(param.getLimitTime() <= 0 || param.getLimitTime() > 15) {
 			throw new CustomException("任务完成时间不得超过7天，您应该细分您的任务");
 		}
 		if(param.getAuditReward() == null) {
