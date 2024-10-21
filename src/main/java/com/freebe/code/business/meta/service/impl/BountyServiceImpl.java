@@ -52,6 +52,7 @@ import com.freebe.code.business.meta.type.TransactionType;
 import com.freebe.code.business.meta.vo.BountyBaseVO;
 import com.freebe.code.business.meta.vo.BountyGraph;
 import com.freebe.code.business.meta.vo.BountyVO;
+import com.freebe.code.business.meta.vo.ProjectVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
@@ -127,9 +128,11 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		checkParam(param);
 		
 		Bounty e = this.getUpdateEntity(param, false);
-
+		
+		Long userId = getCurrentUser().getId();
+		
 		e.setProjectId(param.getProjectId());
-		e.setOwnerId(getCurrentUser().getId());
+		e.setOwnerId(userId);
 		e.setTitle(param.getTitle());
 		e.setDescription(param.getDescription());
 		e.setLimitTime(param.getLimitTime());
@@ -816,6 +819,17 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		}else {
 			if(param.getAuditReward() < 0 || param.getAuditReward() >= 100) {
 				throw new CustomException("任务审核奖励为百分比，取值范围为 0-100");
+			}
+		}
+		
+		if(param.getProjectId() > 0) {
+			ProjectVO project = this.projectService.findById(param.getProjectId());
+			if(null == project) {
+				throw new CustomException("项目不存在");
+			}
+			Long userId = getCurrentUser().getId();
+			if(userId.longValue() != project.getOwnerId().longValue()) {
+				throw new CustomException("您不是项目所有者");
 			}
 		}
 		
