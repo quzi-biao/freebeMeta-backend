@@ -11,6 +11,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -71,7 +72,18 @@ public class MindMapServiceImpl extends BaseServiceImpl<MindMap> implements Mind
 
 	@Override
 	public MindMapVO createOrUpdate(MindMapParam param) throws CustomException {
-		MindMap e = this.getUpdateEntity(param);
+		MindMap probe = new MindMap();
+		probe.setProjectId(param.getProjectId());
+		probe.setIsDelete(false);
+		
+		MindMap e = null;
+		List<MindMap> list = this.repository.findAll(Example.of(probe));
+		if(null == list || list.size() == 0) {
+			e = this.getUpdateEntity(param, false);
+		}else {
+			e = list.get(0);
+		}
+		
 		
 		Long currId = getCurrentUser().getId();
 		if(null == param.getProjectId()) {
