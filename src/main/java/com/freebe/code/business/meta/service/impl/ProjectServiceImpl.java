@@ -85,6 +85,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 
 	@Override
 	public ProjectVO findById(Long id) throws CustomException {
+		if(null == id) {
+			return null;
+		}
 		Project ret = this.objectCaches.get(id, Project.class);
 		if(null == ret){
 			Optional<Project> op = this.repository.findById(id);
