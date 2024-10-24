@@ -1,4 +1,4 @@
-package com.freebe.code.business.collect.service.impl;
+package com.freebe.code.business.meta.service.impl;
 
 
 import java.util.ArrayList;
@@ -19,13 +19,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
-import com.freebe.code.business.collect.controller.param.CollectParam;
-import com.freebe.code.business.collect.controller.param.CollectQueryParam;
-import com.freebe.code.business.collect.entity.Collect;
-import com.freebe.code.business.collect.repository.CollectRepository;
-import com.freebe.code.business.collect.service.CollectService;
-import com.freebe.code.business.collect.vo.CollectVO;
+import com.freebe.code.business.meta.controller.param.CollectParam;
+import com.freebe.code.business.meta.controller.param.CollectQueryParam;
+import com.freebe.code.business.meta.entity.Collect;
+import com.freebe.code.business.meta.repository.CollectRepository;
+import com.freebe.code.business.meta.service.CollectService;
 import com.freebe.code.business.meta.service.MarketProvideService;
+import com.freebe.code.business.meta.vo.CollectVO;
 import com.freebe.code.business.website.template.service.WebsiteTemplateEntityService;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;

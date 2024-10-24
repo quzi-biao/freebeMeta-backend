@@ -1,4 +1,4 @@
-package com.freebe.code.business.collect.controller.param;
+package com.freebe.code.business.meta.controller.param;
 
 import com.freebe.code.common.PageBean;
 

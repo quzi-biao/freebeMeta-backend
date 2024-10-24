@@ -1,4 +1,4 @@
-package com.freebe.code.business.collect.entity;
+package com.freebe.code.business.meta.entity;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.freebe.code.business.collect.controller;
+package com.freebe.code.business.meta.controller;
 
 import javax.validation.Valid;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.freebe.code.business.collect.controller.param.CollectParam;
-import com.freebe.code.business.collect.controller.param.CollectQueryParam;
-import com.freebe.code.business.collect.service.CollectService;
-import com.freebe.code.business.collect.vo.CollectVO;
+import com.freebe.code.business.meta.controller.param.CollectParam;
+import com.freebe.code.business.meta.controller.param.CollectQueryParam;
+import com.freebe.code.business.meta.service.CollectService;
+import com.freebe.code.business.meta.vo.CollectVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ResultBean;
 

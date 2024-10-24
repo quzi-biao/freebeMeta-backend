@@ -1,12 +1,12 @@
-package com.freebe.code.business.collect.service;
+package com.freebe.code.business.meta.service;
 
 import org.springframework.data.domain.Page;
 
 import com.freebe.code.business.base.service.BaseService;
-import com.freebe.code.business.collect.controller.param.CollectParam;
-import com.freebe.code.business.collect.controller.param.CollectQueryParam;
-import com.freebe.code.business.collect.entity.Collect;
-import com.freebe.code.business.collect.vo.CollectVO;
+import com.freebe.code.business.meta.controller.param.CollectParam;
+import com.freebe.code.business.meta.controller.param.CollectQueryParam;
+import com.freebe.code.business.meta.entity.Collect;
+import com.freebe.code.business.meta.vo.CollectVO;
 import com.freebe.code.common.CustomException;
 
 /**

@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
-import com.freebe.code.business.collect.service.CollectService;
+import com.freebe.code.business.meta.service.CollectService;
 import com.freebe.code.business.website.template.controller.param.WebsiteTemplateEntityParam;
 import com.freebe.code.business.website.template.controller.param.WebsiteTemplateEntityQueryParam;
 import com.freebe.code.business.website.template.entity.WebsiteTemplateEntity;

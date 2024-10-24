@@ -1,9 +1,9 @@
-package com.freebe.code.business.collect.repository;
+package com.freebe.code.business.meta.repository;
 
 import org.springframework.stereotype.Repository;
 
 import com.freebe.code.business.base.repository.BaseRepository;
-import com.freebe.code.business.collect.entity.Collect;
+import com.freebe.code.business.meta.entity.Collect;
 
 /**
  *
