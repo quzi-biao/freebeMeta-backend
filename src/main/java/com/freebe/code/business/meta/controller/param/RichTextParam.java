@@ -27,4 +27,6 @@ public class RichTextParam extends BaseEntityParam {
 
 	@ApiModelProperty("内容类型")
 	private Integer contentType;
+	
+	
 }

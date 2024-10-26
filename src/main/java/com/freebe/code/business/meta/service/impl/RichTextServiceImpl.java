@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.RichTextParam;
 import com.freebe.code.business.meta.controller.param.RichTextQueryParam;
@@ -24,6 +25,7 @@ import com.freebe.code.business.meta.controller.param.RichTextUpdateParam;
 import com.freebe.code.business.meta.entity.RichText;
 import com.freebe.code.business.meta.repository.RichTextRepository;
 import com.freebe.code.business.meta.service.RichTextService;
+import com.freebe.code.business.meta.type.RichTextContentType;
 import com.freebe.code.business.meta.type.RichTextOwnerType;
 import com.freebe.code.business.meta.vo.RichTextVO;
 import com.freebe.code.common.CustomException;
@@ -74,10 +76,17 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 			e.setOwnerId(param.getOwnerId());
 		}
 		
-		e.setContentType(param.getContentType());
+		int contentType = param.getOwnerType() == null ? RichTextContentType.BLOCK_SUITE : param.getOwnerType().intValue();
+		e.setContentType(contentType);
 		e.setDocId(e.getCode());
-
+		
 		e = repository.save(e);
+		if(contentType == RichTextContentType.BLOCK_SUITE) {
+			RichText blob = JSONObject.parseObject(JSONObject.toJSONString(e), RichText.class);
+			blob.setId(null);
+			blob.setDocId(e.getDocId() + "_blob");
+			this.repository.save(e);
+		}
 
 		objectCaches.put(e.getId(), e);
 
@@ -141,6 +150,7 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 		vo.setByteContent(e.getByteContent());
 		vo.setTextContent(e.getTextContent());
 		vo.setContentType(e.getContentType());
+		vo.setDocId(e.getDocId());
 
 		return vo;
 	}
