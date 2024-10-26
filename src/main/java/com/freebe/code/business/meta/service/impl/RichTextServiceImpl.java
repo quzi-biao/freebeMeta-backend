@@ -85,7 +85,7 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 			RichText blob = JSONObject.parseObject(JSONObject.toJSONString(e), RichText.class);
 			blob.setId(null);
 			blob.setDocId(e.getDocId() + "_blob");
-			this.repository.save(e);
+			this.repository.save(blob);
 		}
 
 		objectCaches.put(e.getId(), e);
