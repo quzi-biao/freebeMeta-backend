@@ -46,4 +46,9 @@ public class RichText extends BaseEntity {
 	 * 内容类型
 	 */
 	private Integer contentType;
+	
+	/**
+	 * 客户端 ID
+	 */
+	private String clientId;
 }
