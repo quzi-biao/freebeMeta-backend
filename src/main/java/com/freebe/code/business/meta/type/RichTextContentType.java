@@ -27,4 +27,6 @@ public class RichTextContentType {
 	 * https://github.com/toeverything/blocksuite
 	 */
 	public static final int BLOCK_SUITE = 4;
+
+	public static final int BLOCK_SUITE_BLOB = 99;
 }

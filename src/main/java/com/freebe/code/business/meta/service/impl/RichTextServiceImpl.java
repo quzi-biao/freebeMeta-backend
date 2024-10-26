@@ -2,6 +2,7 @@ package com.freebe.code.business.meta.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -84,6 +85,7 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 		if(contentType == RichTextContentType.BLOCK_SUITE) {
 			RichText blob = JSONObject.parseObject(JSONObject.toJSONString(e), RichText.class);
 			blob.setId(null);
+			blob.setContentType(RichTextContentType.BLOCK_SUITE_BLOB);
 			blob.setDocId(e.getDocId() + "_blob");
 			this.repository.save(blob);
 		}
@@ -128,7 +130,7 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 				QueryBuilder<RichText> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
 				
-				builder.addEqual("contentType", param.getContentType());
+				builder.addIn("contentType", Arrays.asList(RichTextContentType.BLOCK_SUITE, RichTextContentType.HTML, RichTextContentType.MARKDOWN));
 				builder.addEqual("ownerId", param.getOwnerId());
 				builder.addEqual("ownerType", param.getOwnerType());
 
