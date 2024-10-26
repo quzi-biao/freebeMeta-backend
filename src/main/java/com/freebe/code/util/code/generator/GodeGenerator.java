@@ -43,7 +43,7 @@ public class GodeGenerator {
 			}
 			String name = entity.getName();
 			String entityName = name.substring(0, name.indexOf('.'));
-			if(entityName.equals("MindMap")) {
+			if(entityName.equals("RichText")) {
 				createFiles(entityName);
 			}
 		}
