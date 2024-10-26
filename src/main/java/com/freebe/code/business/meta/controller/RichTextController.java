@@ -44,7 +44,7 @@ public class RichTextController {
 
 	@ApiOperation(value = "获取问卷问题")
 	@GetMapping("get/{id}")
-	public ResultBean<RichTextVO> get(@PathVariable("id") Long id) throws CustomException {
+	public ResultBean<RichTextVO> get(@PathVariable("id") String id) throws CustomException {
 		return ResultBean.ok(richtextService.findById(id));
 	}
 

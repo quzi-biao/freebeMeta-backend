@@ -16,7 +16,7 @@ import com.freebe.code.business.meta.controller.param.RichTextQueryParam;
  */
 public interface RichTextService extends BaseService<RichText> {
 
-	RichTextVO findById(Long id) throws CustomException;
+	RichTextVO findById(String id) throws CustomException;
 
 	RichTextVO createOrUpdate(RichTextParam param) throws CustomException;
 

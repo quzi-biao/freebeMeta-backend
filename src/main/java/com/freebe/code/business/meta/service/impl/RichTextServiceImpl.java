@@ -43,7 +43,8 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 	private ObjectCaches objectCaches;
 
 	@Override
-	public RichTextVO findById(Long id) throws CustomException {
+	public RichTextVO findById(String idStr) throws CustomException {
+		Long id = Long.parseLong(idStr);
 		RichTextVO ret = this.objectCaches.get(id, RichTextVO.class);
 		if(null == ret){
 			Optional<RichText> op = this.repository.findById(id);
