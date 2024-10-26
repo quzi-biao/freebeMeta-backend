@@ -35,5 +35,5 @@ public class RichTextVO extends BaseVO {
 	private Integer contentType;
 
 	@ApiModelProperty("客户端 ID")
-	private String clientId;
+	private String docId;
 }

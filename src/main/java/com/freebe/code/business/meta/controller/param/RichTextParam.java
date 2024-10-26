@@ -35,5 +35,5 @@ public class RichTextParam extends BaseEntityParam {
 	private Integer contentType;
 
 	@ApiModelProperty("客户端 ID")
-	private String clientId;
+	private String docId;
 }

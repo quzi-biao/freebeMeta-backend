@@ -50,5 +50,5 @@ public class RichText extends BaseEntity {
 	/**
 	 * 客户端 ID
 	 */
-	private String clientId;
+	private String docId;
 }

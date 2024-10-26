@@ -43,12 +43,12 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 	private ObjectCaches objectCaches;
 
 	@Override
-	public RichTextVO findById(String cliendId) throws CustomException {
-		RichTextVO ret = this.objectCaches.get(cliendId, RichTextVO.class);
+	public RichTextVO findById(String docId) throws CustomException {
+		RichTextVO ret = this.objectCaches.get(docId, RichTextVO.class);
 		if(null == ret){
 			RichText rt = new RichText();
 			rt.setIsDelete(false);
-			rt.setClientId(cliendId);
+			rt.setDocId(docId);
 			
 			List<RichText> match = this.repository.findAll(Example.of(rt));
 			
@@ -65,12 +65,12 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 	@Override
 	public RichTextVO createOrUpdate(RichTextParam param) throws CustomException {
 		RichText e = null;
-		if(null == param.getClientId()) {
+		if(null == param.getDocId()) {
 			e = this.getUpdateEntity(param, false);
 		}else {
 			RichText rt = new RichText();
 			rt.setIsDelete(false);
-			rt.setClientId(param.getClientId());
+			rt.setDocId(param.getDocId());
 			
 			List<RichText> match = this.repository.findAll(Example.of(rt));
 			if(null == match || match.size() == 0) {
@@ -85,7 +85,7 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 		e.setByteContent(param.getByteContent());
 		e.setTextContent(param.getTextContent());
 		e.setContentType(param.getContentType());
-		e.setClientId(param.getClientId());
+		e.setDocId(param.getDocId());
 
 		e = repository.save(e);
 
