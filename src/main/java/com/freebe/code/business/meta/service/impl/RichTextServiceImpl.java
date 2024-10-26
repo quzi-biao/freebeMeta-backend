@@ -76,7 +76,7 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 			e.setOwnerId(param.getOwnerId());
 		}
 		
-		int contentType = param.getOwnerType() == null ? RichTextContentType.BLOCK_SUITE : param.getOwnerType().intValue();
+		int contentType = param.getContentType() == null ? RichTextContentType.BLOCK_SUITE : param.getContentType().intValue();
 		e.setContentType(contentType);
 		e.setDocId(e.getCode());
 		
