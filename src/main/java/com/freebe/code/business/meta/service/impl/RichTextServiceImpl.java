@@ -20,9 +20,11 @@ import org.springframework.stereotype.Service;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.RichTextParam;
 import com.freebe.code.business.meta.controller.param.RichTextQueryParam;
+import com.freebe.code.business.meta.controller.param.RichTextUpdateParam;
 import com.freebe.code.business.meta.entity.RichText;
 import com.freebe.code.business.meta.repository.RichTextRepository;
 import com.freebe.code.business.meta.service.RichTextService;
+import com.freebe.code.business.meta.type.RichTextOwnerType;
 import com.freebe.code.business.meta.vo.RichTextVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
@@ -43,56 +45,53 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 	private ObjectCaches objectCaches;
 
 	@Override
-	public RichTextVO findById(String docId) throws CustomException {
-		RichTextVO ret = this.objectCaches.get(docId, RichTextVO.class);
-		if(null == ret){
-			RichText rt = new RichText();
-			rt.setIsDelete(false);
-			rt.setDocId(docId);
-			
-			List<RichText> match = this.repository.findAll(Example.of(rt));
-			
-			if(null == match || match.size() == 0) {
-				return null;
-			}
-			
-			ret = toVO(match.get(0));
+	public RichTextVO findByDocId(String docId) throws CustomException {
+		if(null == docId) {
+			return null;
 		}
-		objectCaches.put(ret.getId(), ret);
-		return ret;
+		RichText ret = findEntityById(docId);
+		if(null == ret) {
+			return null;
+		}
+		return toVO(ret);
 	}
 
 	@Override
-	public RichTextVO createOrUpdate(RichTextParam param) throws CustomException {
-		RichText e = null;
-		if(null == param.getDocId()) {
-			e = this.getUpdateEntity(param, false);
-		}else {
-			RichText rt = new RichText();
-			rt.setIsDelete(false);
-			rt.setDocId(param.getDocId());
-			
-			List<RichText> match = this.repository.findAll(Example.of(rt));
-			if(null == match || match.size() == 0) {
-				e = this.getUpdateEntity(param, false);
-			}else {
-				e = match.get(0);
-			}
+	public String createOrUpdate(RichTextParam param) throws CustomException {
+		RichText e = this.getUpdateEntity(param, false);
+		if(null == param.getName()) {
+			e.setName("无标题");
 		}
-
-		e.setOwnerId(this.getCurrentUser().getId());
-		e.setOwnerType(param.getOwnerType());
-		e.setByteContent(param.getByteContent());
-		e.setTextContent(param.getTextContent());
+		
+		Long currUserId = this.getCurrentUser().getId();
+		int ownerType = param.getOwnerType() == null ? RichTextOwnerType.PERSONAL : param.getOwnerType().intValue();
+		e.setOwnerType(ownerType);
+		
+		if(ownerType == RichTextOwnerType.PERSONAL) {
+			e.setOwnerId(currUserId);
+		}else {
+			// 需要进行权限约束，比如项目组成员才能创建
+			e.setOwnerId(param.getOwnerId());
+		}
+		
 		e.setContentType(param.getContentType());
-		e.setDocId(param.getDocId());
+		e.setDocId(e.getCode());
 
 		e = repository.save(e);
 
-		RichTextVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
+		objectCaches.put(e.getId(), e);
 
-		return vo;
+		return e.getDocId();
+	}
+	
+	@Override
+	public RichTextVO updateContent(RichTextUpdateParam param) throws CustomException {
+		RichText e = this.findEntityById(param.getDocId());
+		
+		e.setTextContent(param.getUpdateContent());
+		objectCaches.put(e.getId(), e);
+		
+		return toVO(e);
 	}
 
 	@Override
@@ -119,6 +118,10 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 			public Predicate toPredicate(Root<RichText> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				QueryBuilder<RichText> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
+				
+				builder.addEqual("contentType", param.getContentType());
+				builder.addEqual("ownerId", param.getOwnerId());
+				builder.addEqual("ownerType", param.getOwnerType());
 
 				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
 				return query.where(builder.getPredicate()).getRestriction();
@@ -144,8 +147,27 @@ public class RichTextServiceImpl extends BaseServiceImpl<RichText> implements Ri
 
 	@Override
 	public void softDelete(Long id) throws CustomException {
-		objectCaches.delete(id, RichTextVO.class);
+		objectCaches.delete(id, RichText.class);
 		super.softDelete(id);
 	}
+	
 
+	private RichText findEntityById(String docId) {
+		RichText ret = this.objectCaches.get(docId, RichText.class);
+		if(null == ret){
+			RichText rt = new RichText();
+			rt.setIsDelete(false);
+			rt.setDocId(docId);
+			
+			List<RichText> match = this.repository.findAll(Example.of(rt));
+			
+			if(null == match || match.size() == 0) {
+				return null;
+			}
+			
+			ret = match.get(0);
+		}
+		objectCaches.put(ret.getId(), ret);
+		return ret;
+	}
 }

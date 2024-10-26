@@ -1,16 +1,13 @@
 package com.freebe.code.business.meta.controller.param;
 
-import com.freebe.code.business.base.controller.param.BaseEntityParam;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-
 /**
- *
+ * 更新内容
  * @author zhengbiaoxie
  *
  */
@@ -18,13 +15,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("富文本参数")
-public class RichTextParam extends BaseEntityParam {
-	@ApiModelProperty("所有者 ID")
-	private Long ownerId;
-
-	@ApiModelProperty("所有者类型")
-	private Integer ownerType;
-
-	@ApiModelProperty("内容类型")
-	private Integer contentType;
+public class RichTextUpdateParam {
+	
+	@ApiModelProperty("文档地址")
+	private String docId;
+	
+	@ApiModelProperty("更新内容")
+	private String updateContent;
 }

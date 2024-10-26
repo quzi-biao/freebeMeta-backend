@@ -21,4 +21,10 @@ public class RichTextContentType {
 	 * 网页格式
 	 */
 	public static final int HTML = 2;
+	
+	/**
+	 * BLOCKSUITE
+	 * https://github.com/toeverything/blocksuite
+	 */
+	public static final int BLOCK_SUITE = 4;
 }
