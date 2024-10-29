@@ -32,6 +32,7 @@ import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
 import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
+import com.freebe.code.util.S;
 
 /**
  *
@@ -50,14 +51,15 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 	private ObjectCaches objectCaches;
 
 	@Override
-	public AdvantureCardVO findByUserId(Long userId) throws CustomException {
+	public AdvantureCardVO findByUserId(Long userId, Long taskTypeId) throws CustomException {
 		if(null == userId) {
 			userId = this.getCurrentUser().getId();
 		}
-		AdvantureCard ret = this.objectCaches.get(userId, AdvantureCard.class);
+		AdvantureCard ret = this.objectCaches.get(S.c(userId, "+", taskTypeId), AdvantureCard.class);
 		if(null == ret){
 			AdvantureCard e = new AdvantureCard();
 			e.setUserId(userId);
+			e.setTaskTypeId(taskTypeId.intValue());
 			
 			Optional<AdvantureCard> op = this.repository.findOne(Example.of(e));
 			if(!op.isPresent()){
@@ -65,7 +67,7 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 			}
 			ret = op.get();
 		}
-		objectCaches.put(userId, ret);
+		objectCaches.put(S.c(userId, "+", taskTypeId), ret);
 		return toVO(ret);
 	}
 
@@ -80,6 +82,7 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 		e.setStartTime(System.currentTimeMillis());
 		e.setEndTime(System.currentTimeMillis() + Constant.TEST_TIME);
 		e.setExperience(0L);
+		e.setTaskTypeId(param.getTaskTypeId());
 
 		e = repository.save(e);
 
@@ -90,10 +93,11 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 	}
 	
 	@Override
-	public AdvantureCardVO addExperience(Long id, Long added) throws CustomException {
+	public AdvantureCardVO addExperience(Long id, Long taskTypeId, Long added) throws CustomException {
 		
 		AdvantureCard e = new AdvantureCard();
 		e.setUserId(id);
+		e.setTaskTypeId(taskTypeId.intValue());
 		
 		Optional<AdvantureCard> op = this.repository.findOne(Example.of(e));
 		if(!op.isPresent()){
@@ -143,7 +147,9 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 						builder.addBetween("endTime", null, System.currentTimeMillis());
 					}
 				}
-
+				
+				builder.addEqual("taskTypeId", param.getTaskTypeId());
+				
 				return query.where(builder.getPredicate()).getRestriction();
 			}
 		};

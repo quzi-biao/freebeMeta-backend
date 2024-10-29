@@ -111,14 +111,17 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 		}
 		
 		AdvantureTaskTake e = this.getUpdateEntity(param, false);
+		AdvantureTaskVO task = this.advantureTaskService.findById(param.getTaskId());
 		
 		// 如果领取任务时发现没有经验卡，则创建
-		AdvantureCardVO card = this.advantureCardService.findByUserId(userId);
+		AdvantureCardVO card = this.advantureCardService.findByUserId(userId, task.getTaskTypeId().longValue());
 		if(null == card) {
 			synchronized (createLock) {
-				card = this.advantureCardService.findByUserId(userId);
+				card = this.advantureCardService.findByUserId(userId, task.getTaskTypeId().longValue());
 				if(null == card) {
-					card = this.advantureCardService.createOrUpdate(new AdvantureCardParam());
+					AdvantureCardParam cardParam = new AdvantureCardParam();
+					cardParam.setTaskTypeId(task.getTaskTypeId());
+					card = this.advantureCardService.createOrUpdate(cardParam);
 				}
 			}
 		}
@@ -191,7 +194,7 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 		
 		if(param.getPass()) {
 			e.setState(AdvantureTaskTakeState.DONE);
-			this.advantureCardService.addExperience(e.getTakerId(), task.getExperience());
+			this.advantureCardService.addExperience(e.getTakerId(), task.getTaskTypeId().longValue(), task.getExperience());
 		}else {
 			e.setState(AdvantureTaskTakeState.FAILED);
 		}

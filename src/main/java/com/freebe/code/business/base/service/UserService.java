@@ -102,4 +102,12 @@ public interface UserService extends BaseService<User> {
 	 */
 	User findUserByFreeBeId(String freebeId);
 
+	/**
+	 * 
+	 * @param loginParam
+	 * @return
+	 * @throws CustomException
+	 */
+	UserVO loginRetUserInfo(LoginParam loginParam) throws CustomException;
+
 }

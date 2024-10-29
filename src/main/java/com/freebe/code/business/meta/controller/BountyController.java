@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.freebe.code.business.meta.controller.param.BountyAuditParam;
+import com.freebe.code.business.meta.controller.param.AuditParam;
 import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.service.BountyService;
@@ -70,7 +70,7 @@ public class BountyController {
 
 	@ApiOperation(value = "悬赏审核")
 	@PostMapping("audit")
-	public ResultBean<BountyVO> auditBounty(@Valid @RequestBody BountyAuditParam param) throws CustomException {
+	public ResultBean<BountyVO> auditBounty(@Valid @RequestBody AuditParam param) throws CustomException {
 		return ResultBean.ok(bountyService.auditBounty(param));
 	}
 

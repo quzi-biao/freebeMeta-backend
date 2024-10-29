@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.freebe.code.business.base.service.BaseService;
-import com.freebe.code.business.meta.controller.param.BountyAuditParam;
+import com.freebe.code.business.meta.controller.param.AuditParam;
 import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.entity.Bounty;
@@ -57,7 +57,7 @@ public interface BountyService extends BaseService<Bounty> {
 	 * @return
 	 * @throws CustomException
 	 */
-	BountyVO auditBounty(BountyAuditParam param) throws CustomException;
+	BountyVO auditBounty(AuditParam param) throws CustomException;
 
 	/**
 	 * 悬赏完成

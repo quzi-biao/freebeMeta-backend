@@ -41,4 +41,9 @@ public class AdvantureCard extends BaseEntity {
 	 * 经验值
 	 */
 	private Long experience;
+	
+	/**
+	 * 任务类型
+	 */
+	private Integer taskTypeId;
 }

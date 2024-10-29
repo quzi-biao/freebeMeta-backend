@@ -80,6 +80,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 				throw new CustomException("您要登录后才能执行此操作");
 			}
 		}
+		if(header.startsWith("Bearer")) {
+			header = header.substring("Bearer".length()).trim();
+		}
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		if(null != authentication.getName()) {

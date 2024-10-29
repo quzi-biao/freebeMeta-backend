@@ -36,9 +36,9 @@ public class AdvantureCardController {
 
 
 	@ApiOperation(value = "获取冒险卡片")
-	@GetMapping("get/{id}")
-	public ResultBean<AdvantureCardVO> get(@PathVariable("id") Long id) throws CustomException {
-		return ResultBean.ok(advanturecardService.findByUserId(id));
+	@GetMapping("get/{id}/{typeId}")
+	public ResultBean<AdvantureCardVO> get(@PathVariable("id") Long id, @PathVariable("typeId") Long typeId) throws CustomException {
+		return ResultBean.ok(advanturecardService.findByUserId(id, typeId));
 	}
 
 	@ApiOperation(value = "查询冒险卡片")

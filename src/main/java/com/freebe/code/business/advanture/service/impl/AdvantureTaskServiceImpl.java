@@ -99,6 +99,7 @@ public class AdvantureTaskServiceImpl extends BaseServiceImpl<AdvantureTask> imp
 				builder.addEqual("isDelete", false);
 				builder.addEqual("taskLevel", param.getTaskLevel());
 				builder.addEqual("status", param.getStatus());
+				builder.addEqual("taskTypeId", param.getTaskTypeId());
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}

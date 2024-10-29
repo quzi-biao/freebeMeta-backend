@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.freebe.code.business.base.controller.param.LoginParam;
 import com.freebe.code.business.base.controller.param.UpdatePasswordParam;
 import com.freebe.code.business.base.service.UserService;
+import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.meta.web3.AddressVerify;
 import com.freebe.code.business.meta.web3.VerifyParam;
 import com.freebe.code.common.CustomException;
@@ -62,6 +63,12 @@ public class UserController extends AbstractController {
     public ResultBean<String> login(@Valid @RequestBody LoginParam loginParam) throws CustomException {
         String token = userService.login(loginParam);
         return ResultBean.ok("", token);
+    }
+    
+    @ApiOperation(value = "登录", notes = "用户登录")
+    @PostMapping("login2")
+    public ResultBean<UserVO> login2(@Valid @RequestBody LoginParam loginParam) throws CustomException {
+        return ResultBean.ok(userService.loginRetUserInfo(loginParam));
     }
     
     @ApiOperation(value = "注册", notes = "用户注册")

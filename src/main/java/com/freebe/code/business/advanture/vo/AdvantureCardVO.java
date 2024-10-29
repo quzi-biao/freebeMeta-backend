@@ -37,4 +37,7 @@ public class AdvantureCardVO extends BaseVO {
 
 	@ApiModelProperty("状态")
 	private Integer state;
+	
+	@ApiModelProperty("任务类型")
+	private Integer taskTypeId;
 }

@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-import com.freebe.code.business.base.entity.BaseEntity;
+import com.freebe.code.business.base.entity.InteractionEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="t_markert_provider", 
 	indexes = {@Index(columnList = "Id")})
-public class MarketProvide extends BaseEntity {
+public class MarketProvide extends InteractionEntity {
 	/**
 	 * 供应所有者
 	 */

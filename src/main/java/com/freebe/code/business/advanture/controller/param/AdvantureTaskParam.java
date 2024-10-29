@@ -30,4 +30,7 @@ public class AdvantureTaskParam extends BaseEntityParam {
 	
 	@ApiModelProperty("任务等级")
 	private Integer taskLevel;
+	
+	@ApiModelProperty("任务类型")
+	private Integer taskTypeId;
 }

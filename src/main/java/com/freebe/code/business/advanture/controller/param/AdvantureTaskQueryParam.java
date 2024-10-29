@@ -24,4 +24,7 @@ public class AdvantureTaskQueryParam extends PageBean {
 
 	@ApiModelProperty("任务等级")
 	private Integer taskLevel;
+	
+	@ApiModelProperty("任务类型")
+	private Integer taskTypeId;
 }

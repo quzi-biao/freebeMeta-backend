@@ -31,12 +31,13 @@ import com.freebe.code.business.meta.service.BountyService;
 import com.freebe.code.business.meta.service.BountyTakerService;
 import com.freebe.code.business.meta.type.BountyState;
 import com.freebe.code.business.meta.type.BountyTakerState;
+import com.freebe.code.business.meta.type.MessageType;
 import com.freebe.code.business.meta.vo.BountyTakerVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
-import com.freebe.code.util.DateUtils;
 import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
+import com.freebe.code.util.S;
 
 /**
  *
@@ -93,12 +94,12 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 			throw new CustomException("悬赏不可认领");
 		}
 		
-		long waitTime = System.currentTimeMillis() - bounty.getCreateTime();
-		if(waitTime > bounty.getTakerWaitTime() * DateUtils.DAY_PERIOD) {
-			bounty.setState(BountyState.WAIT_TIMEOUT_FAILED);
-			this.bountyService.update(bounty.getId(), bounty);
-			throw new CustomException("悬赏已超时失败");
-		}
+//		long waitTime = System.currentTimeMillis() - bounty.getCreateTime();
+//		if(waitTime > bounty.getTakerWaitTime() * DateUtils.DAY_PERIOD) {
+//			bounty.setState(BountyState.WAIT_TIMEOUT_FAILED);
+//			this.bountyService.update(bounty.getId(), bounty);
+//			throw new CustomException("悬赏已超时失败");
+//		}
 		
 		BountyTaker e = this.getUpdateEntity(param, false);
 
@@ -111,6 +112,8 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		this.bountyService.updateTake(e.getBountyId(), e.getId());
 		BountyTakerVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
+		
+		this.sendMessage(e.getTaker(), bounty.getOwnerId(), S.c("您的悬赏[#", bounty.getId(), "]", bounty.getName(), "已被认领，认领人: ", this.getCurrentUser().getName()), MessageType.BOUNTY_TAKE_MSG);
 
 		return vo;
 	}
@@ -140,6 +143,9 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		
 		BountyTakerVO vo = toVO(take);
 		objectCaches.put(vo.getId(), vo);
+		
+		this.sendMessage(take.getTaker(), bounty.getOwnerId(), S.c("认领人放弃了您的悬赏[", bounty.getId(), "]", bounty.getName(), "，您的悬赏可被重新认领"), MessageType.BOUNTY_SUBMIT_MSG);
+		
 		return vo;
 	}
 
@@ -171,6 +177,9 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		this.bountyService.doneBounty(bounty.getId());
 		BountyTakerVO vo = toVO(take);
 		objectCaches.put(vo.getId(), vo);
+		
+		this.sendMessage(take.getTaker(), bounty.getOwnerId(), S.c(this.getCurrentUser().getName(), "完成了您的悬赏: [#", bounty.getId(), "]", bounty.getName()), MessageType.BOUNTY_SUBMIT_MSG);
+		
 		return vo;
 	}
 
@@ -179,12 +188,12 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 			return false;
 		}
 		
-		long costTime = System.currentTimeMillis() - take.getTakeTime();
-		if(costTime > bounty.getLimitTime() * DateUtils.DAY_PERIOD) {
-			bounty.setState(BountyState.TIMEOUT_FAILED);
-			this.bountyService.update(bounty.getId(), bounty);
-			return false;
-		}
+//		long costTime = System.currentTimeMillis() - take.getTakeTime();
+//		if(costTime > bounty.getLimitTime() * DateUtils.DAY_PERIOD) {
+//			bounty.setState(BountyState.TIMEOUT_FAILED);
+//			this.bountyService.update(bounty.getId(), bounty);
+//			return false;
+//		}
 		
 		return true;
 	}

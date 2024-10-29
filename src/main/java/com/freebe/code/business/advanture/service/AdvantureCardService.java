@@ -16,12 +16,12 @@ import com.freebe.code.business.advanture.controller.param.AdvantureCardQueryPar
  */
 public interface AdvantureCardService extends BaseService<AdvantureCard> {
 
-	AdvantureCardVO findByUserId(Long userId) throws CustomException;
+	AdvantureCardVO findByUserId(Long userId, Long taskTypeId) throws CustomException;
 
 	AdvantureCardVO createOrUpdate(AdvantureCardParam param) throws CustomException;
 
 	Page<AdvantureCardVO> queryPage(AdvantureCardQueryParam param) throws CustomException;
 	
-	AdvantureCardVO addExperience(Long userI, Long added) throws CustomException;
+	AdvantureCardVO addExperience(Long userId, Long taskTypeId, Long added) throws CustomException;
 
 }

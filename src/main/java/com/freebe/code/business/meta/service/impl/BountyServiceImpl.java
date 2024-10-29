@@ -30,7 +30,7 @@ import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.base.vo.UserVO;
 import com.freebe.code.business.graph.FreeNode;
 import com.freebe.code.business.graph.FreeRelation;
-import com.freebe.code.business.meta.controller.param.BountyAuditParam;
+import com.freebe.code.business.meta.controller.param.AuditParam;
 import com.freebe.code.business.meta.controller.param.BountyParam;
 import com.freebe.code.business.meta.controller.param.BountyQueryParam;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
@@ -48,6 +48,7 @@ import com.freebe.code.business.meta.service.impl.lucene.BountyLuceneSearch;
 import com.freebe.code.business.meta.type.BountyState;
 import com.freebe.code.business.meta.type.BountyTakerState;
 import com.freebe.code.business.meta.type.Currency;
+import com.freebe.code.business.meta.type.MessageType;
 import com.freebe.code.business.meta.type.TransactionType;
 import com.freebe.code.business.meta.vo.BountyBaseVO;
 import com.freebe.code.business.meta.vo.BountyGraph;
@@ -57,6 +58,7 @@ import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
+import com.freebe.code.util.S;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
 
 /**
@@ -183,7 +185,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 
 	@Transactional
 	@Override
-	public BountyVO auditBounty(BountyAuditParam param) throws CustomException {
+	public BountyVO auditBounty(AuditParam param) throws CustomException {
 		if(StringUtils.isEmpty(param.getEvaluate())) {
 			throw new CustomException("请输入任务评价");
 		}
@@ -191,7 +193,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			throw new CustomException("参数错误");
 		}
 		
-		Bounty e = this.getById(param.getBountyId());
+		Bounty e = this.getById(param.getId());
 		if(null == e) {
 			throw new CustomException("任务不存在");
 		}
@@ -241,11 +243,13 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			this.bountyTakerService.save(tt);
 			// 贡献分发放(贡献分等于积分)
 			this.userService.addContribution(taker, e.getReward());
+			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏已审核通过: [", e.getId(), "]", e.getName()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
 			e.setState(BountyState.AUDIT_FAILED);
 			e = this.repository.save(e);
 			this.bountyTakerService.save(tt);
+			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏审核未通过: [", e.getId(), "]", e.getName(), ":", param.getEvaluate()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
 		}
 		
 		objectCaches.put(e.getId(), e);
@@ -254,6 +258,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		return vo;
 	}
 	
+	@Transactional
 	@Override
 	public void restartBounty(Long id) throws CustomException {
 		Bounty e = this.getById(id);
@@ -273,7 +278,8 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 
 		objectCaches.put(e.getId(), e);
 	}
-
+	
+	@Transactional
 	@Override
 	public BountyVO cancelBounty(Long bountyId) throws CustomException {
 		Bounty e = this.getById(bountyId);
@@ -298,7 +304,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		return vo;
 	}
 	
-
+	@Transactional
 	@Override
 	public void updateTake(Long bountyId, Long takeId) throws CustomException {
 		Bounty bounty = this.getById(bountyId);
@@ -317,6 +323,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		objectCaches.put(bounty.getId(), bounty);
 	}
 	
+	@Transactional
 	@Override
 	public void doneBounty(Long bountyId) throws CustomException {
 		Bounty bounty = this.getById(bountyId);
@@ -332,6 +339,14 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		bounty = this.repository.save(bounty);
 		objectCaches.put(bounty.getId(), bounty);
+		
+		List<Long> auditors = toList(bounty.getAuditors(), Long.class);
+		if(null == auditors || auditors.size() == 0) {
+			auditors = new ArrayList<>();
+			auditors.add(bounty.getOwnerId());
+		}
+		
+		this.sendMessage(bounty.getTakerId(), auditors, S.c("[", getCurrentUser().getName() ,"]完成了您的悬赏[", bounty.getId(), "]", bounty.getName(), "已完成，请及时审核"), MessageType.BOUNTY_AUDIT_MSG);
 	}
 
 

@@ -23,6 +23,9 @@ public class UserVO {
 	private String address;
 	
 	@ApiModelProperty("头像")
+	private String avatar;
+	
+	@ApiModelProperty("头像")
 	private String avator;
 	
 	@ApiModelProperty("用户类型")
@@ -39,4 +42,7 @@ public class UserVO {
 	
 	@ApiModelProperty("贡献分")
 	private Long contribution;
+	
+	@ApiModelProperty("用户类型")
+	private String accessToken;
 }

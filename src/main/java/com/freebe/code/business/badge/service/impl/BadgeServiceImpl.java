@@ -47,6 +47,9 @@ public class BadgeServiceImpl extends BaseServiceImpl<Badge> implements BadgeSer
 
 	@Override
 	public BadgeVO findById(Long id) throws CustomException {
+		if(null == id) {
+			return null;
+		}
 		BadgeVO ret = this.objectCaches.get(id, BadgeVO.class);
 		if(null == ret){
 			Optional<Badge> op = this.repository.findById(id);

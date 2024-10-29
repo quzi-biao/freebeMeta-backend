@@ -3,9 +3,9 @@ package com.freebe.code.business.meta.controller.param;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-@ApiModel("悬赏审核参数")
+@ApiModel("审核参数")
 @Data
-public class BountyAuditParam {
+public class AuditParam {
 	/**
 	 * 审核说明
 	 */
@@ -19,5 +19,5 @@ public class BountyAuditParam {
 	/**
 	 * 悬赏 ID
 	 */
-	private Long bountyId;
+	private Long id;
 }

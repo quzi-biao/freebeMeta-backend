@@ -201,6 +201,42 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 			throw new CustomException("token 不存在");
 		}
 	}
+	
+	@Override
+	public UserVO loginRetUserInfo(LoginParam loginParam) throws CustomException {
+		User user = this.getOrCreateUser(loginParam);
+		if(null == user) {
+			throw new CustomException("用户不存在");
+		}
+		
+		String uniqueCode = user.getVerifyInfo();
+        
+        String password = loginParam.getPassword();
+        password = JwtUtils.getHashSecret(password);
+		//增加空密码校验
+		if(null == user.getPassword()){
+			throw new CustomException("用户名或密码错误");
+		}
+        if (!user.getPassword().equals(password) && !user.getPassword().equals(loginParam.getPassword())) {
+        	codeManager.updateAttemptedRecord(uniqueCode);
+            throw new CustomException("用户名或密码错误");
+        }
+		else {
+			//更新尝试次数的map
+			codeManager.updateUniqueCode(uniqueCode);
+		}
+		
+		user.setLastLogin(System.currentTimeMillis());
+		this.repository.save(user);
+        
+        // 设置token
+        String token = JwtUtils.getToken(user.getId().toString(), user.getPassword());
+        this.kv.save(token, System.currentTimeMillis());
+        
+        UserVO ret = toVO(user);
+        ret.setAccessToken(token);
+        return ret;
+	}
 
 	@Override
 	public String login(LoginParam loginParam) throws CustomException {
@@ -217,7 +253,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		if(null == user.getPassword()){
 			throw new CustomException("用户名或密码错误");
 		}
-        if (!user.getPassword().equals(password)) {
+        if (!user.getPassword().equals(password) && !user.getPassword().equals(loginParam.getPassword())) {
         	codeManager.updateAttemptedRecord(uniqueCode);
             throw new CustomException("用户名或密码错误");
         }
@@ -412,6 +448,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		vo.setId(user.getId());
 		vo.setName(user.getName());
 		vo.setAddress(user.getAddress());
+		vo.setAvatar(user.getAvator());
 		vo.setAvator(user.getAvator());
 		vo.setFreeBeId(user.getFreeBeId());
 		vo.setLastLogin(user.getLastLogin());

@@ -2,6 +2,9 @@ package com.freebe.code.util.code.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
@@ -33,17 +36,19 @@ public class GodeGenerator {
 	private static String voPath = basePath +".vo";
 	private static String paramPath = basePath +".controller.param";
 	private static String controllerPath = basePath +".controller";
+	private static String[] ENTITIES = new String[] {"Comment", "Content", "ContentData", "ContentDraft", "Job", "JobApply", "Like"};
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println(GeneratorUtils.getPath(srcPath, entityPath));
 		File[] entities = new File(GeneratorUtils.getPath(srcPath, entityPath)).listFiles();
+		Set<String> createEntities = new HashSet<>(Arrays.asList(ENTITIES));
 		for(File entity : entities) {
 			if(entity.isDirectory()) {
 				continue;
 			}
 			String name = entity.getName();
 			String entityName = name.substring(0, name.indexOf('.'));
-			if(entityName.equals("RichText")) {
+			if(createEntities.contains(entityName)) {
 				createFiles(entityName);
 			}
 		}

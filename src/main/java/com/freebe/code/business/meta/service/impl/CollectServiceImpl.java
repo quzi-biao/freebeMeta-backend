@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -25,6 +26,7 @@ import com.freebe.code.business.meta.entity.Collect;
 import com.freebe.code.business.meta.repository.CollectRepository;
 import com.freebe.code.business.meta.service.CollectService;
 import com.freebe.code.business.meta.service.MarketProvideService;
+import com.freebe.code.business.meta.type.InteractionType;
 import com.freebe.code.business.meta.vo.CollectVO;
 import com.freebe.code.business.website.template.service.WebsiteTemplateEntityService;
 import com.freebe.code.common.CustomException;
@@ -50,6 +52,9 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 	
 	@Autowired
 	private WebsiteTemplateEntityService websiteTemplateEntityService;
+	
+	@Autowired
+	private InteractionCountUtils countUtils;
 
 	@Override
 	public CollectVO findById(Long id) throws CustomException {
@@ -65,6 +70,7 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 		return ret;
 	}
 
+	@Transactional
 	@Override
 	public CollectVO createOrUpdate(CollectParam param) throws CustomException {
 		if(null == param.getTypeId() || null == param.getEntityId()) {
@@ -80,10 +86,12 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 
 		CollectVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
+		countUtils.inc(param.getEntityId(), param.getTypeId(), InteractionType.COLLECT);
 
 		return vo;
 	}
 	
+	@Transactional
 	@Override
 	public CollectVO cancel(CollectParam param) throws CustomException {
 		if(null == param.getTypeId() || null == param.getEntityId()) {
@@ -102,6 +110,7 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 		}
 		
 		this.repository.deleteAll(collects);
+		countUtils.dec(param.getEntityId(), param.getTypeId(), InteractionType.COLLECT);
 		
 		return null;
 	}

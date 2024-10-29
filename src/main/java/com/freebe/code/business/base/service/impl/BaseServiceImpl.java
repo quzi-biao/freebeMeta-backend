@@ -27,7 +27,9 @@ import com.freebe.code.business.base.repository.CommonRepository;
 import com.freebe.code.business.base.repository.Selections;
 import com.freebe.code.business.base.service.BaseService;
 import com.freebe.code.business.base.vo.UserVO;
+import com.freebe.code.business.meta.controller.param.MessageParam;
 import com.freebe.code.business.meta.service.MemberService;
+import com.freebe.code.business.meta.service.MessageService;
 import com.freebe.code.business.meta.vo.MemberVO;
 import com.freebe.code.business.meta.vo.RoleVO;
 import com.freebe.code.common.Constants;
@@ -47,6 +49,9 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MessageService msgService;
 	
 	public CommonRepository getBaseDao() {
 		return baseDao;
@@ -84,6 +89,43 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 		HttpServletRequest request = requestAttributes.getRequest();
 		UserVO ret = (UserVO) request.getAttribute(Constants.USER_INFO);
 		return ret;
+	}
+	
+	/**
+	 * 发送消息
+	 * @param sender
+	 * @param reciever
+	 * @param content
+	 * @param msgType
+	 * @throws CustomException
+	 */
+	public void sendMessage(Long sender, Long reciever, String content, int msgType) throws CustomException {
+		MessageParam param = new MessageParam();
+		param.setContent(content);
+		param.setReciever(reciever);
+		param.setSender(sender);
+		param.getMessageType();
+		
+		this.msgService.createOrUpdate(param);
+	}
+	
+	/**
+	 * 发送消息
+	 * @param sender
+	 * @param reciever
+	 * @param content
+	 * @param msgType
+	 * @throws CustomException
+	 */
+	public void sendMessage(Long sender, List<Long> recievers, String content, int msgType) throws CustomException {
+		for(Long reciever : recievers) {
+			MessageParam param = new MessageParam();
+			param.setContent(content);
+			param.setReciever(reciever);
+			param.setSender(sender);
+			param.getMessageType();
+			this.msgService.createOrUpdate(param);
+		}
 	}
 	
 	/**

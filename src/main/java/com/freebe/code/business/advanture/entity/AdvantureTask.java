@@ -51,4 +51,9 @@ public class AdvantureTask extends BaseEntity {
 	 * 任务等级
 	 */
 	private Integer taskLevel;
+	
+	/**
+	 * 任务类型
+	 */
+	private Integer taskTypeId;
 }
