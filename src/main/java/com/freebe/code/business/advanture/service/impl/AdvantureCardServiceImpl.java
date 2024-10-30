@@ -74,7 +74,7 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 	@Override
 	public synchronized AdvantureCardVO createOrUpdate(AdvantureCardParam param) throws CustomException {
 		Long userId = getCurrentUser().getId();
-		param.setName("adcard-" + userId);
+		param.setName(S.c("adcard-", userId, "-", param.getTaskTypeId()));
 		
 		AdvantureCard e = this.getUpdateEntity(param);
 
@@ -87,7 +87,7 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 		e = repository.save(e);
 
 		AdvantureCardVO vo = toVO(e);
-		objectCaches.put(e.getUserId(), e);
+		objectCaches.put(S.c(e.getUserId(), "+", e.getTaskTypeId()), e);
 
 		return vo;
 	}
@@ -107,7 +107,7 @@ public class AdvantureCardServiceImpl extends BaseServiceImpl<AdvantureCard> imp
 		
 		card.setExperience(card.getExperience() + added);
 		
-		objectCaches.put(card.getUserId(), card);
+		objectCaches.put(S.c(card.getUserId(), "+", card.getTaskTypeId()), card);
 		
 		return toVO(card);
 	}

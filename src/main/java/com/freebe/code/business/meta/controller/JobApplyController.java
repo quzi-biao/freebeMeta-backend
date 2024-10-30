@@ -49,6 +49,12 @@ public class JobApplyController {
 		return ResultBean.ok(jobapplyService.findById(id));
 	}
 	
+	@ApiOperation(value = "获取岗位申请")
+	@GetMapping("get/mine/{jobId}")
+	public ResultBean<JobApplyVO> getMin(@PathVariable("jobId") Long jobId) throws CustomException {
+		return ResultBean.ok(jobapplyService.findApply(jobId));
+	}
+	
 	@ApiOperation(value = "问卷回答完成")
 	@GetMapping("answer/end/{id}")
 	public ResultBean<JobApplyVO> answer(@PathVariable("id") Long id) throws CustomException {
@@ -62,19 +68,19 @@ public class JobApplyController {
 	}
 	
 	@ApiOperation(value = "问卷审核")
-	@GetMapping("answer/audit")
+	@PostMapping("answer/audit")
 	public ResultBean<JobApplyVO> answerAudit(@Valid @RequestBody AuditParam param) throws CustomException {
 		return ResultBean.ok(jobapplyService.answerAudit(param));
 	}
 	
 	@ApiOperation(value = "问卷审核")
-	@GetMapping("task/audit")
+	@PostMapping("task/audit")
 	public ResultBean<JobApplyVO> taskAudit(@Valid @RequestBody AuditParam param) throws CustomException {
 		return ResultBean.ok(jobapplyService.taskAudit(param));
 	}
 	
 	@ApiOperation(value = "申请审核")
-	@GetMapping("review")
+	@PostMapping("review")
 	public ResultBean<JobApplyVO> review(@Valid @RequestBody AuditParam param) throws CustomException {
 		return ResultBean.ok(jobapplyService.review(param));
 	}

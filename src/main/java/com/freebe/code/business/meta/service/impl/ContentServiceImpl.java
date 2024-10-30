@@ -98,7 +98,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		e.setContentType(draft.getContentType());
 		e.setCreateTime(System.currentTimeMillis());
 		e.setDeployTime(System.currentTimeMillis());
-		e.setLike(0L);
+		e.setFavorite(0L);
 		e.setOwnerId(draft.getOwnerId());
 		e.setPicture(draft.getPicture());
 		e.setProjectId(draft.getProjectId());
@@ -153,7 +153,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		e.setPicture(param.getPicture());
 		e.setContentAbstract(param.getContentAbstract());
 		e.setStatus(AuditStatus.UNKOWN);
-		e.setLike(0L);
+		e.setFavorite(0L);
 		e.setCollect(0L);
 		e.setShare(0L);
 		e.setComment(0L);
@@ -257,7 +257,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		vo.setDeployTime(e.getDeployTime());
 		vo.setStatus(e.getStatus());
 
-		vo.setLike(e.getLike());
+		vo.setLike(e.getFavorite());
 		vo.setCollect(e.getCollect());
 		vo.setShare(e.getShare());
 		vo.setComment(e.getComment());

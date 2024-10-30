@@ -26,9 +26,12 @@ import com.freebe.code.business.meta.controller.param.JobParam;
 import com.freebe.code.business.meta.controller.param.JobQueryParam;
 import com.freebe.code.business.meta.entity.Job;
 import com.freebe.code.business.meta.repository.JobRepository;
+import com.freebe.code.business.meta.service.CollectService;
 import com.freebe.code.business.meta.service.ContentDataService;
 import com.freebe.code.business.meta.service.JobService;
+import com.freebe.code.business.meta.service.ProjectService;
 import com.freebe.code.business.meta.type.ContentType;
+import com.freebe.code.business.meta.type.InteractionEntityType;
 import com.freebe.code.business.meta.vo.JobVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
@@ -52,23 +55,46 @@ public class JobServiceImpl extends BaseServiceImpl<Job> implements JobService {
 	private ContentDataService contentDataService;
 	
 	@Autowired
+	private ProjectService projectService;
+	
+	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private BadgeService bdgeService;
 	
+	@Autowired
+	private CollectService collectService;
+	
 	@Override
 	public JobVO findById(Long id) throws CustomException {
-		Job ret = this.objectCaches.get(id, Job.class);
-		if(null == ret){
-			Optional<Job> op = this.repository.findById(id);
-			if(!op.isPresent()){
-				return null;
-			}
-			ret = op.get();
-		}
-		objectCaches.put(ret.getId(), ret);
+		Job ret = getEntity(id);
 		return toVO(ret);
+	}
+
+	
+	@Transactional
+	@Override
+	public synchronized void incApply(Long id) {
+		Job job = this.getEntity(id);
+		if(null == job.getApplier()) {
+			job.setApplier(0L);
+		}
+		job.setApplier(job.getApplier() + 1);
+		this.repository.save(job);
+		this.objectCaches.put(job.getId(), job);
+	}
+	
+	@Transactional
+	@Override
+	public synchronized void incHead(Long id) {
+		Job job = this.getEntity(id);
+		if(null == job.getCurrHead()) {
+			job.setCurrHead(0);
+		}
+		job.setCurrHead(job.getCurrHead() + 1);
+		this.repository.save(job);
+		this.objectCaches.put(job.getId(), job);
 	}
 
 	@Transactional
@@ -108,11 +134,14 @@ public class JobServiceImpl extends BaseServiceImpl<Job> implements JobService {
 		e.setDescriptionKey(key);
 
 		e.setApplier(0L);
-		e.setLike(0L);
+		e.setFavorite(0L);
 		e.setCollect(0L);
 		e.setShare(0L);
 		e.setComment(0L);
-
+		
+		e.setHeadCount(param.getHeadCount());
+		e.setDeadLine(param.getDeadLine());
+		
 		e = repository.save(e);
 
 		JobVO vo = toVO(e);
@@ -174,10 +203,19 @@ public class JobServiceImpl extends BaseServiceImpl<Job> implements JobService {
 		vo.setQuestionaireId(e.getQuestionaireId());
 		vo.setTaskTypeId(e.getTaskTypeId());
 
-		vo.setLike(e.getLike());
+		vo.setLike(e.getFavorite());
 		vo.setCollect(e.getCollect());
 		vo.setShare(e.getShare());
 		vo.setComment(e.getComment());
+		
+		vo.setHeadCount(e.getHeadCount());
+		vo.setDeadLine(e.getDeadLine());	
+		vo.setCurrHead(e.getCurrHead());
+		if(null != e.getProjectId()) {
+			vo.setProject(this.projectService.findById(e.getProjectId()));
+		}
+		
+		vo.setCollected(this.collectService.isCollect(InteractionEntityType.JOB, vo.getId()));
 
 		return vo;
 	}
@@ -187,5 +225,18 @@ public class JobServiceImpl extends BaseServiceImpl<Job> implements JobService {
 		objectCaches.delete(id, JobVO.class);
 		super.softDelete(id);
 	}
+	
 
+	private Job getEntity(Long id) {
+		Job ret = this.objectCaches.get(id, Job.class);
+		if(null == ret){
+			Optional<Job> op = this.repository.findById(id);
+			if(!op.isPresent()){
+				return null;
+			}
+			ret = op.get();
+		}
+		objectCaches.put(ret.getId(), ret);
+		return ret;
+	}
 }

@@ -37,6 +37,7 @@ import com.freebe.code.business.meta.service.MarketProvideService;
 import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.impl.lucene.MarketProvideLuceneSearch;
+import com.freebe.code.business.meta.type.InteractionEntityType;
 import com.freebe.code.business.meta.vo.MarketProvideVO;
 import com.freebe.code.business.meta.vo.MarketProviderVO;
 import com.freebe.code.business.meta.vo.MemberVO;
@@ -380,7 +381,7 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		vo.setTags(toList(e.getTags()));
 		vo.setAudit(e.getAudit());
 		//vo.setContact(e.getContact());
-		vo.setCollected(this.collectService.isCollect(0, e.getId()));
+		vo.setCollected(this.collectService.isCollect(InteractionEntityType.PROVIDE, e.getId()));
 
 		return vo;
 	}

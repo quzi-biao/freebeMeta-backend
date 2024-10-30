@@ -29,6 +29,9 @@ public class JobVO extends InteractionEntityVO {
 
 	@ApiModelProperty("归属的项目")
 	private Long projectId;
+	
+	@ApiModelProperty("归属的项目")
+	private ProjectVO project;
 
 	@ApiModelProperty("岗位标题")
 	private String title;
@@ -53,5 +56,13 @@ public class JobVO extends InteractionEntityVO {
 
 	@ApiModelProperty("关联的任务类型 ID")
 	private Long taskTypeId;
+	
+	@ApiModelProperty("招聘人数")
+	private Integer headCount;
+	
+	@ApiModelProperty("招募截止时间")
+	private Long deadLine;
 
+	@ApiModelProperty("已招募的人数")
+	private Integer currHead;
 }

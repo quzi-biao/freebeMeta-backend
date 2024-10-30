@@ -21,5 +21,12 @@ public interface JobService extends BaseService<Job> {
 	JobVO createOrUpdate(JobParam param) throws CustomException;
 
 	Page<JobVO> queryPage(JobQueryParam param) throws CustomException;
+	
+	void incApply(Long id);
 
+	/**
+	 * 增加通过的人数
+	 * @param id
+	 */
+	void incHead(Long id);
 }

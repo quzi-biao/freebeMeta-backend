@@ -39,5 +39,9 @@ public class JobParam extends InteractionEntityParam {
 	@ApiModelProperty("关联的任务类型 ID")
 	private Long taskTypeId;
 
-
+	@ApiModelProperty("招聘人数")
+	private Integer headCount;
+	
+	@ApiModelProperty("招募截止时间")
+	private Long deadLine;
 }

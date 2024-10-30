@@ -139,7 +139,7 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 		e.setTaskId(param.getTaskId());
 		e.setTakeTime(System.currentTimeMillis());
 		e.setState(AdvantureTaskTakeState.DOING);
-
+		e.setTaskTypeId(task.getTaskTypeId());
 		e = repository.save(e);
 
 		AdvantureTaskTakeVO vo = toVO(e);
@@ -302,6 +302,7 @@ public class AdvantureTaskTakeServiceImpl extends BaseServiceImpl<AdvantureTaskT
 				}
 				
 				builder.addEqual("taskId", param.getTaskId());
+				builder.addEqual("taskTypeId", param.getTaskTypeId());
 
 				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
 				return query.where(builder.getPredicate()).getRestriction();

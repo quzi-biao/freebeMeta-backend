@@ -69,4 +69,19 @@ public class Job extends InteractionEntity {
 	 * 关联的任务类型 ID
 	 */
 	private Long taskTypeId;
+	
+	/**
+	 * 招聘人数
+	 */
+	private Integer headCount;
+	
+	/**
+	 * 招募截止时间
+	 */
+	private Long deadLine;
+	
+	/**
+	 * 已招募的人数
+	 */
+	private Integer currHead;
 }

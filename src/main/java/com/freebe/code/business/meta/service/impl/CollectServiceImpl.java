@@ -25,7 +25,9 @@ import com.freebe.code.business.meta.controller.param.CollectQueryParam;
 import com.freebe.code.business.meta.entity.Collect;
 import com.freebe.code.business.meta.repository.CollectRepository;
 import com.freebe.code.business.meta.service.CollectService;
+import com.freebe.code.business.meta.service.JobService;
 import com.freebe.code.business.meta.service.MarketProvideService;
+import com.freebe.code.business.meta.type.InteractionEntityType;
 import com.freebe.code.business.meta.type.InteractionType;
 import com.freebe.code.business.meta.vo.CollectVO;
 import com.freebe.code.business.website.template.service.WebsiteTemplateEntityService;
@@ -49,6 +51,9 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 	
 	@Autowired
 	private MarketProvideService marketProvideService;
+	
+	@Autowired
+	private JobService jobService;
 	
 	@Autowired
 	private WebsiteTemplateEntityService websiteTemplateEntityService;
@@ -76,12 +81,16 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 		if(null == param.getTypeId() || null == param.getEntityId()) {
 			throw new CustomException("参数错误");
 		}
-		Collect e = this.getUpdateEntity(param, false);
+		
+		Collect e = new Collect();
 
 		e.setUserId(getCurrentUser().getId());
 		e.setTypeId(param.getTypeId());
 		e.setEntityId(param.getEntityId());
-
+		if(this.repository.exists(Example.of(e))) {
+			throw new CustomException("您已经收藏了");
+		}
+		e.setIsDelete(false);
 		e = repository.save(e);
 
 		CollectVO vo = toVO(e);
@@ -156,6 +165,7 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 				QueryBuilder<Collect> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
 				builder.addEqual("typeId", param.getTypeId());
+				builder.addEqual("userId", param.getUserId());
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}
@@ -172,10 +182,12 @@ public class CollectServiceImpl extends BaseServiceImpl<Collect> implements Coll
 		vo.setUserId(e.getUserId());
 		vo.setTypeId(e.getTypeId());
 		
-		if(e.getTypeId().intValue() == 0) {
+		if(e.getTypeId().intValue() == InteractionEntityType.PROVIDE) {
 			vo.setEntity(this.marketProvideService.findById(e.getEntityId()));
-		}else if(e.getTypeId().intValue() == 1) {
+		}else if(e.getTypeId().intValue() == InteractionEntityType.WEBSITE_TEMPLATE) {
 			vo.setEntity(this.websiteTemplateEntityService.findById(e.getEntityId()));
+		}else if(e.getTypeId().intValue() == InteractionEntityType.JOB) {
+			vo.setEntity(this.jobService.findById(e.getEntityId()));
 		}
 
 		return vo;

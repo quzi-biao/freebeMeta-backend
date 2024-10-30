@@ -67,10 +67,10 @@ public class InteractionCountUtils {
 			}
 			e.setComment(e.getComment() - 1);
 		}else if(interactionType == InteractionType.LIKE) {
-			if(null == e.getLike() || e.getCollect() <= 0) {
+			if(null == e.getFavorite() || e.getCollect() <= 0) {
 				return;
 			}
-			e.setLike(e.getLike() - 1);
+			e.setFavorite(e.getFavorite() - 1);
 		}else if(interactionType == InteractionType.SHARE) {
 			if(null == e.getShare() || e.getCollect() <= 0) {
 				return;
@@ -110,10 +110,10 @@ public class InteractionCountUtils {
 			}
 			e.setComment(e.getComment() + 1);
 		}else if(interactionType == InteractionType.LIKE) {
-			if(null == e.getLike()) {
-				e.setLike(0L);
+			if(null == e.getFavorite()) {
+				e.setFavorite(0L);
 			}
-			e.setLike(e.getLike() + 1);
+			e.setFavorite(e.getFavorite() + 1);
 		}else if(interactionType == InteractionType.SHARE) {
 			if(null == e.getShare()) {
 				e.setShare(0L);

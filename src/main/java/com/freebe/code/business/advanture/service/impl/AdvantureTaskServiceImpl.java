@@ -64,6 +64,7 @@ public class AdvantureTaskServiceImpl extends BaseServiceImpl<AdvantureTask> imp
 		e.setDescription(param.getDescription());
 		e.setExperience(param.getExperience());
 		e.setTaskLevel(param.getTaskLevel());
+		e.setTaskTypeId(param.getTaskTypeId());
 
 		e = repository.save(e);
 
@@ -119,6 +120,7 @@ public class AdvantureTaskServiceImpl extends BaseServiceImpl<AdvantureTask> imp
 		vo.setStatus(e.getStatus());
 		vo.setCreator(e.getCreator());
 		vo.setTaskLevel(e.getTaskLevel());
+		vo.setTaskTypeId(e.getTaskTypeId());
 
 		return vo;
 	}

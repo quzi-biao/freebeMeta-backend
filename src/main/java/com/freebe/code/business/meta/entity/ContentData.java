@@ -33,17 +33,17 @@ public class ContentData extends BaseEntity {
 	 * 内容的二进制数据（如果是压缩保存）
 	 */
 	@Column(columnDefinition = "BLOB")
-	private byte[] binary;
+	private byte[] binaryData;
 	
 	/**
 	 * 内容是否压缩
 	 */
-	private Integer commpress;
+	private Integer commpressType;
 	
 	/**
 	 * 是否是加密内容
 	 */
-	private Integer crypto;
+	private Integer cryptoType;
 	
 	/**
 	 * 内容类型

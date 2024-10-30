@@ -167,11 +167,6 @@ public class ContentDraftServiceImpl extends BaseServiceImpl<ContentDraft> imple
 		vo.setDeployTime(e.getDeployTime());
 		vo.setStatus(e.getStatus());
 
-		vo.setLike(e.getLike());
-		vo.setCollect(e.getCollect());
-		vo.setShare(e.getShare());
-		vo.setComment(e.getComment());
-
 		return vo;
 	}
 

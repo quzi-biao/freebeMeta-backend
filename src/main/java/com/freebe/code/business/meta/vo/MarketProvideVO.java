@@ -2,7 +2,6 @@ package com.freebe.code.business.meta.vo;
 
 import java.util.List;
 
-import com.freebe.code.business.base.vo.BaseVO;
 import com.freebe.code.business.base.vo.UserVO;
 
 import io.swagger.annotations.ApiModel;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @ApiModel("市场供应方")
-public class MarketProvideVO extends BaseVO {
+public class MarketProvideVO extends InteractionEntityVO {
 	@ApiModelProperty("供应所有者")
 	private List<MarketProviderVO> providers;
 	
@@ -54,7 +53,4 @@ public class MarketProvideVO extends BaseVO {
 
 	@ApiModelProperty("联系方式")
 	private String contact;
-	
-	@ApiModelProperty("是否已收藏")
-	private Boolean collected;
 }

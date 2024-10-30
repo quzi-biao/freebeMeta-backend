@@ -13,4 +13,6 @@ public class InteractionEntityType {
 	public static final int JOB = 2;
 	
 	public static final int COMMENT = 3;
+	
+	public static final int WEBSITE_TEMPLATE = 4;
 }

@@ -62,4 +62,12 @@ public interface JobApplyService extends BaseService<JobApply> {
 	 * @return
 	 */
 	JobApplyVO review(AuditParam param) throws CustomException;
+
+	/**
+	 * 获取我的申请
+	 * @param jobId
+	 * @return
+	 * @throws CustomException 
+	 */
+	JobApplyVO findApply(Long jobId) throws CustomException;
 }

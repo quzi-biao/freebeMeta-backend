@@ -66,4 +66,9 @@ public class AdvantureTaskTake extends BaseEntity{
 	 * 状态
 	 */
 	private Integer state;
+	
+	/**
+	 * 任务类型
+	 */
+	private Integer taskTypeId;
 }

@@ -76,6 +76,28 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 		
 		return toVO(ret);
 	}
+	
+	@Override
+	public JobApplyVO findApply(Long jobId) throws CustomException {
+		Long userId = this.getCurrentUser().getId();
+		JobApply ret = this.objectCaches.get(S.c("u", jobId, "-", userId), JobApply.class);
+		if(null == ret){
+			JobApply probe = new JobApply();
+			probe.setOwnerId(userId);
+			probe.setJobId(jobId);
+			
+			List<JobApply> op = this.repository.findAll(Example.of(probe));
+			if(null == op || op.size() == 0){
+				ret = new JobApply();
+			}else {
+				ret = op.get(0);
+			}
+		}
+		
+		objectCaches.put(S.c("u", jobId, "-", userId), ret);
+		
+		return toVO(ret);
+	}
 
 	@Transactional
 	@Override
@@ -89,6 +111,18 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 			throw new CustomException("岗位不存在");
 		}
 		
+		if(job.getDeadLine() != null && job.getDeadLine() > 0 && System.currentTimeMillis() > job.getDeadLine().longValue()) {
+			throw new CustomException("招聘已过截止时间");
+		}
+		
+		if(null != job.getHeadCount() && job.getHeadCount() > 0) {
+			if(job.getCurrHead() != null) {
+				if(job.getCurrHead().intValue() >= job.getHeadCount().intValue()) {
+					throw new CustomException("已招满");
+				}
+			}
+		}
+		
 		UserVO curr = this.getCurrentUser();
 		
 		JobApply probe = new JobApply();
@@ -98,9 +132,9 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 		JobApply e = null;
 		List<JobApply> es = this.repository.findAll(Example.of(probe));
 		if(null == es || es.size() == 0) {
-			e = es.get(0);
-		}else {
 			e = this.getUpdateEntity(param, false);
+		}else {
+			e = es.get(0);
 		}
 		
 		// 允许修改申请信息
@@ -123,13 +157,11 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 			e.setOwnerId(curr.getId());
 			e.setJobId(param.getJobId());
 		}
-
-		e = repository.save(e);
-
-		JobApplyVO vo = toVO(e);
-		objectCaches.put(e.getId(), e);
-
-		return vo;
+		
+		e = this.saveAndCache(e);
+		this.jobService.incApply(e.getJobId());
+		
+		return toVO(e);
 	}
 	
 	@Transactional
@@ -170,7 +202,7 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 		
 		this.sendMessage(apply.getOwnerId(), job.getOwnerId(), S.c("申请者[", this.getCurrentUser().getName(), "]完成问卷回答, 请及时审核"), MessageType.JO_APPLY_ANSWER_DONE_MSG);
 		
-		objectCaches.put(apply.getId(), apply);
+		apply = this.saveAndCache(apply);
 		
 		return toVO(apply);
 	}
@@ -218,8 +250,7 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 			this.sendMessage(curr.getId(), apply.getOwnerId(), S.c("您的问卷回答审核未通过: ", param.getEvaluate()), MessageType.JO_APPLY_ANSWER_AUDIT_MSG);
 		}
 		
-		apply = this.repository.save(apply);		
-		objectCaches.put(apply.getId(), apply);
+		apply = this.saveAndCache(apply);
 		
 		return toVO(apply);
 	}
@@ -262,8 +293,7 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 		
 		this.sendMessage(apply.getOwnerId(), job.getOwnerId(), S.c("申请者[", taskCard.getUser().getName(), "]完成任务, 请及时审核"), MessageType.JO_APPLY_ANSWER_DONE_MSG);
 		
-		apply = this.repository.save(apply);		
-		objectCaches.put(apply.getId(), apply);
+		apply = saveAndCache(apply);
 		
 		return toVO(apply);
 	}
@@ -305,8 +335,7 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 			this.sendMessage(curr.getId(), apply.getOwnerId(), S.c("您的任务审核未通过: ", param.getEvaluate()), MessageType.JO_APPLY_TASK_AUDIT_MSG);
 		}
 		
-		apply = this.repository.save(apply);		
-		objectCaches.put(apply.getId(), apply);
+		apply = saveAndCache(apply);
 		
 		return toVO(apply);
 	}
@@ -339,7 +368,8 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 		
 		if(param.getPass()) {
 			apply.setApplyStatus(ApplyStatus.REVIEW_PASS);
-			this.sendMessage(curr.getId(), apply.getOwnerId(), "恭喜您, 申请已通过", MessageType.JO_APPLY_REVIEW_MSG);
+			this.jobService.incHead(job.getId());
+			this.sendMessage(curr.getId(), apply.getOwnerId(), S.c("恭喜您, 你应聘的岗位[", job.getName() ,"]申请已通过"), MessageType.JO_APPLY_REVIEW_MSG);
 		}else {
 			if(StringUtils.isEmpty(param.getEvaluate())) {
 				throw new CustomException("您应该说明不通过的原因");
@@ -348,8 +378,7 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 			this.sendMessage(curr.getId(), apply.getOwnerId(), S.c("您的申请未通过: ", param.getEvaluate()), MessageType.JO_APPLY_REVIEW_MSG);
 		}
 		
-		apply = this.repository.save(apply);		
-		objectCaches.put(apply.getId(), apply);
+		apply = this.saveAndCache(apply);
 		
 		return toVO(apply);
 	}
@@ -419,6 +448,14 @@ public class JobApplyServiceImpl extends BaseServiceImpl<JobApply> implements Jo
 	public void softDelete(Long id) throws CustomException {
 		objectCaches.delete(id, JobApplyVO.class);
 		super.softDelete(id);
+	}
+	
+
+	private JobApply saveAndCache(JobApply apply) {
+		apply = this.repository.save(apply);		
+		objectCaches.put(apply.getId(), apply);
+		objectCaches.put(S.c("u", apply.getJobId(), "-", apply.getOwnerId()), apply);
+		return apply;
 	}
 	
 	private JobApply getEntity(Long id) {

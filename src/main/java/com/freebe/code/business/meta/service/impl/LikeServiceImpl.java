@@ -138,6 +138,7 @@ public class LikeServiceImpl extends BaseServiceImpl<Like> implements LikeServic
 				QueryBuilder<Like> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
 				builder.addEqual("typeId", param.getTypeId());
+				builder.addEqual("userId", param.getUserId());
 
 				return query.where(builder.getPredicate()).getRestriction();
 			}

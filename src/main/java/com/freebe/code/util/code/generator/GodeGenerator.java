@@ -36,7 +36,7 @@ public class GodeGenerator {
 	private static String voPath = basePath +".vo";
 	private static String paramPath = basePath +".controller.param";
 	private static String controllerPath = basePath +".controller";
-	private static String[] ENTITIES = new String[] {"Comment", "Content", "ContentData", "ContentDraft", "Job", "JobApply", "Like"};
+	private static String[] ENTITIES = new String[] {"TaskType"};
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println(GeneratorUtils.getPath(srcPath, entityPath));

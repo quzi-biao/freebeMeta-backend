@@ -30,6 +30,7 @@ public class InteractionEntityVO extends BaseVO {
 
 	@ApiModelProperty("评论")
 	private Long comment;
-
-
+	
+	@ApiModelProperty("是否收藏")
+	private Boolean collected;
 }

@@ -98,7 +98,7 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
 		
 		String key = this.contentDataService.updateContent(e.getContentKey(), param.getContent(), ContentType.NORMAL);
 		e.setContentKey(key);
-		e.setLike(0L);
+		e.setFavorite(0L);
 		e.setCollect(0L);
 		e.setShare(0L);
 		e.setComment(0L);
@@ -162,7 +162,7 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
 		vo.setContent(contentDataService.findByKey(e.getContentKey()));
 		vo.setParentOwner(userService.getUser(e.getParentOwnerId()));
 
-		vo.setLike(e.getLike());
+		vo.setLike(e.getFavorite());
 		vo.setCollect(e.getCollect());
 		vo.setShare(e.getShare());
 		vo.setComment(e.getComment());

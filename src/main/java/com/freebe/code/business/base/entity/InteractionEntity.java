@@ -21,7 +21,7 @@ public class InteractionEntity extends BaseEntity {
 	/**
 	 * 喜欢的数量
 	 */
-	private Long like;
+	private Long favorite;
 	
 	/**
 	 * 收藏的数量

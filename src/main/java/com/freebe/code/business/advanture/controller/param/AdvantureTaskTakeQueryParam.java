@@ -41,4 +41,7 @@ public class AdvantureTaskTakeQueryParam extends PageBean {
 
 	@ApiModelProperty("结束时间")
 	private Long createEndTime;
+	
+	@ApiModelProperty("结束时间")
+	private Long taskTypeId;
 }

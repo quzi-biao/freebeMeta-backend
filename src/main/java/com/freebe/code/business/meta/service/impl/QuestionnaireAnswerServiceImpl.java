@@ -23,11 +23,15 @@ import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.QuestionnaireAnswerParam;
 import com.freebe.code.business.meta.controller.param.QuestionnaireAnswerQueryParam;
 import com.freebe.code.business.meta.controller.param.QuestionnaireSingleAnswerParam;
+import com.freebe.code.business.meta.entity.JobApply;
 import com.freebe.code.business.meta.entity.QuestionnaireAnswer;
 import com.freebe.code.business.meta.repository.QuestionnaireAnswerRepository;
+import com.freebe.code.business.meta.service.JobApplyService;
+import com.freebe.code.business.meta.service.JobService;
 import com.freebe.code.business.meta.service.QuestionnaireAnswerService;
 import com.freebe.code.business.meta.service.QuestionnaireService;
 import com.freebe.code.business.meta.service.QuestionnaireSingleAnswerService;
+import com.freebe.code.business.meta.vo.JobVO;
 import com.freebe.code.business.meta.vo.QuestionnaireAnswerVO;
 import com.freebe.code.business.meta.vo.QuestionnaireVO;
 import com.freebe.code.common.CustomException;
@@ -56,6 +60,12 @@ public class QuestionnaireAnswerServiceImpl extends BaseServiceImpl<Questionnair
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private JobApplyService jobApplyService;
+	
+	@Autowired
+	private JobService jobService;
 
 	@Override
 	public QuestionnaireAnswerVO findById(Long id) throws CustomException {
@@ -133,6 +143,20 @@ public class QuestionnaireAnswerServiceImpl extends BaseServiceImpl<Questionnair
 		if(e.getUserId().longValue() == this.getCurrentUser().getId()) {
 			return toVO(e);
 		}
+		
+		// 问卷归属于某个岗位申请，同时当前用户是岗位所有者，则返回
+		JobApply probe = new JobApply();
+		probe.setAnwserId(e.getId());
+		probe.setOwnerId(userId);
+		List<JobApply> applies = this.jobApplyService.findAll(Example.of(probe));
+		if(null != applies && applies.size() > 0) {
+			JobApply apply = applies.get(0);
+			JobVO job = this.jobService.findById(apply.getJobId());
+			if(job.getOwnerId().longValue() == this.getCurrentUser().getId()) {
+				return toVO(e);
+			}
+		}
+		
 		
 		throw new CustomException("回答未公开");
 	}

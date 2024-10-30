@@ -72,7 +72,7 @@ public class ContentDataServiceImpl extends BaseServiceImpl<ContentData> impleme
 		ContentData e = this.getUpdateEntity(param, false);
 
 		e.setContent(param.getContent());
-		e.setBinary(param.getBinary());
+		e.setBinaryData(param.getBinary());
 //		e.setCommpress(param.getCommpress());
 //		e.setCrypto(param.getCrypto());
 		e.setContentType(param.getContentType());
@@ -148,9 +148,9 @@ public class ContentDataServiceImpl extends BaseServiceImpl<ContentData> impleme
 		vo.setCreateTime(e.getCreateTime());
 
 		vo.setContent(e.getContent());
-		vo.setBinary(e.getBinary());
-		vo.setCommpress(e.getCommpress());
-		vo.setCrypto(e.getCrypto());
+		vo.setBinary(e.getBinaryData());
+		vo.setCommpress(e.getCommpressType());
+		vo.setCrypto(e.getCryptoType());
 		vo.setContentType(e.getContentType());
 		vo.setOwnerId(e.getOwnerId());
 		vo.setContentKey(e.getContentKey());
