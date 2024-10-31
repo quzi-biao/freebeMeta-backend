@@ -73,4 +73,11 @@ public interface ProjectService extends BaseService<Project> {
 	 * @throws CustomException
 	 */
 	Integer getProjectState(Long projectId) throws CustomException;
+
+	/**
+	 * 获取项目所有者
+	 * @param projectId
+	 * @return
+	 */
+	Long getOwnerId(Long projectId);
 }

@@ -61,6 +61,12 @@ public class MarketProvideController {
 		return ResultBean.ok(markerproviderService.applyToProvider(param));
 	}
 	
+	@ApiOperation(value = "成为供应者")
+	@PostMapping("mine")
+	public ResultBean<Page<MarketProvideVO>> queryMine(@Valid @RequestBody MarkerProvideQueryParam param) throws CustomException {
+		return ResultBean.ok(markerproviderService.queryMineProvide(param));
+	}
+	
 	@ApiOperation(value = "放弃成为供应者")
 	@GetMapping("giveout/{id}")
 	public ResultBean<MarketProvideVO> giveoutProvider(@PathVariable("id") Long id) throws CustomException {

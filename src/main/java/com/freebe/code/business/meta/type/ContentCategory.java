@@ -32,12 +32,22 @@ public class ContentCategory {
 	public static final int WEEK_REPORT = 4;
 	
 	/**
-	 * 社区新闻
+	 * 信息分享
 	 */
 	public static final int NEW_REPORT = 5;
 	
 	/**
-	 * 思想讨论
+	 * 思想见解
 	 */
 	public static final int THINKING = 6;
+	
+	/**
+	 * 招募公告
+	 */
+	public static final int NOTICE = 7;
+	
+	/**
+	 * 建议意见
+	 */
+	public static final int SUGGESTION = 8;
 }

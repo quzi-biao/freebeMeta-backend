@@ -12,21 +12,25 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.alipay.api.kms.aliyun.utils.StringUtils;
 import com.freebe.code.business.base.service.UserService;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.CommentParam;
 import com.freebe.code.business.meta.controller.param.CommentQueryParam;
 import com.freebe.code.business.meta.entity.Comment;
 import com.freebe.code.business.meta.repository.CommentRepository;
+import com.freebe.code.business.meta.service.CollectService;
 import com.freebe.code.business.meta.service.CommentService;
 import com.freebe.code.business.meta.service.ContentDataService;
 import com.freebe.code.business.meta.service.ContentService;
+import com.freebe.code.business.meta.service.LikeService;
 import com.freebe.code.business.meta.type.ContentType;
 import com.freebe.code.business.meta.type.InteractionEntityType;
 import com.freebe.code.business.meta.type.InteractionType;
@@ -62,6 +66,15 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
 	
 	@Autowired
 	private InteractionCountUtils countUtils;
+	
+	@Autowired
+	private LikeService likeService;
+	
+	@Autowired
+	private CollectService collectService;
+	
+	@Autowired
+	private CommentService commentService;
 
 	@Override
 	public CommentVO findById(Long id) throws CustomException {
@@ -74,6 +87,10 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
 	public CommentVO createOrUpdate(CommentParam param) throws CustomException {
 		if(null == param.getContentId()) {
 			throw new CustomException("参数错误");
+		}
+		
+		if(StringUtils.isEmpty(param.getContent())) {
+			throw new CustomException("内容为空");
 		}
 		
 		ContentVO content = this.contentService.findById(param.getContentId());
@@ -166,14 +183,34 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
 		vo.setCollect(e.getCollect());
 		vo.setShare(e.getShare());
 		vo.setComment(e.getComment());
+		
+		vo.setCollected(this.collectService.isCollect(InteractionEntityType.COMMENT, e.getId()));
+		vo.setLiked(this.likeService.isLike(InteractionEntityType.COMMENT, e.getId()));
+		vo.setCommented(this.commentService.isComment(InteractionEntityType.COMMENT, e.getId()));
 
 		return vo;
+	}
+	
+	@Override
+	public Boolean isComment(int typeId, Long entityId) {
+		Comment probe = new Comment();
+		probe.setIsDelete(false);
+		probe.setContentId(entityId);
+		
+		return this.repository.exists(Example.of(probe));
 	}
 
 	@Override
 	public void softDelete(Long id) throws CustomException {
+		Comment c = this.getEntity(id);
 		objectCaches.delete(id, CommentVO.class);
 		super.softDelete(id);
+		
+		if(c.getParentId() != null) {
+			countUtils.dec(c.getParentId(), (long) InteractionEntityType.COMMENT, InteractionType.COMMENT);
+		}else {
+			countUtils.dec(c.getContentId(), (long) InteractionEntityType.CONTENT, InteractionType.COMMENT);
+		}
 	}
 	
 	private Comment getEntity(Long id) {
@@ -188,5 +225,6 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
 		objectCaches.put(ret.getId(), ret);
 		return ret;
 	}
+
 
 }

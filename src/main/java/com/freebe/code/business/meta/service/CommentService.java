@@ -22,4 +22,6 @@ public interface CommentService extends BaseService<Comment> {
 
 	Page<CommentVO> queryPage(CommentQueryParam param) throws CustomException;
 
+	Boolean isComment(int typeId, Long entityId);
+
 }

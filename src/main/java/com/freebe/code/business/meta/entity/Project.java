@@ -35,6 +35,16 @@ public class Project extends BaseEntity {
 	private Integer projectType;
 	
 	/**
+	 * 悬赏创建约束，1 所有人可创建，2 项目成员可创建，3 主理人可以创建
+	 */
+	private Integer bountyCreateLimit;
+	
+	/**
+	 * 悬赏认领约束，1 所有人可认领，2 项目成员可认领
+	 */
+	private Integer bountyTakeLimit;
+	
+	/**
 	 * 项目总预算
 	 */
 	private String preAmount;

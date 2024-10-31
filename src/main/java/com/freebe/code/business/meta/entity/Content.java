@@ -34,6 +34,11 @@ public class Content extends InteractionEntity {
 	private Long repplyContent;
 	
 	/**
+	 * 之前的草稿 ID
+	 */
+	private Long draftId;
+	
+	/**
 	 * 项目 ID
 	 */
 	private Long projectId;

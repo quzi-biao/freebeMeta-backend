@@ -269,6 +269,23 @@ public class MarketProvideServiceImpl extends BaseServiceImpl<MarketProvide> imp
 		
 		return provider.getContact();
 	}
+	
+	@Override
+	public Page<MarketProvideVO> queryMineProvide(MarkerProvideQueryParam param) throws CustomException {
+		Long userId = getCurrentUser().getId();
+		MarketProvideUser probe = new MarketProvideUser();
+		probe.setUserId(userId);
+		probe.setIsDelete(false);
+		
+		PageRequest request = PageUtils.toPageRequest(param);
+		Page<MarketProvideUser> page = this.marketProvideUserRepository.findAll(Example.of(probe), request);
+		List<MarketProvideVO> retList = new ArrayList<>();
+
+		for(MarketProvideUser e:  page.getContent()) {
+			retList.add(this.findById(e.getProvideId()));
+		}
+		return new PageImpl<MarketProvideVO>(retList, page.getPageable(), page.getTotalElements());
+	}
 
 	@Override
 	public Page<MarketProvideVO> queryPage(MarkerProvideQueryParam param) throws CustomException {

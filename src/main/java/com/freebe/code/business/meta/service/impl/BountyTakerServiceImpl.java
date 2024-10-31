@@ -29,10 +29,14 @@ import com.freebe.code.business.meta.entity.BountyTaker;
 import com.freebe.code.business.meta.repository.BountyTakerRepository;
 import com.freebe.code.business.meta.service.BountyService;
 import com.freebe.code.business.meta.service.BountyTakerService;
+import com.freebe.code.business.meta.service.ProjectService;
 import com.freebe.code.business.meta.type.BountyState;
+import com.freebe.code.business.meta.type.BountyTakeLimit;
 import com.freebe.code.business.meta.type.BountyTakerState;
 import com.freebe.code.business.meta.type.MessageType;
 import com.freebe.code.business.meta.vo.BountyTakerVO;
+import com.freebe.code.business.meta.vo.ProjectMemberVO;
+import com.freebe.code.business.meta.vo.ProjectVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
 import com.freebe.code.util.PageUtils;
@@ -57,6 +61,9 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ProjectService projectService;
 
 	@Override
 	public BountyTakerVO findById(Long id) throws CustomException {
@@ -100,6 +107,17 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 //			this.bountyService.update(bounty.getId(), bounty);
 //			throw new CustomException("悬赏已超时失败");
 //		}
+		
+		if(null != bounty.getProjectId() && bounty.getProjectId() > 0) {
+			ProjectVO project = this.projectService.findById(bounty.getProjectId());
+			Integer takeLimit = project.getBountyTakeLimit();
+			if(takeLimit == BountyTakeLimit.MEMBER) {
+				if(!this.isMember(getCurrentUser().getId(), project.getMembers())) {
+					throw new CustomException("只有项目组成员才能认领悬赏，请联系项目管理员");
+				}
+			}
+		
+		}
 		
 		BountyTaker e = this.getUpdateEntity(param, false);
 
@@ -183,20 +201,20 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		return vo;
 	}
 
-	private boolean checkBountyTimeLimit(BountyTaker take, Bounty bounty) {
-		if(bounty.getState() == BountyState.TIMEOUT_FAILED) {
-			return false;
-		}
-		
+//	private boolean checkBountyTimeLimit(BountyTaker take, Bounty bounty) {
+//		if(bounty.getState() == BountyState.TIMEOUT_FAILED) {
+//			return false;
+//		}
+//		
 //		long costTime = System.currentTimeMillis() - take.getTakeTime();
 //		if(costTime > bounty.getLimitTime() * DateUtils.DAY_PERIOD) {
 //			bounty.setState(BountyState.TIMEOUT_FAILED);
 //			this.bountyService.update(bounty.getId(), bounty);
 //			return false;
 //		}
-		
-		return true;
-	}
+//		
+//		return true;
+//	}
 
 	@Override
 	public Page<BountyTakerVO> queryPage(BountyTakerQueryParam param) throws CustomException {
@@ -264,12 +282,12 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 	 * @throws CustomException
 	 */
 	private void checkBounty(BountyTaker take, Bounty bounty) throws CustomException {
-		if(!checkBountyTimeLimit(take, bounty)) {
-			take.setState(BountyTakerState.TIMEOUT_CANCEL);
-			take.setDoneTime(System.currentTimeMillis());
-			this.repository.save(take);
-			throw new CustomException("悬赏已超时");
-		}
+//		if(!checkBountyTimeLimit(take, bounty)) {
+//			take.setState(BountyTakerState.TIMEOUT_CANCEL);
+//			take.setDoneTime(System.currentTimeMillis());
+//			this.repository.save(take);
+//			throw new CustomException("悬赏已超时");
+//		}
 		
 		if(bounty.getState() != BountyState.RUNNING && bounty.getState() != BountyState.WAIT_AUDIT) {
 			throw new CustomException("悬赏状态异常");
@@ -278,6 +296,19 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		if(bounty.getTakerId().longValue() != getCurrentUser().getId()) {
 			throw new CustomException("您不是悬赏认领者");
 		}
+	}
+	
+	private boolean isMember(Long id, List<ProjectMemberVO> members) {
+		if(null == members || members.size() == 0) {
+			return true;
+		}
+		
+		for(ProjectMemberVO m : members) {
+			if(m.getMember().getUser().getId().longValue() == id.longValue()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

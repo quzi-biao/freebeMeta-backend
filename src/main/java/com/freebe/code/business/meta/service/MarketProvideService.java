@@ -51,4 +51,12 @@ public interface MarketProvideService extends BaseService<MarketProvide> {
 	 */
 	MarketProvideVO giveoutProvider(Long provideId) throws CustomException;
 
+	/**
+	 * 我参与的服务
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	Page<MarketProvideVO> queryMineProvide(MarkerProvideQueryParam param) throws CustomException;
+
 }

@@ -30,6 +30,6 @@ public interface ContentDataService extends BaseService<ContentData> {
 	String updateContent(String key, String content, Integer type) throws CustomException;
 
 	String createOrUpdate(ContentDataParam param) throws CustomException;
-
+	
 	Page<ContentDataVO> queryPage(ContentDataQueryParam param) throws CustomException;
 }

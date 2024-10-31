@@ -21,5 +21,12 @@ public interface ContentDraftService extends BaseService<ContentDraft> {
 	ContentDraftVO createOrUpdate(ContentDraftParam param) throws CustomException;
 
 	Page<ContentDraftVO> queryPage(ContentDraftQueryParam param) throws CustomException;
+	
+	/**
+	 * 内容已发布
+	 * @param contentId
+	 * @throws CustomException
+	 */
+	void deploy(Long draftId, Long contentId) throws CustomException;
 
 }

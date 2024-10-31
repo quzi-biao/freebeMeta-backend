@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +28,16 @@ import com.freebe.code.business.meta.controller.param.ContentParam;
 import com.freebe.code.business.meta.controller.param.ContentQueryParam;
 import com.freebe.code.business.meta.entity.Content;
 import com.freebe.code.business.meta.repository.ContentRepository;
+import com.freebe.code.business.meta.service.CollectService;
+import com.freebe.code.business.meta.service.CommentService;
 import com.freebe.code.business.meta.service.ContentDataService;
 import com.freebe.code.business.meta.service.ContentDraftService;
 import com.freebe.code.business.meta.service.ContentService;
+import com.freebe.code.business.meta.service.LikeService;
 import com.freebe.code.business.meta.type.AuditStatus;
 import com.freebe.code.business.meta.type.ContentCategory;
 import com.freebe.code.business.meta.type.ContentType;
+import com.freebe.code.business.meta.type.InteractionEntityType;
 import com.freebe.code.business.meta.type.PermissionCode;
 import com.freebe.code.business.meta.vo.ContentDraftVO;
 import com.freebe.code.business.meta.vo.ContentVO;
@@ -63,6 +68,15 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 	
 	@Autowired
 	private ContentDataService contentDataService;
+	
+	@Autowired
+	private LikeService likeService;
+	
+	@Autowired
+	private CollectService collectService;
+	
+	@Autowired
+	private CommentService commentService;
 
 	@Override
 	public ContentVO findById(Long id) throws CustomException {
@@ -78,6 +92,10 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 			throw new CustomException("草稿不存在");
 		}
 		
+		if(draft.getOwnerId().longValue() != getCurrentUser().getId().longValue()) {
+			throw new CustomException("您没有操作权限");
+		}
+		
 		String content = this.contentDataService.findByKey(draft.getContentKey());
 		if(null == content || content.length() < 100) {
 			throw new CustomException("字数太少，不能发布");
@@ -86,7 +104,18 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 			throw new CustomException("请先填写内容摘要");
 		}
 		
-		Content e = new Content();
+		Content probe = new Content();
+		probe.setDraftId(draftId);
+		probe.setIsDelete(false);
+		
+		Content e = null;
+		List<Content> match = this.repository.findAll(Example.of(probe));
+		if(null == match || match.size() == 0) {
+			e = new Content();
+		}else {
+			e = match.get(0);
+		}
+		
 		e.setIsDelete(false);
 		e.setInUse(true);
 		
@@ -107,6 +136,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		//e.setStatus(AuditStatus.UNKOWN);
 		e.setStatus(AuditStatus.PASS); // 内容先不审核了
 		e.setTitle(draft.getTitle());
+		e.setDraftId(draft.getId());
 		
 		e.setContentKey(draft.getContentKey());
 		
@@ -118,6 +148,8 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		
 		e = this.repository.save(e);
 		objectCaches.put(e.getId(), e);
+		
+		this.contentDraftService.deploy(draftId, e.getId());
 		
 		return toVO(e);
 	}
@@ -197,9 +229,9 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 	public Page<ContentVO> queryPage(ContentQueryParam param) throws CustomException {
 		param.setOrder("id");
 		if(null == param.getStatus() || AuditStatus.PASS != param.getStatus()) {
-			this.checkPermssion(PermissionCode.CONTENT_AUDIT);
-		}else {
 			param.setStatus(AuditStatus.PASS);
+		}else {
+			this.checkPermssion(PermissionCode.CONTENT_AUDIT);
 		}
 		
 		PageRequest request = PageUtils.toPageRequest(param);
@@ -261,7 +293,12 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		vo.setCollect(e.getCollect());
 		vo.setShare(e.getShare());
 		vo.setComment(e.getComment());
-
+		
+		vo.setCollected(this.collectService.isCollect(InteractionEntityType.CONTENT, e.getId()));
+		vo.setLiked(this.likeService.isLike(InteractionEntityType.CONTENT, e.getId()));
+		vo.setCommented(this.commentService.isComment(InteractionEntityType.CONTENT, e.getId()));
+		
+		
 		return vo;
 	}
 

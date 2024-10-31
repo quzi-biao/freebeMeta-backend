@@ -46,6 +46,12 @@ public class ProjectParam extends BaseEntityParam {
 	@ApiModelProperty("项目类型")
 	private Integer projectType;
 	
+	@ApiModelProperty("悬赏创建约束")
+	private Integer bountyCreateLimit;
+	
+	@ApiModelProperty("悬赏领取约束")
+	private Integer bountyTakeLimit;
+	
 	@ApiModelProperty("项目成员")
 	private List<ProjectMemberParam> members;
 }

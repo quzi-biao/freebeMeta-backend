@@ -45,6 +45,7 @@ import com.freebe.code.business.meta.service.ProjectService;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.WalletService;
 import com.freebe.code.business.meta.service.impl.lucene.BountyLuceneSearch;
+import com.freebe.code.business.meta.type.BountyCreateLimit;
 import com.freebe.code.business.meta.type.BountyState;
 import com.freebe.code.business.meta.type.BountyTakerState;
 import com.freebe.code.business.meta.type.Currency;
@@ -53,6 +54,7 @@ import com.freebe.code.business.meta.type.TransactionType;
 import com.freebe.code.business.meta.vo.BountyBaseVO;
 import com.freebe.code.business.meta.vo.BountyGraph;
 import com.freebe.code.business.meta.vo.BountyVO;
+import com.freebe.code.business.meta.vo.ProjectMemberVO;
 import com.freebe.code.business.meta.vo.ProjectVO;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.business.meta.vo.WalletVO;
@@ -226,6 +228,10 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setAuditTime(System.currentTimeMillis());
 		e.setAuditorId(getCurrentUser().getId());
 		if(param.getPass()) {
+			Long srcUserId = e.getOwnerId();
+			if(e.getProjectId() != null && e.getProjectId().longValue() > 0) {
+				srcUserId = this.projectService.getOwnerId(e.getProjectId());	
+			}
 			e.setState(BountyState.DONE);
 			Long taker = e.getTakerId();
 			if(taker != tt.getTaker()) {
@@ -233,8 +239,8 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			}
 			
 			// 积分回报发放
-			Long transactionId = createTransaction(e);
-			Long auditTransactionId = createAuditTransaction(e);
+			Long transactionId = createTransaction(e, srcUserId);
+			Long auditTransactionId = createAuditTransaction(e, srcUserId);
 			tt.setEvaluate(param.getEvaluate());
 			tt.setTransactionId(transactionId);
 			e.setAuditTransactionId(auditTransactionId);
@@ -340,7 +346,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		bounty = this.repository.save(bounty);
 		objectCaches.put(bounty.getId(), bounty);
 		
-		List<Long> auditors = toList(bounty.getAuditors(), Long.class);
+		List<Long> auditors = strToAuditorIds(bounty.getAuditors());
 		if(null == auditors || auditors.size() == 0) {
 			auditors = new ArrayList<>();
 			auditors.add(bounty.getOwnerId());
@@ -385,7 +391,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		return new PageImpl<BountyVO>(retList, page.getPageable(), page.getTotalElements());
 	}
 	
-	private Long createTransaction(Bounty e) throws CustomException {
+	private Long createTransaction(Bounty e, Long srcUserId) throws CustomException {
 		// 创建交易
 		TransactionParam param = new TransactionParam();
 		if(e.getAuditReward() == null) {
@@ -394,7 +400,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		param.setAmount(e.getReward().doubleValue() * (100 - e.getAuditReward()) / 100);
 		param.setCurrency(Currency.FREE_BE);
 		
-		param.setSrcWalletId(this.walletService.findByUser(e.getOwnerId()).getId());
+		param.setSrcWalletId(this.walletService.findByUser(srcUserId).getId());
 		
 		WalletVO wallet = this.walletService.findByUser(e.getTakerId());
 		param.setDstWalletId(wallet.getId());
@@ -409,7 +415,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		return transaction.getId();
 	}
 	
-	private Long createAuditTransaction(Bounty e) throws CustomException {
+	private Long createAuditTransaction(Bounty e, Long srcUserId) throws CustomException {
 		if(e.getAuditorId() == null || e.getAuditReward() == null || e.getAuditReward() == 0) {
 			return null;
 		}
@@ -418,7 +424,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		param.setAmount(e.getReward().doubleValue() * e.getAuditReward() / 100);
 		param.setCurrency(Currency.FREE_BE);
 		
-		param.setSrcWalletId(this.walletService.findByUser(e.getOwnerId()).getId());
+		param.setSrcWalletId(this.walletService.findByUser(srcUserId).getId());
 		
 		WalletVO wallet = this.walletService.findByUser(e.getAuditorId());
 		param.setDstWalletId(wallet.getId());
@@ -817,18 +823,18 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		if(null == param.getReward() || param.getReward() == 0) {
 			throw new CustomException("请设置任务赏金");
 		}
-		if(null == param.getTakerWaitTime()) {
-			throw new CustomException("请设置任务认领等待时间");
-		}
-		if(param.getTakerWaitTime() <= 0 || param.getTakerWaitTime() > 100) {
-			throw new CustomException("任务等待时间不得超过10天");
-		}
-		if(null == param.getLimitTime()) {
-			throw new CustomException("请设置任务完成时间");
-		}
-		if(param.getLimitTime() <= 0 || param.getLimitTime() > 15) {
-			throw new CustomException("任务完成时间不得超过7天，您应该细分您的任务");
-		}
+//		if(null == param.getTakerWaitTime()) {
+//			throw new CustomException("请设置任务认领等待时间");
+//		}
+//		if(param.getTakerWaitTime() <= 0 || param.getTakerWaitTime() > 100) {
+//			throw new CustomException("任务等待时间不得超过10天");
+//		}
+//		if(null == param.getLimitTime()) {
+//			throw new CustomException("请设置任务完成时间");
+//		}
+//		if(param.getLimitTime() <= 0 || param.getLimitTime() > 15) {
+//			throw new CustomException("任务完成时间不得超过7天，您应该细分您的任务");
+//		}
 		if(param.getAuditReward() == null) {
 			param.setAuditReward(0);
 		}else {
@@ -843,14 +849,38 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 				throw new CustomException("项目不存在");
 			}
 			Long userId = getCurrentUser().getId();
-			if(userId.longValue() != project.getOwnerId().longValue()) {
-				throw new CustomException("您不是项目所有者");
+			Integer createLimit = project.getBountyCreateLimit();
+			if(null == createLimit || createLimit == BountyCreateLimit.OWNER) {
+				if(userId.longValue() != project.getOwnerId().longValue()) {
+					throw new CustomException("您不是项目所有者");
+				}
+			}else if(createLimit == BountyCreateLimit.MEMBER) {
+				if(!this.isMember(this.getCurrentUser().getId(), project.getMembers())) {
+					throw new CustomException("您不是项目成员");
+				}
+			}
+			WalletVO wallet = this.walletService.findByUser(project.getOwnerId());
+			if(wallet.getFreeBe() < param.getReward()) {
+				throw new CustomException("项目主理人的钱包余额不足");
+			}
+		}else {
+			WalletVO wallet = this.walletService.findByUser(this.getCurrentUser().getId());
+			if(wallet.getFreeBe() < param.getReward()) {
+				throw new CustomException("您的钱包余额不足");
 			}
 		}
-		
-		WalletVO wallet = this.walletService.findByUser(this.getCurrentUser().getId());
-		if(wallet.getFreeBe() < param.getReward()) {
-			throw new CustomException("您的钱包余额不足");
+	}
+
+	private boolean isMember(Long id, List<ProjectMemberVO> members) {
+		if(null == members || members.size() == 0) {
+			return true;
 		}
+		
+		for(ProjectMemberVO m : members) {
+			if(m.getMember().getUser().getId().longValue() == id.longValue()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

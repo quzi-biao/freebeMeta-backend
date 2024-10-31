@@ -88,16 +88,15 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		if(null == id) {
 			return null;
 		}
-		Project ret = this.objectCaches.get(id, Project.class);
-		if(null == ret){
-			Optional<Project> op = this.repository.findById(id);
-			if(!op.isPresent()){
-				return null;
-			}
-			ret = op.get();
-		}
-		objectCaches.put(ret.getId(), ret);
+		Project ret = getEntity(id);
 		return toVO(ret, true);
+	}
+
+	
+	@Override
+	public Long getOwnerId(Long projectId) {
+		Project ret = getEntity(projectId);
+		return ret.getOwnerId();
 	}
 
 	@Override
@@ -154,7 +153,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		e.setPictures(toStr(param.getPictures()));
 		e.setTags(toStr(param.getTags()));
 		e.setDescription(param.getDescription());
-
+		e.setBountyTakeLimit(param.getBountyTakeLimit());
+		e.setBountyCreateLimit(param.getBountyCreateLimit());		
+		
 		e = repository.save(e);
 		
 		this.projectMemberService.updateProjectMembers(e.getId(), param.getMembers());
@@ -423,6 +424,8 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		vo.setBillTime(e.getBillTime());
 		vo.setBillState(e.getBillState());
 		vo.setProjectType(e.getProjectType());
+		vo.setBountyCreateLimit(e.getBountyCreateLimit());
+		vo.setBountyTakeLimit(e.getBountyTakeLimit());
 		
 		if(isDetail) {
 			vo.setProjectReward(this.transactionService.getProjectReward(e.getId()));
@@ -534,6 +537,20 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 			pm.setPreAmount(0D);
 			param.getMembers().add(pm);
 		}
+	}
+	
+
+	private Project getEntity(Long id) {
+		Project ret = this.objectCaches.get(id, Project.class);
+		if(null == ret){
+			Optional<Project> op = this.repository.findById(id);
+			if(!op.isPresent()){
+				return null;
+			}
+			ret = op.get();
+		}
+		objectCaches.put(ret.getId(), ret);
+		return ret;
 	}
 
 }

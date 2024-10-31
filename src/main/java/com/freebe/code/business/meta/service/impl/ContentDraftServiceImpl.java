@@ -33,6 +33,7 @@ import com.freebe.code.business.meta.type.ContentType;
 import com.freebe.code.business.meta.vo.ContentDraftVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
+import com.freebe.code.util.AbstractUtils;
 import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
 
@@ -97,18 +98,33 @@ public class ContentDraftServiceImpl extends BaseServiceImpl<ContentDraft> imple
 
 		String key = this.contentDataService.updateContent(e.getContentKey(), param.getContent(), ContentType.NORMAL);
 		e.setContentKey(key);
-		
+		e.setContentAbstract(AbstractUtils.getAbstract(param.getContent()));	
 		e = repository.save(e);
 
 		ContentDraftVO vo = toVO(e);
-		objectCaches.put(vo.getId(), vo);
+		objectCaches.put(e.getId(), e);
 
 		return vo;
+	}
+	
+	@Override
+	public void deploy(Long draftId, Long contentId) throws CustomException {
+		ContentDraft draft = this.getEntity(draftId);
+		if(null == draft) {
+			return;
+		}
+		draft.setDeployTime(System.currentTimeMillis());
+		draft.setStatus(AuditStatus.PASS);
+		draft.setContentId(contentId);
+		
+		this.repository.save(draft);
+		objectCaches.put(draft.getId(), draft);
 	}
 
 	@Override
 	public Page<ContentDraftVO> queryPage(ContentDraftQueryParam param) throws CustomException {
 		param.setOrder("id");
+		param.setOwnerId(this.getCurrentUser().getId());
 		PageRequest request = PageUtils.toPageRequest(param);
 
 		Specification<ContentDraft> example = buildSpec(param);

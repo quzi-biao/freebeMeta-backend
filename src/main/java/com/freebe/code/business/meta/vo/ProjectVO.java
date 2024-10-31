@@ -45,6 +45,12 @@ public class ProjectVO extends BaseVO {
 
 	@ApiModelProperty("项目标签，数组")
 	private List<ProjectTag> tags;
+	
+	@ApiModelProperty("悬赏创建约束")
+	private Integer bountyCreateLimit;
+	
+	@ApiModelProperty("悬赏领取约束")
+	private Integer bountyTakeLimit;
 
 	@ApiModelProperty("项目介绍")
 	private String description;

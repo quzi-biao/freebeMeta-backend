@@ -48,7 +48,7 @@ public class ContentDraftController {
 	}
 	
 	@ApiOperation(value = "内容发布")
-	@PostMapping("deploy/{id}")
+	@GetMapping("deploy/{id}")
 	public ResultBean<ContentVO> createOrUpdate(@PathVariable("id") Long id) throws CustomException {
 		return ResultBean.ok(contentService.deployFromDraft(id));
 	}
