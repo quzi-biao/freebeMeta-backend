@@ -179,7 +179,11 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		List<ProjectVO> retList = new ArrayList<>();
 
 		for(ProjectMemberVO e:  pmPage.getContent()) {
-			retList.add(this.findById(e.getProjectId()));
+			ProjectVO project = this.findById(e.getProjectId());
+			if(null == project) {
+				continue;
+			}
+			retList.add(project);
 		}
 		
 		return new PageImpl<ProjectVO>(retList, pmPage.getPageable(), pmPage.getTotalElements());
@@ -401,6 +405,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 	
 
 	private ProjectVO toVO(Project e, boolean isDetail) throws CustomException {
+		if(null == e) {
+			return null;
+		}
 		ProjectVO vo = new ProjectVO();
 		vo.setId(e.getId());
 		vo.setName(e.getName());
