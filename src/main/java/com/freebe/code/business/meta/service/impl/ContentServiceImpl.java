@@ -184,7 +184,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		e.setTitle(param.getTitle());
 		e.setPicture(param.getPicture());
 		e.setContentAbstract(param.getContentAbstract());
-		e.setStatus(AuditStatus.UNKOWN);
+		e.setStatus(AuditStatus.PASS);
 		e.setFavorite(0L);
 		e.setCollect(0L);
 		e.setShare(0L);
