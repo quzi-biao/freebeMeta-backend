@@ -58,4 +58,7 @@ public class ContentVO extends InteractionEntityVO {
 
 	@ApiModelProperty("内容发布状态（审核中，已发布）")
 	private Integer status;
+	
+	@ApiModelProperty("公开类型")
+	private Integer publicType;
 }

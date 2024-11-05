@@ -45,4 +45,6 @@ public class ContentParam extends InteractionEntityParam {
 	@ApiModelProperty("内容摘要")
 	private String contentAbstract;
 
+	@ApiModelProperty("公开类型")
+	private Integer publicType;
 }

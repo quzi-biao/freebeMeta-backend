@@ -1,6 +1,8 @@
 package com.freebe.code.business.meta.controller.param;
 
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,7 +33,7 @@ public class ContentQueryParam extends InteractionEntityQueryParam {
 	private Integer contentType;
 
 	@ApiModelProperty("内容分类")
-	private Integer category;
+	private List<Integer> categories;
 
 	@ApiModelProperty("内容 key，关联到 contentData")
 	private String contentKey;

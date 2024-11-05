@@ -260,7 +260,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 				builder.addEqual("repplyContent", param.getRepplyContent());
 				builder.addEqual("projectId", param.getProjectId());
 				builder.addEqual("contentType", param.getContentType());
-				builder.addEqual("category", param.getCategory());
+				builder.addIn("category", param.getCategories());
 				builder.addEqual("status", param.getStatus()); // 只有审核通过的文章才返回
 				builder.addEqual("contentKey", param.getContentKey());
 				

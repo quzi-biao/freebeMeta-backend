@@ -150,7 +150,7 @@ public class ContentDraftServiceImpl extends BaseServiceImpl<ContentDraft> imple
 				builder.addEqual("repplyContent", param.getRepplyContent());
 				builder.addEqual("projectId", param.getProjectId());
 				builder.addEqual("contentType", param.getContentType());
-				builder.addEqual("category", param.getCategory());
+				builder.addIn("category", param.getCategories());
 				builder.addEqual("status", param.getStatus());
 				builder.addEqual("contentKey", param.getContentKey());
 

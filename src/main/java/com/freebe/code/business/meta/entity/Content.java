@@ -95,4 +95,9 @@ public class Content extends InteractionEntity {
 	 * 审核建议
 	 */
 	private String auditorComment;
+	
+	/**
+	 * 公开类型
+	 */
+	private Integer publicType;
 }
