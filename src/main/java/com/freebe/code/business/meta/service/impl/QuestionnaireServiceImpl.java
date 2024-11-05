@@ -147,8 +147,8 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<Questionnaire> imp
 			public Predicate toPredicate(Root<Questionnaire> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				QueryBuilder<Questionnaire> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
-
-				builder.addBetween("createTime", param.getCreateStartTime(), param.getCreateEndTime());
+				
+				builder.addEqual("isDelete", param.getOwnerId());
 				return query.where(builder.getPredicate()).getRestriction();
 			}
 		};

@@ -21,23 +21,4 @@ import lombok.NoArgsConstructor;
 public class QuestionnaireQueryParam extends PageBean {
 	@ApiModelProperty("问卷所有者 ID")
 	private Long ownerId;
-
-	@ApiModelProperty("问卷标题")
-	private String title;
-
-	@ApiModelProperty("问卷背景图")
-	private String picture;
-
-	@ApiModelProperty("问卷说明")
-	private String description;
-
-	@ApiModelProperty("问卷截止日期")
-	private Long deadLine;
-
-	@ApiModelProperty("开始时间")
-	private Long createStartTime;
-
-	@ApiModelProperty("结束时间")
-	private Long createEndTime;
-
 }
