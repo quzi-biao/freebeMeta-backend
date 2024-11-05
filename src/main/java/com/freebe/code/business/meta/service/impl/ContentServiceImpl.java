@@ -43,6 +43,7 @@ import com.freebe.code.business.meta.vo.ContentDraftVO;
 import com.freebe.code.business.meta.vo.ContentVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
+import com.freebe.code.util.AbstractUtils;
 import com.freebe.code.util.CodeUtils;
 import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
@@ -161,6 +162,10 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 			throw new CustomException("请输入内容标题");
 		}
 		
+		if(StringUtils.isEmpty(param.getContent())) {
+			throw new CustomException("内容不能为空");
+		}
+		
 		if(null == param.getContentType()) {
 			param.setContentType(ContentType.NORMAL);
 		}
@@ -183,7 +188,7 @@ public class ContentServiceImpl extends BaseServiceImpl<Content> implements Cont
 		e.setCategory(param.getCategory());
 		e.setTitle(param.getTitle());
 		e.setPicture(param.getPicture());
-		e.setContentAbstract(param.getContentAbstract());
+		e.setContentAbstract(AbstractUtils.getAbstract(param.getContent()));
 		e.setStatus(AuditStatus.PASS);
 		e.setFavorite(0L);
 		e.setCollect(0L);
