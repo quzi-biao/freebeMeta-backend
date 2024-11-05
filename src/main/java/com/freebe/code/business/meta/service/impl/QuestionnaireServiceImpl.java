@@ -148,7 +148,7 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<Questionnaire> imp
 				QueryBuilder<Questionnaire> builder = new QueryBuilder<>(root, criteriaBuilder);
 				builder.addEqual("isDelete", false);
 				
-				builder.addEqual("isDelete", param.getOwnerId());
+				builder.addEqual("ownerId", param.getOwnerId());
 				return query.where(builder.getPredicate()).getRestriction();
 			}
 		};
