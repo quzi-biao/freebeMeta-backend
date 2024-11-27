@@ -39,6 +39,7 @@ import com.freebe.code.business.meta.vo.ProjectMemberVO;
 import com.freebe.code.business.meta.vo.ProjectVO;
 import com.freebe.code.common.CustomException;
 import com.freebe.code.common.ObjectCaches;
+import com.freebe.code.util.DateUtils;
 import com.freebe.code.util.PageUtils;
 import com.freebe.code.util.QueryUtils.QueryBuilder;
 import com.freebe.code.util.S;
@@ -101,12 +102,12 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 			throw new CustomException("悬赏不可认领");
 		}
 		
-//		long waitTime = System.currentTimeMillis() - bounty.getCreateTime();
-//		if(waitTime > bounty.getTakerWaitTime() * DateUtils.DAY_PERIOD) {
-//			bounty.setState(BountyState.WAIT_TIMEOUT_FAILED);
-//			this.bountyService.update(bounty.getId(), bounty);
-//			throw new CustomException("悬赏已超时失败");
-//		}
+		long waitTime = System.currentTimeMillis() - bounty.getCreateTime();
+		if(waitTime > bounty.getTakerWaitTime() * DateUtils.DAY_PERIOD) {
+			bounty.setState(BountyState.WAIT_TIMEOUT_FAILED);
+			this.bountyService.update(bounty.getId(), bounty);
+			throw new CustomException("悬赏已超时失败");
+		}
 		
 		if(null != bounty.getProjectId() && bounty.getProjectId() > 0) {
 			ProjectVO project = this.projectService.findById(bounty.getProjectId());
@@ -201,20 +202,20 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		return vo;
 	}
 
-//	private boolean checkBountyTimeLimit(BountyTaker take, Bounty bounty) {
-//		if(bounty.getState() == BountyState.TIMEOUT_FAILED) {
-//			return false;
-//		}
-//		
-//		long costTime = System.currentTimeMillis() - take.getTakeTime();
-//		if(costTime > bounty.getLimitTime() * DateUtils.DAY_PERIOD) {
-//			bounty.setState(BountyState.TIMEOUT_FAILED);
-//			this.bountyService.update(bounty.getId(), bounty);
-//			return false;
-//		}
-//		
-//		return true;
-//	}
+	private boolean checkBountyTimeLimit(BountyTaker take, Bounty bounty) {
+		if(bounty.getState() == BountyState.TIMEOUT_FAILED) {
+			return false;
+		}
+		
+		long costTime = System.currentTimeMillis() - take.getTakeTime();
+		if(costTime > bounty.getLimitTime() * DateUtils.DAY_PERIOD) {
+			bounty.setState(BountyState.TIMEOUT_FAILED);
+			this.bountyService.update(bounty.getId(), bounty);
+			return false;
+		}
+		
+		return true;
+	}
 
 	@Override
 	public Page<BountyTakerVO> queryPage(BountyTakerQueryParam param) throws CustomException {
@@ -282,12 +283,12 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 	 * @throws CustomException
 	 */
 	private void checkBounty(BountyTaker take, Bounty bounty) throws CustomException {
-//		if(!checkBountyTimeLimit(take, bounty)) {
-//			take.setState(BountyTakerState.TIMEOUT_CANCEL);
-//			take.setDoneTime(System.currentTimeMillis());
-//			this.repository.save(take);
-//			throw new CustomException("悬赏已超时");
-//		}
+		if(!checkBountyTimeLimit(take, bounty)) {
+			take.setState(BountyTakerState.TIMEOUT_CANCEL);
+			take.setDoneTime(System.currentTimeMillis());
+			this.repository.save(take);
+			throw new CustomException("悬赏已超时");
+		}
 		
 		if(bounty.getState() != BountyState.RUNNING && bounty.getState() != BountyState.WAIT_AUDIT) {
 			throw new CustomException("悬赏状态异常");
