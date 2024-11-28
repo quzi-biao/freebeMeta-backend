@@ -234,7 +234,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			}
 			e.setState(BountyState.DONE);
 			Long taker = e.getTakerId();
-			if(taker != tt.getTaker()) {
+			if(taker.longValue() != tt.getTaker().longValue()) {
 				throw new CustomException("系统混乱");
 			}
 			
