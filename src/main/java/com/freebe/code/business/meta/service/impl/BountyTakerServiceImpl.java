@@ -132,7 +132,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		BountyTakerVO vo = toVO(e);
 		objectCaches.put(vo.getId(), vo);
 		
-		this.sendMessage(e.getTaker(), bounty.getOwnerId(), S.c("您的悬赏[#", bounty.getId(), "]", bounty.getName(), "已被认领，认领人: ", this.getCurrentUser().getName()), MessageType.BOUNTY_TAKE_MSG);
+		this.sendMessage(e.getTaker(), bounty.getOwnerId(), S.c("您的悬赏[#", bounty.getId(), "]", bounty.getTitle(), "已被认领，认领人: ", this.getCurrentUser().getName()), MessageType.BOUNTY_TAKE_MSG);
 
 		return vo;
 	}
@@ -163,7 +163,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		BountyTakerVO vo = toVO(take);
 		objectCaches.put(vo.getId(), vo);
 		
-		this.sendMessage(take.getTaker(), bounty.getOwnerId(), S.c("认领人放弃了您的悬赏[", bounty.getId(), "]", bounty.getName(), "，您的悬赏可被重新认领"), MessageType.BOUNTY_SUBMIT_MSG);
+		this.sendMessage(take.getTaker(), bounty.getOwnerId(), S.c("认领人放弃了您的悬赏[", bounty.getId(), "]", bounty.getTitle(), "，您的悬赏可被重新认领"), MessageType.BOUNTY_SUBMIT_MSG);
 		
 		return vo;
 	}
@@ -197,7 +197,7 @@ public class BountyTakerServiceImpl extends BaseServiceImpl<BountyTaker> impleme
 		BountyTakerVO vo = toVO(take);
 		objectCaches.put(vo.getId(), vo);
 		
-		this.sendMessage(take.getTaker(), bounty.getOwnerId(), S.c(this.getCurrentUser().getName(), "完成了您的悬赏: [#", bounty.getId(), "]", bounty.getName()), MessageType.BOUNTY_SUBMIT_MSG);
+		this.sendMessage(take.getTaker(), bounty.getOwnerId(), S.c(this.getCurrentUser().getName(), "完成了您的悬赏: [#", bounty.getId(), "]", bounty.getTitle()), MessageType.BOUNTY_SUBMIT_MSG);
 		
 		return vo;
 	}

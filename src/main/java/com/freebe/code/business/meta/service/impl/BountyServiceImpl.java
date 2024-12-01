@@ -249,13 +249,13 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			this.bountyTakerService.save(tt);
 			// 贡献分发放(贡献分等于积分)
 			this.userService.addContribution(taker, e.getReward());
-			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏已审核通过: [", e.getId(), "]", e.getName()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
+			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏已审核通过: [", e.getId(), "]", e.getTitle()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
 			e.setState(BountyState.AUDIT_FAILED);
 			e = this.repository.save(e);
 			this.bountyTakerService.save(tt);
-			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏审核未通过: [", e.getId(), "]", e.getName(), ":", param.getEvaluate()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
+			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏审核未通过: [", e.getId(), "]", e.getTitle(), ":", param.getEvaluate()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
 		}
 		
 		objectCaches.put(e.getId(), e);
@@ -352,7 +352,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			auditors.add(bounty.getOwnerId());
 		}
 		
-		this.sendMessage(bounty.getTakerId(), auditors, S.c("[", getCurrentUser().getName() ,"]完成了您的悬赏[", bounty.getId(), "]", bounty.getName(), "已完成，请及时审核"), MessageType.BOUNTY_AUDIT_MSG);
+		this.sendMessage(bounty.getTakerId(), auditors, S.c("[", getCurrentUser().getName() ,"]完成了您的悬赏[", bounty.getId(), "]", bounty.getTitle(), "已完成，请及时审核"), MessageType.BOUNTY_AUDIT_MSG);
 	}
 
 
