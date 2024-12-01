@@ -228,7 +228,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		e.setAuditTime(System.currentTimeMillis());
 		e.setAuditorId(getCurrentUser().getId());
 		if(param.getPass()) {
-			Long srcUserId = e.getOwnerId();
+			Long srcUserId = 131L; //e.getOwnerId(); // 从Meta 账户发出
 			if(e.getProjectId() != null && e.getProjectId().longValue() > 0) {
 				srcUserId = this.projectService.getOwnerId(e.getProjectId());	
 			}
