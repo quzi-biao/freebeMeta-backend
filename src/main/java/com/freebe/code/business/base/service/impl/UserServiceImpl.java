@@ -454,6 +454,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		vo.setLastLogin(user.getLastLogin());
 		vo.setContribution(user.getContribution());
 		vo.setFreeBe(this.walletService.getAmount(user.getId(), Currency.FREE_BE));
+		vo.setCny(this.walletService.getAmount(user.getId(), Currency.CNY));
 		
 		return vo;
 	}

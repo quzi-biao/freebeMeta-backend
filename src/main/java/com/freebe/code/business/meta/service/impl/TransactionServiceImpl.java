@@ -31,6 +31,7 @@ import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.ProjectRecordService;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.service.WalletService;
+import com.freebe.code.business.meta.type.Currency;
 import com.freebe.code.business.meta.type.TransactionState;
 import com.freebe.code.business.meta.type.TransactionType;
 import com.freebe.code.business.meta.vo.ProjectReward;
@@ -169,8 +170,14 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		}
 		
 		WalletVO wallet = this.walletService.findById(param.getSrcWalletId());
-		if(wallet.getFreeBe() < param.getAmount()) {
-			throw new CustomException("余额不足");
+		if(param.getCurrency() == Currency.CNY) {
+			if(wallet.getCny() < param.getAmount()) {
+				throw new CustomException("Y余额不足");
+			}
+		}else {
+			if(wallet.getFreeBe() < param.getAmount()) {
+				throw new CustomException("余额不足");
+			}
 		}
 		
 		if(null == param.getId()) {

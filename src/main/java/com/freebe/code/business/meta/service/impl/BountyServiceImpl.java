@@ -397,8 +397,15 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		if(e.getAuditReward() == null) {
 			e.setAuditReward(0);
 		}
+		
+		ProjectVO project = this.projectService.findById(e.getProjectId());
+		
 		param.setAmount(e.getReward().doubleValue() * (100 - e.getAuditReward()) / 100);
-		param.setCurrency(Currency.FREE_BE);
+		if(null == project.getCurrency()) {
+			param.setCurrency(project.getCurrency());
+		}else {
+			param.setCurrency(Currency.FREE_BE);
+		}
 		
 		param.setSrcWalletId(this.walletService.findByUser(srcUserId).getId());
 		
@@ -422,7 +429,13 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		// 创建交易
 		TransactionParam param = new TransactionParam();
 		param.setAmount(e.getReward().doubleValue() * e.getAuditReward() / 100);
-		param.setCurrency(Currency.FREE_BE);
+		
+		ProjectVO project = this.projectService.findById(e.getProjectId());
+		if(null == project.getCurrency()) {
+			param.setCurrency(Currency.FREE_BE);
+		}else {
+			param.setCurrency(project.getCurrency());
+		}
 		
 		param.setSrcWalletId(this.walletService.findByUser(srcUserId).getId());
 		

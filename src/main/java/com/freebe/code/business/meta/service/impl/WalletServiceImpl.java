@@ -27,6 +27,7 @@ import com.freebe.code.business.meta.controller.param.WalletQueryParam;
 import com.freebe.code.business.meta.entity.Wallet;
 import com.freebe.code.business.meta.repository.WalletRepository;
 import com.freebe.code.business.meta.service.WalletService;
+import com.freebe.code.business.meta.type.Currency;
 import com.freebe.code.business.meta.vo.FinanceInfo;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
@@ -125,13 +126,13 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 	
 
 	@Override
-	public Double getAmount(Long userId, Integer freeBe) throws CustomException {
-		String id = "u:" + userId;
+	public Double getAmount(Long userId, Integer currency) throws CustomException {
+//		String id = "u:" + userId;
 		
-		Wallet ret = this.objectCaches.get(id, Wallet.class);
-		if(null != ret) {
-			return numbericCurrency(ret.getFreeBe());
-		}
+//		Wallet ret = this.objectCaches.get(id, Wallet.class);
+//		if(null != ret) {
+//			return numbericCurrency(ret.getFreeBe());
+//		}
 		
 		Wallet wallet = new Wallet();
 		wallet.setUserId(userId);
@@ -149,7 +150,10 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 			}
 		}
 		
-		ret = wallets.get(0);
+		Wallet ret = wallets.get(0);
+		if(currency == Currency.CNY) {
+			return numbericCurrency(ret.getCny());
+		}
 		return numbericCurrency(ret.getFreeBe());
 	}
 
@@ -221,6 +225,29 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 		srcWallet.setFreeBe(srcAmount.subtract(decAmount).longValue());
 		Wallet dstWallet = this.getById(dst);
 		BigDecimal dstAmount = new BigDecimal(dstWallet.getFreeBe());
+		dstWallet.setFreeBe(dstAmount.add(decAmount).longValue());
+		
+		this.repository.save(srcWallet);
+		this.repository.save(dstWallet);
+		
+		updateCache(dstWallet);
+		updateCache(srcWallet);
+	}
+	
+	@Transactional
+	@Override
+	public synchronized void transferCny(Long transactionId, Long src, Long dst, Double amount) throws CustomException {
+		BigDecimal decAmount = new BigDecimal(currencyStr(amount));
+		
+		Wallet srcWallet = this.getById(src);
+		BigDecimal srcAmount = new BigDecimal(srcWallet.getCny());
+		if(srcAmount.compareTo(decAmount) < 0) {
+			throw new CustomException("交易失败，余额不足");
+		}
+		
+		srcWallet.setFreeBe(srcAmount.subtract(decAmount).longValue());
+		Wallet dstWallet = this.getById(dst);
+		BigDecimal dstAmount = new BigDecimal(dstWallet.getCny());
 		dstWallet.setFreeBe(dstAmount.add(decAmount).longValue());
 		
 		this.repository.save(srcWallet);
