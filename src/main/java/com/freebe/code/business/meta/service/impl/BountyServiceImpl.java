@@ -393,7 +393,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	
 	@Override
 	public Double countCost(Long projectId) {
-		return numbericCurrency(this.repository.getProjectReward(projectId));
+		return this.repository.getProjectReward(projectId).doubleValue();
 	}
 	
 	private Long createTransaction(Bounty e, Long srcUserId) throws CustomException {
