@@ -245,10 +245,10 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 			throw new CustomException("交易失败，余额不足");
 		}
 		
-		srcWallet.setFreeBe(srcAmount.subtract(decAmount).longValue());
+		srcWallet.setCny(srcAmount.subtract(decAmount).toString());
 		Wallet dstWallet = this.getById(dst);
 		BigDecimal dstAmount = new BigDecimal(dstWallet.getCny());
-		dstWallet.setFreeBe(dstAmount.add(decAmount).longValue());
+		dstWallet.setCny(dstAmount.add(decAmount).toString());
 		
 		this.repository.save(srcWallet);
 		this.repository.save(dstWallet);
