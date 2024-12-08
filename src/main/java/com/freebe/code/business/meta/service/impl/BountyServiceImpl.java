@@ -391,6 +391,11 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		return new PageImpl<BountyVO>(retList, page.getPageable(), page.getTotalElements());
 	}
 	
+	@Override
+	public Double countCost(Long projectId) {
+		return numbericCurrency(this.repository.getProjectReward(projectId));
+	}
+	
 	private Long createTransaction(Bounty e, Long srcUserId) throws CustomException {
 		// 创建交易
 		TransactionParam param = new TransactionParam();

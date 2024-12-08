@@ -29,6 +29,7 @@ import com.freebe.code.business.meta.controller.param.ProjectParam;
 import com.freebe.code.business.meta.controller.param.ProjectQueryParam;
 import com.freebe.code.business.meta.entity.Project;
 import com.freebe.code.business.meta.repository.ProjectRepository;
+import com.freebe.code.business.meta.service.BountyService;
 import com.freebe.code.business.meta.service.MemberService;
 import com.freebe.code.business.meta.service.ProjectMemberService;
 import com.freebe.code.business.meta.service.ProjectRecordService;
@@ -79,6 +80,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 	
 	@Autowired
 	private ProjectRecordService projectRecordService;
+	
+	@Autowired
+	private BountyService bountyService;
 	
 	@Autowired
 	private TransactionService transactionService;
@@ -436,6 +440,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 		
 		if(isDetail) {
 			vo.setProjectReward(this.transactionService.getProjectReward(e.getId()));
+			vo.setCostAmount(this.bountyService.countCost(e.getId()));
 		}
 		
 		vo.setMembers(this.projectMemberService.getProjectMembers(e.getId()));

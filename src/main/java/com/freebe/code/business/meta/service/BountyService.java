@@ -81,4 +81,11 @@ public interface BountyService extends BaseService<Bounty> {
 	 */
 	BountyGraph getBountyGraph(Long projectId) throws CustomException;
 
+	/**
+	 * 统计当前已消耗的预算
+	 * @param projectId
+	 * @return
+	 */
+	Double countCost(Long projectId);
+
 }

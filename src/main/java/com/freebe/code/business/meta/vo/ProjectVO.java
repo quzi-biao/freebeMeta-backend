@@ -75,6 +75,9 @@ public class ProjectVO extends BaseVO {
 	
 	@ApiModelProperty("积分总消耗")
 	private ProjectReward projectReward;
+	
+	@ApiModelProperty("消耗积分，包括已悬赏但未发放的")
+	private Double costAmount;
 
 	@ApiModelProperty("项目成员")
 	private List<ProjectMemberVO> members;
