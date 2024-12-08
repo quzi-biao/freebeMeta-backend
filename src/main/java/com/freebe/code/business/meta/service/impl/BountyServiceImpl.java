@@ -407,9 +407,9 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		
 		param.setAmount(e.getReward().doubleValue() * (100 - e.getAuditReward()) / 100);
 		if(null == project.getCurrency()) {
-			param.setCurrency(project.getCurrency());
-		}else {
 			param.setCurrency(Currency.FREE_BE);
+		}else {
+			param.setCurrency(project.getCurrency());
 		}
 		
 		param.setSrcWalletId(this.walletService.findByUser(srcUserId).getId());
