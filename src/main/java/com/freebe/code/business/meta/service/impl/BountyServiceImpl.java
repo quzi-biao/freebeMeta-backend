@@ -490,9 +490,12 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 
 		vo.setProjectId(e.getProjectId());
 		if(null != vo.getProjectId() && vo.getProjectId() != 0) {
-			vo.setProjectName(this.projectService.findById(vo.getProjectId()).getName());
+			ProjectVO project = this.projectService.findById(vo.getProjectId());
+			vo.setProjectName(project.getName());
+			vo.setCurrency(project.getCurrency());
 		}else {
 			vo.setProjectName("个人发布");
+			vo.setCurrency(0);
 		}
 		vo.setOwnerId(e.getOwnerId());
 

@@ -55,6 +55,9 @@ public class BountyVO extends BaseVO {
 	@ApiModelProperty("任务赏金")
 	private Long reward;
 	
+	@ApiModelProperty("货币")
+	private Integer currency;
+	
 	@ApiModelProperty("任务U赏金")
 	private Double ureward;
 	
