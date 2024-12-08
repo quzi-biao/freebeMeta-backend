@@ -241,13 +241,25 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		//执行转账动作
 		WalletVO wallet = this.walletService.findById(transaction.getSrcWalletId());
 		Double amount = numbericCurrency(transaction.getAmount());
-		if(wallet.getFreeBe() < amount) {
-			transaction.setState(TransactionState.FAILED);
-			transaction.setFailedReason("余额不足");
+		if(transaction.getCurrency() == Currency.CNY) {
+			if(wallet.getCny() < amount) {
+				transaction.setState(TransactionState.FAILED);
+				transaction.setFailedReason("余额不足");
+			}
+		}else {
+			if(wallet.getFreeBe() < amount) {
+				transaction.setState(TransactionState.FAILED);
+				transaction.setFailedReason("余额不足");
+			}
 		}
 		
 		try {
-			this.walletService.transferFreeBe(transactionId, transaction.getSrcWalletId(), transaction.getDstWalletId(), amount);
+			if(transaction.getCurrency() == Currency.CNY) {
+				this.walletService.transferCny(transactionId, transaction.getSrcWalletId(), transaction.getDstWalletId(), amount);
+			}else {
+				this.walletService.transferFreeBe(transactionId, transaction.getSrcWalletId(), transaction.getDstWalletId(), amount);
+			}
+			
 			transaction.setState(TransactionState.CONFIRM);
 			transaction.setConfirmTime(System.currentTimeMillis());
 			
