@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.controller.param.TransactionQueryParam;
+import com.freebe.code.business.meta.controller.param.WithdrawParam;
 import com.freebe.code.business.meta.service.TransactionService;
 import com.freebe.code.business.meta.vo.TransactionVO;
 import com.freebe.code.common.CustomException;
@@ -57,6 +58,12 @@ public class TransactionController {
 	@GetMapping("audit/{id}")
 	public ResultBean<TransactionVO> audit(@PathVariable("id") Long id) throws CustomException {
 		return ResultBean.ok(transactionService.transactionAudit(id));
+	}
+	
+	@ApiOperation(value = "提现")
+	@GetMapping("withdraw")
+	public ResultBean<TransactionVO> withdraw(WithdrawParam param) throws CustomException {
+		return ResultBean.ok(transactionService.withdraw(param));
 	}
 	
 	@ApiOperation(value = "撤销交易")

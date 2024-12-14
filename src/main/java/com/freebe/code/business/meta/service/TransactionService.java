@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import com.freebe.code.business.base.service.BaseService;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.controller.param.TransactionQueryParam;
+import com.freebe.code.business.meta.controller.param.WithdrawParam;
 import com.freebe.code.business.meta.entity.Transaction;
 import com.freebe.code.business.meta.vo.ProjectReward;
 import com.freebe.code.business.meta.vo.TransactionVO;
@@ -25,6 +26,14 @@ public interface TransactionService extends BaseService<Transaction> {
 	TransactionVO createOrUpdate(TransactionParam param) throws CustomException;
 
 	Page<TransactionVO> queryPage(TransactionQueryParam param) throws CustomException;
+	
+	/**
+	 * 提现
+	 * @param param
+	 * @return
+	 * @throws CustomException
+	 */
+	TransactionVO withdraw(WithdrawParam param) throws CustomException;
 
 	/**
 	 * 系统内部创建

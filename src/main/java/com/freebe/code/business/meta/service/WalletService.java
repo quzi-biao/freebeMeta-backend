@@ -55,6 +55,15 @@ public interface WalletService extends BaseService<Wallet> {
 	Double getAmount(Long id, Integer freeBe) throws CustomException;
 	
 	/**
+	 * 
+	 * @param id
+	 * @param amount
+	 * @param currency
+	 * @return
+	 */
+	void burn(Long id, String amount, Integer currency);
+	
+	/**
 	 * 元转账
 	 * @param transactionId
 	 * @param src
@@ -63,4 +72,5 @@ public interface WalletService extends BaseService<Wallet> {
 	 * @throws CustomException
 	 */
 	void transferCny(Long transactionId, Long src, Long dst, Double amount) throws CustomException;
+	
 }

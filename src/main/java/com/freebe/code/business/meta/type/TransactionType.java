@@ -25,4 +25,9 @@ public class TransactionType {
 	 * 工作奖励
 	 */
 	public static final int WORK_REWARD = 3;
+	
+	/**
+	 * 提现
+	 */
+	public static final int WITHDRAW = 4;
 }

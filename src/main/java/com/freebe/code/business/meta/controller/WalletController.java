@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.freebe.code.business.meta.service.WalletService;
+import com.freebe.code.business.meta.service.impl.TransactionServiceImpl;
 import com.freebe.code.business.meta.vo.FinanceInfo;
 import com.freebe.code.business.meta.vo.WalletVO;
 import com.freebe.code.common.CustomException;
@@ -46,6 +47,13 @@ public class WalletController {
 	public ResultBean<FinanceInfo> finace() throws CustomException {
 		return ResultBean.ok(walletService.getFinanceInfo());
 	}
+	
+	@ApiOperation(value = "提现余额")
+	@GetMapping("withdraw")
+	public ResultBean<Double> withdrawAmount() throws CustomException {
+		return ResultBean.ok(walletService.findById(TransactionServiceImpl.WITHDRAW_WALLET_ID).getCny());
+	}
+	
 //
 //	@ApiOperation(value = "查询钱包")
 //	@PostMapping("list")

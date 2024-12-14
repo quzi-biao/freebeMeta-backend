@@ -25,6 +25,7 @@ import com.freebe.code.business.base.repository.UserRepository;
 import com.freebe.code.business.base.service.impl.BaseServiceImpl;
 import com.freebe.code.business.meta.controller.param.TransactionParam;
 import com.freebe.code.business.meta.controller.param.TransactionQueryParam;
+import com.freebe.code.business.meta.controller.param.WithdrawParam;
 import com.freebe.code.business.meta.entity.Transaction;
 import com.freebe.code.business.meta.repository.TransactionRepository;
 import com.freebe.code.business.meta.service.ProjectMemberService;
@@ -53,6 +54,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class TransactionServiceImpl extends BaseServiceImpl<Transaction> implements TransactionService {
+	// 提现账户 ID
+	public final static Long WITHDRAW_WALLET_ID = 141L;
+	
+	// Meta 账户
+	public final static Long META_WALLET_ID = 126L;
+	
 	@Autowired
 	private TransactionRepository repository;
 	
@@ -88,9 +95,9 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		return toVO(ret);
 	}
 	
-
+	@Transactional
 	@Override
-	public TransactionVO transactionAudit(Long transactionId) throws CustomException {
+	public synchronized TransactionVO transactionAudit(Long transactionId) throws CustomException {
 		checkFinanceOfficer();
 		
 		Transaction transaction = this.getById(transactionId);
@@ -101,6 +108,14 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		int state = transaction.getState().intValue();
 		if(state != TransactionState.WAIT_AUDIT) {
 			throw new CustomException("交易已审核，不可重复操作");
+		}
+		
+		// 检查提现余额
+		if(transaction.getTransactionType().intValue() == TransactionType.WITHDRAW) {
+			WalletVO withDraw = this.walletService.findById(WITHDRAW_WALLET_ID);
+			if(withDraw.getCny() < numbericCurrency(transaction.getAmount())) {
+				throw new CustomException("提现账户余额不足");
+			}
 		}
 		
 		transaction.setState(TransactionState.PUBLICITY);
@@ -152,7 +167,31 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		
 		return this.innerCreateOrUpdate(param);
 	}
+	
+	@Override
+	public TransactionVO withdraw(WithdrawParam param) throws CustomException {
+		WalletVO wallet = this.walletService.findByUser(getCurrentUser().getId());
+		if(null == wallet) {
+			throw new CustomException("请求异常");
+		}
+		
+		WalletVO withDraw = this.walletService.findById(WITHDRAW_WALLET_ID);
+		if(withDraw.getCny() < param.getAmout()) {
+			throw new CustomException("提现账户余额不足");
+		}
+		
+		TransactionParam t = new TransactionParam();
+		t.setAmount(param.getAmout().doubleValue());
+		t.setCurrency(Currency.CNY);
+		t.setDstWalletId(META_WALLET_ID); // 提现将金额返还给 META
+		t.setMark("提现");
+		t.setSrcWalletId(wallet.getId());		
+		t.setTransactionType(TransactionType.WITHDRAW);
+		
+		return this.innerCreateOrUpdate(t);
+	}
 
+	@Transactional
 	@Override
 	public synchronized TransactionVO innerCreateOrUpdate(TransactionParam param) throws CustomException {
 		if(null == param.getDstWalletId() || null == param.getSrcWalletId()) {
@@ -234,26 +273,33 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		if(null == transaction) {
 			throw new CustomException("交易不存在");
 		}
+				
 		transaction.setState(TransactionState.CONFIRMING);
 		this.repository.save(transaction);
-		//交易上链
 		
 		//执行转账动作
 		WalletVO wallet = this.walletService.findById(transaction.getSrcWalletId());
-		Double amount = numbericCurrency(transaction.getAmount());
-		if(transaction.getCurrency() == Currency.CNY) {
-			if(wallet.getCny() < amount) {
-				transaction.setState(TransactionState.FAILED);
-				transaction.setFailedReason("余额不足");
-			}
-		}else {
-			if(wallet.getFreeBe() < amount) {
-				transaction.setState(TransactionState.FAILED);
-				transaction.setFailedReason("余额不足");
-			}
-		}
 		
 		try {
+			// 提现交易，还需要从提现账户中移除对应的金额
+			if(transaction.getTransactionType().intValue() == TransactionType.WITHDRAW) {
+				WalletVO withDraw = this.walletService.findById(WITHDRAW_WALLET_ID);
+				if(withDraw.getCny() < numbericCurrency(transaction.getAmount())) {
+					throw new CustomException("提现账户余额不足");
+				}
+			}
+			
+			Double amount = numbericCurrency(transaction.getAmount());
+			if(transaction.getCurrency() == Currency.CNY) {
+				if(wallet.getCny() < amount) {
+					throw new CustomException("余额不足");
+				}
+			}else {
+				if(wallet.getFreeBe() < amount) {
+					throw new CustomException("余额不足");
+				}
+			}
+			
 			if(transaction.getCurrency() == Currency.CNY) {
 				this.walletService.transferCny(transactionId, transaction.getSrcWalletId(), transaction.getDstWalletId(), amount);
 			}else {
@@ -263,9 +309,14 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 			transaction.setState(TransactionState.CONFIRM);
 			transaction.setConfirmTime(System.currentTimeMillis());
 			
+			// 提现交易，还需要从提现账户中移除对应的金额
+			if(transaction.getTransactionType().intValue() == TransactionType.WITHDRAW) {
+				this.walletService.burn(WITHDRAW_WALLET_ID, transaction.getAmount(), transaction.getCurrency());
+			}
+			
 		} catch (CustomException e) {
 			transaction.setState(TransactionState.FAILED);
-			transaction.setFailedReason("余额不足");
+			transaction.setFailedReason(e.getMessage());
 			log.error(e.getMessage(), e);
 		}
 		

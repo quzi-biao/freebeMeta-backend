@@ -209,7 +209,28 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 		objectCaches.delete(id, WalletVO.class);
 		super.softDelete(id);
 	}
-
+	
+	@Override
+	public void burn(Long id, String amount, Integer currency) {
+		Wallet w = this.getById(id);
+		BigDecimal decAmount = new BigDecimal(amount);
+		if(currency == null) {
+			return;
+		}
+		
+		if(currency.intValue() == Currency.CNY) {
+			BigDecimal srcAmount = new BigDecimal(w.getCny());
+			w.setCny(String.valueOf(srcAmount.subtract(decAmount).longValue()));
+		}else if(currency.intValue() == Currency.USDT) {
+			BigDecimal srcAmount = new BigDecimal(w.getUsdt());
+			w.setUsdt(String.valueOf(srcAmount.subtract(decAmount).longValue()));
+		}else {
+			BigDecimal srcAmount = new BigDecimal(w.getFreeBe());
+			w.setFreeBe(srcAmount.subtract(decAmount).longValue());
+		}
+		this.repository.save(w);
+		updateCache(w);
+	}
 
 	@Transactional
 	@Override
@@ -293,6 +314,5 @@ public class WalletServiceImpl extends BaseServiceImpl<Wallet> implements Wallet
 
 		return vo;
 	}
-
 
 }
