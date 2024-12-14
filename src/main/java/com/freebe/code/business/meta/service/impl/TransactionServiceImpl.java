@@ -174,6 +174,9 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		if(null == wallet) {
 			throw new CustomException("请求异常");
 		}
+		if(wallet.getCny() < param.getAmount()) {
+			throw new CustomException("您的余额不足");
+		}
 		
 		WalletVO withDraw = this.walletService.findById(WITHDRAW_WALLET_ID);
 		if(null == withDraw) {
