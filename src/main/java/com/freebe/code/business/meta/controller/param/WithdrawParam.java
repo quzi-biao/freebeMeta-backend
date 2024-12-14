@@ -8,5 +8,5 @@ import lombok.Data;
 @Data
 public class WithdrawParam {
 	@ApiModelProperty("提现金额")
-	public Integer amout;
+	public Integer amount;
 }

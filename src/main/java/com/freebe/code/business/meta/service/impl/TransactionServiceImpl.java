@@ -176,12 +176,12 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		}
 		
 		WalletVO withDraw = this.walletService.findById(WITHDRAW_WALLET_ID);
-		if(withDraw.getCny() < param.getAmout()) {
+		if(withDraw.getCny() < param.getAmount()) {
 			throw new CustomException("提现账户余额不足");
 		}
 		
 		TransactionParam t = new TransactionParam();
-		t.setAmount(param.getAmout().doubleValue());
+		t.setAmount(param.getAmount().doubleValue());
 		t.setCurrency(Currency.CNY);
 		t.setDstWalletId(META_WALLET_ID); // 提现将金额返还给 META
 		t.setMark("提现");
