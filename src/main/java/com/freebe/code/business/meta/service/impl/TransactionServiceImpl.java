@@ -176,6 +176,9 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction> impleme
 		}
 		
 		WalletVO withDraw = this.walletService.findById(WITHDRAW_WALLET_ID);
+		if(null == withDraw) {
+			throw new CustomException("系统异常");
+		}
 		if(withDraw.getCny() < param.getAmount()) {
 			throw new CustomException("提现账户余额不足");
 		}
