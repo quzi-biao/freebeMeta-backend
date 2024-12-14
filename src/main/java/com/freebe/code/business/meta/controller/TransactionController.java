@@ -61,7 +61,7 @@ public class TransactionController {
 	}
 	
 	@ApiOperation(value = "提现")
-	@GetMapping("withdraw")
+	@PostMapping("withdraw")
 	public ResultBean<TransactionVO> withdraw(WithdrawParam param) throws CustomException {
 		return ResultBean.ok(transactionService.withdraw(param));
 	}
