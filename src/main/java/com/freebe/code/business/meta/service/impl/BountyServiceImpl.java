@@ -256,8 +256,10 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			this.userService.addContribution(taker, e.getReward());
 			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏已审核通过: [", e.getId(), "]", e.getTitle()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
 			// 更新后续悬赏的状态
+			objectCaches.put(e.getId(), e);
+			
 			if(e.getNextBounties() != null) {
-				
+				updateNextBountyStatus(e);
 			}
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
@@ -272,7 +274,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		BountyVO vo = toVO(e);
 		return vo;
 	}
-	
+
 	@Transactional
 	@Override
 	public void restartBounty(Long id) throws CustomException {
@@ -616,6 +618,29 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	}
 	
 	/**
+	 * 前置任务完成更新后续任务
+	 * @param e
+	 */
+	private void updateNextBountyStatus(Bounty e) {
+		List<Long> fronts = toList(e.getFrontBounties(), Long.class);
+		if(null == fronts || fronts.size() == 0) {
+			return;
+		}
+		
+		for(Long id : fronts) {
+			Bounty next = this.findEntityById(id);
+			if(next.getState() != BountyState.WAIT_DEPEND) {
+				continue;
+			}
+			if(checkFrontIsDone(next.getFrontBounties())) {
+				next.setState(BountyState.WAIT_TAKER);
+				this.save(next);
+				this.objectCaches.put(next.getId(), next);
+			}
+		}
+	}
+	
+	/**
 	 * 更新审核专员信息，过去不存在的新增，过去存在，现在不存在的移除
 	 * @param e
 	 * @param auditors
@@ -723,7 +748,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	 * @param bounty
 	 * @throws CustomException
 	 */
-	private boolean checkFrontIsDone(String frontStr) throws CustomException {
+	private boolean checkFrontIsDone(String frontStr) {
 		List<Long> fronts = toList(frontStr, Long.class);
 		if(null != fronts && fronts.size() > 0) {
 			for(Long front : fronts) {
