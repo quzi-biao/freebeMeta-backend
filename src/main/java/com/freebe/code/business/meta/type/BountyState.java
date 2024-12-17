@@ -45,4 +45,9 @@ public class BountyState {
 	 * 直接取消
 	 */
 	public static final int CANCEL = 7;
+	
+	/**
+	 * 等待前置任务完成
+	 */
+	public static final int WAIT_DEPEND = 8;
 }

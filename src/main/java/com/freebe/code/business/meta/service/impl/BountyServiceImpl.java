@@ -166,6 +166,11 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 		List<Long> existFronts = toList(e.getFrontBounties(), Long.class);
 		
 		e.setFrontBounties(toStr(fronts));
+		if(null != fronts && fronts.size() > 0) {
+			if(!checkFrontIsDone(e.getFrontBounties())) {
+				e.setState(BountyState.WAIT_DEPEND);
+			}
+		}
 		
 		e = repository.save(e);
 		
@@ -250,6 +255,10 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 			// 贡献分发放(贡献分等于积分)
 			this.userService.addContribution(taker, e.getReward());
 			this.sendMessage(e.getOwnerId(), e.getTakeId(), S.c("您的悬赏已审核通过: [", e.getId(), "]", e.getTitle()), MessageType.BOUNTY_AUDIT_RESULT_MSG);
+			// 更新后续悬赏的状态
+			if(e.getNextBounties() != null) {
+				
+			}
 		}else {
 			tt.setState(BountyTakerState.AUDIT_FAILED);
 			e.setState(BountyState.AUDIT_FAILED);
@@ -707,6 +716,28 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 检查前置悬赏是否完成
+	 * @param bounty
+	 * @throws CustomException
+	 */
+	private boolean checkFrontIsDone(String frontStr) throws CustomException {
+		List<Long> fronts = toList(frontStr, Long.class);
+		if(null != fronts && fronts.size() > 0) {
+			for(Long front : fronts) {
+				Bounty frontBounty = this.findEntityById(front);
+				if(null == frontBounty) {
+					continue;
+				}
+				int state = frontBounty.getState();
+				if(state != BountyState.DONE && state != BountyState.CANCEL) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**
