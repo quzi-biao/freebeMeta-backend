@@ -622,7 +622,7 @@ public class BountyServiceImpl extends BaseServiceImpl<Bounty> implements Bounty
 	 * @param e
 	 */
 	private void updateNextBountyStatus(Bounty e) {
-		List<Long> fronts = toList(e.getFrontBounties(), Long.class);
+		List<Long> fronts = toList(e.getNextBounties(), Long.class);
 		if(null == fronts || fronts.size() == 0) {
 			return;
 		}
