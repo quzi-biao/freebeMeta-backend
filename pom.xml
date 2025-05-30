@@ -11,7 +11,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	
 	<properties>
-		<java.home>/Users/zhengbiaoxie/Program/jdk1.8.0_372.jdk/Contents/Home</java.home>
+		<java.home>${env.JAVA_HOME}</java.home>
 	</properties>
   
 	<dependencies>
