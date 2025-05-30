@@ -1,0 +1,90 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+    tomcat:
+      max-swallow-size: -1 # -1表示无限制，没配置浏览器客户端接收不到异常
+  port: 8990
+
+logging:
+  config=classpath:logback.xml
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 100MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/freebe_meta?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    #url: jdbc:mysql://124.222.244.189:3306/lyhc?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 
+    hikari:
+      max-lifetime: 120000
+      testOnBorrow: true
+      validationQuery: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+  mail:
+    host: smtp.163.com # smtp地址，开通的时候会显示
+    username: freebe2024@163.com # 你的邮箱账号
+    password: ${MAIL_PASSWORD} # 邮箱授权码，通过环境变量设置
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+
+lucene:
+  memberIndexLibrary: /Users/zhengbiaoxie/Tmp/meta/freeBeIndex
+  projectIndexLibrary: /Users/zhengbiaoxie/Tmp/meta/freeBeProjectIndex
+  taskIndexLibrary: /Users/zhengbiaoxie/Tmp/meta/freeBeTaskIndex
+  fileIndexLibrary: /Users/zhengbiaoxie/Tmp/meta/freeBeFileIndex
+  marketProvideIndexLibrary: /Users/zhengbiaoxie/Tmp/meta/marketProvideIndex
+  
+oss:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  # Credentials should be set via environment variables
+  accessKeyId: ${OSS_ACCESS_KEY_ID}
+  accessKeySecret: ${OSS_ACCESS_KEY_SECRET}
+  bucketName: ${OSS_BUCKET_NAME}
+
+# 权限认证白名单
+security:
+  whiteList:
+  - /info
+  - /api/**
+  - /csrf
+  - /v2/api-docs
+  - /swagger-resources/**
+  - /swagger-ui.html**
+  - /webjars/**
+  - /medical-provider/api-docs
+  - /static/**
+  - /druid/**
+  - /error/**
+  - /auth/code/**
+  - /auth/verify
+  - /auth/register
+  - /auth/login
+  - /auth/smsCode/**
+  - /auth/loginBySms
+  - /auth/kaptcha
+  - /auth/verifyKaptcha/**
+  - /storage/**
+  - /chat/**
+  - /favicon.ico
+  - /code/submit
+  - /wallet/finance
+  - /member/count
+  - /*/list
+  - /project/listMember
+  - /project/get/*
+  - /member/get/*
